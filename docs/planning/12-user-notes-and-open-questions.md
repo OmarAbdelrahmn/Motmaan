@@ -1,6 +1,6 @@
 # User notes and open questions
 
-Updated: 3 October 2026. This file keeps the decisions made in the planning conversation, topics explicitly deferred, and the current question batch. Detailed requirements live in the linked topic files.
+Updated: 4 October 2026. This file keeps the decisions made in the planning conversation, topics explicitly deferred, and the current question batch. Detailed requirements live in the linked topic files.
 
 ## How this tracker works
 
@@ -45,15 +45,15 @@ Updated: 3 October 2026. This file keeps the decisions made in the planning conv
 - Doctor expertise is a database-backed, administrator-editable catalog of areas of strength within psychiatric care. Each doctor may list several strengths on their profile; patients filter doctors by them. Management interviews candidates and approves expertise/degrees before public display. Exact Arabic/English catalog labels and post-hiring profile-edit rules remain open; the user is unsure about seed values. See [practitioner expertise](13-practitioner-expertise.md).
 - Candidate applications collect normal doctor-applicant personal information, expertise, and degrees/academic qualifications. Management verifies degrees and applicant data before activation. Exact fields/documents remain deferred; verification procedure and public-profile details remain open.
 - Patient doctor search filters include expertise, specialty, language, appointment mode, and availability. Per user's delegation, recommended logic is AND across categories and OR among values within a category.
-- Doctors can handle all listed clinical work: diagnoses, treatment plans, prescriptions, reports, session records, and tasks, within granted permissions, assigned-patient scope, and applicable qualification rules.
+- Doctors can handle all listed clinical work: diagnoses, treatment plans, prescriptions, reports, session records, and tasks, within granted permissions, assigned-patient scope, and applicable qualification rules. Doctors may issue finalized clinical reports and prescriptions directly, without a separate management approval step, within granted permissions, assigned-patient scope, and applicable qualifications.
 - Percentage compensation rates are changeable through the system; exact rate scope/permissions and calculation base were explicitly deferred.
-- Patient tasks include daily/weekly self-care actions and Motmaan program recommendations. Doctors assign them; patients can mark actions complete or missed and give a reason; doctors can review. Doctors control patient tasks and their reminder schedule; the backend calculates and sends recurrence-based push notifications in `Asia/Riyadh`, and the app displays them. This supersedes earlier admin timing control; appointment reminder lead time remains admin-controlled. Confirmed controls are time of day, selected weekdays, start/end dates, and reminders per day. Numeric limits, effects of task edits, and weekly summaries remain open.
+- Patient tasks include daily/weekly self-care actions and Motmaan program recommendations. Doctors assign them; patients can mark actions complete or missed and give a reason; doctors can review. Doctors control patient tasks and their reminder schedule; the backend calculates and sends recurrence-based push notifications in `Asia/Riyadh`, and the app displays them. This supersedes earlier admin timing control; appointment reminder lead time remains admin-controlled. Confirmed controls are time of day, selected weekdays, start/end dates, and reminders per day. Changes to recurring patient tasks apply only to future occurrences and preserve earlier completion history. Numeric limits and weekly summaries remain open.
 - Patients can book and pay for a recommended Motmaan program through app or website.
 
 ### Internal staff work and doctor discovery
 
 - Doctor-level **تفضيلات** should affect priority/order in patient-facing doctor lists. The user explicitly deferred discussion; meaning, configuration ownership, ranking criteria, and interaction with employed-doctor priority remain open. See [practitioner expertise](13-practitioner-expertise.md). Do not ask about this in the next batch.
-- Internal administrative tasks allow reception/accountant assignment with several assignees, details, Low/Normal/High/Urgent priority, optional due dates and overdue indication, comments, and files. Status is automatic from actions; exact mappings and multi-assignee completion remain open. Assignment/comment/status/deadline/overdue events notify live inside the website. Management sees full authorized-branch task details; other staff see full created/assigned task details. Notification persistence/recipients and file constraints remain open. See [internal staff tasks](15-internal-staff-tasks.md).
+- Internal administrative tasks allow reception/accountant assignment with several assignees, details, Low/Normal/High/Urgent priority, optional due dates and overdue indication, comments, and files. Status is automatic from actions. Tasks close automatically when the completion condition is met, without creator approval; exact mappings and the multi-assignee completion condition remain open. Assignment/comment/status/deadline/overdue events notify live inside the website. Management sees full authorized-branch task details; other staff see full created/assigned task details. Unread notification persistence, including events missed while the website was closed, is confirmed. Recipient rules and file constraints remain open. See [internal staff tasks](15-internal-staff-tasks.md).
 - Employed and external doctors share the same operational behavior/access rules. Prioritize employed doctors in discovery/booking; show external doctors when employed doctors are full for the requested booking. Compensation stays distinct. Search accepts start/end dates; equal dates mean one day. Evaluate fallback over the selected range and matching filters; mixed-date display remains open.
 
 ### Support, records, video, and files
@@ -70,20 +70,43 @@ Updated: 3 October 2026. This file keeps the decisions made in the planning conv
 
 ## Next ten questions
 
-Answer by number. A short answer is enough; say **later** to defer an item.
+The current queue has three items after the 4 October answers and owner-message removals. The owner-facing version below also includes selected previously deferred topics; their answers are still pending.
 
-1. With several internal-task assignees, should the task finish only after everyone completes their part, or can one person complete it for everyone?
-2. Should the task creator approve completion, or should the system close it immediately after the required assignees finish?
-3. Should live staff notifications remain in an unread notification list, including updates missed while the website was closed?
-4. When a doctor changes a patient's recurring task, should the change apply only to future occurrences and keep earlier completion history?
-5. Can doctors issue finalized clinical reports and prescriptions directly, or is a management approval step required?
-6. What is the name of the assessment/test platform, and does Motmaan already have its API or integration documentation?
-7. Can one package contain different services, and may patients choose any eligible doctor for those services?
-8. If a patient wants to stop an already-started package, can unused sessions be refunded, and how should used sessions affect the amount?
-9. What are support working hours and expected response times? Should urgent tickets have a different target?
-10. Which SMS provider does Motmaan currently use, and is its API available for OTPs and doctor invitations?
+1. What are the internal multi-assignee task details, including whether all assignees must complete their parts or one assignee can complete the task for everyone? Multiple assignees remain a confirmed requirement; the owner message asks about support and details.
+2. What are the full details of the system's assessment/test platform, including tests, patient usage, results, and available integration?
+3. Can a package contain different services, can patients choose any eligible doctor, and can the package be shared among family members?
 
-The central register is [decisions and open questions](06-decisions-and-open-questions.md). This batch does not reopen explicitly deferred items. Exact expertise seed labels remain open; clinical-lead preparation is a recommendation, not a confirmed decision.
+### Resolved on 4 October 2026
+
+- Internal tasks close automatically after the required completion condition is met; creator approval is not required. The multi-assignee completion condition remains open.
+- Retain staff notifications in an unread list, including events missed while the website was closed.
+- Changes to recurring patient tasks apply only to future occurrences and preserve earlier completion history.
+- Doctors can issue finalized clinical reports and prescriptions directly, within their permissions, assigned-patient scope, and qualifications, without a separate management approval step.
+
+### Removed from this owner message, still unresolved
+
+- Stopping an already-started package and refunding unused sessions.
+- Support working hours, response targets, and urgent-ticket targets.
+- Existing SMS provider and available integration access.
+- Detailed staff permission matrix and doctor-deactivation effects; these retain their prior deferred status.
+
+## Revised owner questions - 4 October 2026
+
+1. هل النظام يدعم إسناد المهمة الداخلية لأكثر من موظف؟ وما تفاصيل إنشاء المهمة وإسنادها ومتابعتها وإتمامها؟
+2. ما تفاصيل منصة الاختبارات المرتبطة بالنظام: اسمها، والاختبارات المتاحة، وطريقة استخدامها وعرض النتائج، وإمكانية الربط معها؟
+3. هل الباقة تشمل خدمات مختلفة؟ وهل يختار المريض أي طبيب مناسب؟ وهل يمكن مشاركة الباقة بين أفراد الأسرة؟
+4. ما التفضيلات التي تحدد ترتيب ظهور الأطباء للمريض؟ ومن يضبطها؟
+5. ما سياسة الإلغاء المتأخر وإعادة جدولة الموعد؟
+6. كيف يُحدد طبيب المريض، وكيف يُنقل إلى طبيب آخر أو يُعين له طبيب بديل؟
+7. هل المطلوب في التأمين تسجيل البيانات فقط، أم الربط مع نفيس أو وصيل؟ وما العمليات المطلوبة؟
+8. ما خطوات تحويل رصيد محفظة المريض إلى حسابه البنكي؟ ومن يوافق على التحويل؟
+9. عند اختيار موعد وبدء الدفع، كم دقيقة يظل الموعد محجوزًا قبل إتاحته لشخص آخر إذا لم يكتمل الدفع؟
+10. هل نسمح بالحجز عن طريق التحويل البنكي؟ وإذا نعم، كيف يُتحقق من التحويل ويُؤكد الحجز؟
+11. ما تفاصيل نسب الأطباء: هل تختلف حسب الطبيب أو الخدمة؟ وعلى أي مبلغ تُحسب؟ وكيف تُعامل الخصومات والضرائب والباقات والاستردادات؟ ومن يملك تعديل النسبة؟
+12. ما البيانات والشهادات والمستندات المطلوبة من الطبيب في نموذج «انضم إلينا»؟
+13. ما البيانات والملفات العربية المطلوب ترجمتها للإنجليزية؟ وكيف تُعرض الترجمة؟
+14. ما تفاصيل الربط العائلي كاملة: من يضيف أفراد الأسرة، وكيف يُثبت الربط، وما الذي يراه أو ينفذه كل فرد، وكيف يُفك الربط أو تتغير الصلاحيات عند بلوغ الطفل؟
+15. ما قائمة مجالات خبرة الأطباء التي نعتمدها ليختار منها الطبيب ويستخدمها المريض في البحث؟ نحتاج أسماءها بالعربية والإنجليزية.
 
 ## Deferred by the user
 

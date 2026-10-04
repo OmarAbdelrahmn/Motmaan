@@ -1,6 +1,6 @@
 # System scope and backend direction
 
-Updated: 3 October 2026. Status: planning.
+Updated: 4 October 2026. Status: planning.
 
 The API will support the center's operational, clinical, and financial workflows across staff dashboards, the patient website, and mobile apps. Our first focus is defining booking and payment behavior, alongside patient identity and authorization, before choosing tables and endpoints.
 
@@ -51,7 +51,7 @@ The center currently has about 10 specialists, growing to 25, about 30 appointme
 - **Confirmed:** Practitioner compensation supports a percentage arrangement and a salary arrangement with an incentive on monthly eligible revenue above a configurable target. Monthly target/incentive revenue uses completed, fully paid sessions after discounts, excluding VAT and adjusted for refunds. SAR 10,000 and 20% are examples; allocation and period-correction details remain open.
 - **Confirmed:** Candidates submit information through Join us on the main website. Management can review/contact them, and authorized acceptance automatically provisions the doctor account, assigns the doctor role, and schedules an SMS invitation. Secure first-access and retry details are proposed in the recruitment note.
 - **Confirmed:** Every website must work well on mobile and desktop, including public pages and both staff dashboards.
-- **Confirmed:** Patient treatment tasks have two types: repeatable self-care actions and Motmaan program recommendations. Doctors control tasks and their reminder schedule; patients report completion or a missed reason. The backend sends push notifications according to the doctor-defined schedule and recurrence. Doctor controls include reminder time, weekdays, start/end dates, and reminders per day; numeric limits, schedule-edit effects, and weekly summaries remain open.
+- **Confirmed:** Patient treatment tasks have two types: repeatable self-care actions and Motmaan program recommendations. Doctors control tasks and their reminder schedule; patients report completion or a missed reason. The backend sends push notifications according to the doctor-defined schedule and recurrence. Doctor controls include reminder time, weekdays, start/end dates, and reminders per day; Changes to recurring patient tasks apply only to future occurrences and preserve earlier completion history. Numeric limits and weekly summaries remain open.
 - **Confirmed:** Patients can book and pay through both the mobile app and the responsive patient website, including from a recommended Motmaan program.
 - **Confirmed payment options:** mada, Apple Pay, credit/debit cards, Tabby, and Tamara are required together. Tap Payments is preferred for evaluation and PayTabs is a comparison; merchant approval and final provider selection remain open.
 - **Confirmed booking/payment rule:** An online booking becomes confirmed only after the provider confirms successful payment. The API must rely on trusted provider confirmation rather than a client-only checkout return.
@@ -121,3 +121,7 @@ Plan private object storage, strong staff authentication, protected audit logs, 
 Prepare the confirmed scope, workflow and state diagrams, permission matrix, data ownership model, API contracts, and acceptance scenarios. Obtain provider sandbox access and migration samples early. Figma and operational review requirements remain part of the source project scope; this planning task does not execute them.
 
 Reference: [Microsoft web application architecture guidance](https://learn.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/common-web-application-architectures).
+
+## Confirmed clarification - 4 October 2026
+
+- Doctors may issue finalized clinical reports and prescriptions directly, without a separate management approval step, within granted permissions, assigned-patient scope, and applicable qualifications.

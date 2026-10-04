@@ -1,6 +1,6 @@
 # Web frontend developer handoff
 
-Updated: 3 October 2026. Status: planning handoff. The project is not in implementation; this file captures current product direction and should be updated as decisions are confirmed.
+Updated: 4 October 2026. Status: planning handoff. The project is not in implementation; this file captures current product direction and should be updated as decisions are confirmed.
 
 ## Product and technical context
 
@@ -39,7 +39,7 @@ Updated: 3 October 2026. Status: planning handoff. The project is not in impleme
 - Administrators create and control package offers, sale/expiry, and settings. Render current API-provided package terms and entitlements; do not hardcode pricing or expiry rules.
 - On-time patient cancellation can offer a refund to the original payment method or Motmaan wallet credit; package entitlement is restored. The admin-configured deadline has no default. Late-cancellation and rescheduling rules are deferred.
 - If Motmaan or the assigned doctor cancels, credit the patient in the internal Motmaan wallet. Bank withdrawal requires the patient to contact administration; detailed payout flow is deferred.
-- Doctors assign self-care tasks and program recommendations. Doctors control patient-task reminder scheduling; the backend sends task push notifications according to the doctor-defined schedule and recurrence, and the patient app displays them. Patients can mark occurrences complete or missed and give a reason; doctors can review progress. Doctor controls include time of day, selected weekdays, start/end dates, and reminders per day. Numeric limits, schedule-edit effects, and weekly summaries remain open.
+- Doctors assign self-care tasks and program recommendations. Doctors control patient-task reminder scheduling; the backend sends task push notifications according to the doctor-defined schedule and recurrence, and the patient app displays them. Patients can mark occurrences complete or missed and give a reason; doctors can review progress. Doctor controls include time of day, selected weekdays, start/end dates, and reminders per day. Changes to recurring patient tasks apply only to future occurrences and preserve earlier completion history. Numeric limits and weekly summaries remain open.
 - Patients submit support tickets; administrators resolve them. Statuses are Open, In progress, Waiting for patient, Resolved, and Closed. Send push updates and show an in-ticket new-message indicator. Email the patient a satisfaction survey rated out of 10 with optional comments and one submission per ticket when the ticket is Closed; link the response to the resolving administrator. Management sees all responses; the patient sees their own.
 
 ### Management dashboard
@@ -87,10 +87,10 @@ Updated: 3 October 2026. Status: planning handoff. The project is not in impleme
 - Translation vendor approval, data location/privacy, and clinical review workflow.
 - Expertise catalog labels, candidate approval, public profile fields, and patient filter scope.
 - Reconcile source-only feature details and staff role permissions; all project requirements/features are stage one except explicit deferred items.
-- Doctor deactivation behavior for existing sessions and reactivation flow; clinical qualification/approval rules.
+- Doctor deactivation behavior for existing sessions and reactivation flow; clinical qualification rules; direct report/prescription issuance is confirmed.
 - Exact recruitment form fields/documents, credential verification, and public doctor profile fields.
 - Percentage rate scope and calculation basis.
-- Patient-task schedule limits/edit effects, weekly summaries, and exact support-ticket push/email triggers.
+- Patient-task schedule limits, weekly summaries, and exact support-ticket push/email triggers.
 - Package offer configuration fields; patient-facing case-data boundary for internal admin metadata.
 - Exact analytics/reports, notification channels, brand assets/content workflow, and performance budgets.
 
@@ -115,6 +115,11 @@ When the user confirms a rule that changes a web page, interaction, permission, 
 - Prioritize employed doctors in discovery/booking; show external doctors when employed doctors are full over the selected start/end date range and matching filters. Equal dates mean one day. Backend fallback eligibility is authoritative; mixed-date presentation remains open. Operational access rules are the same; compensation stays distinct.
 - Management verifies candidate degrees and applicant data before activation. Verification procedure remains open; exact applicant fields/documents remain deferred.
 - Session reviews support comments (recommended as optional) and exactly 48 hours from session end; mobile edits are allowed within that original window. Web editing remains unspecified; render API-authoritative saved feedback and eligibility. Ticket satisfaction comments are optional and submission remains once per ticket.
-- Doctor dashboard controls patient tasks and reminder times, selected weekdays, start/end dates, and reminders per day. Backend schedules/sends push; administration still controls appointment reminder lead time. Numeric schedule limits and edit effects remain open.
+- Doctor dashboard controls patient tasks and reminder times, selected weekdays, start/end dates, and reminders per day. Backend schedules/sends push; administration still controls appointment reminder lead time. Changes to recurring patient tasks apply only to future occurrences and preserve earlier completion history. Numeric schedule limits remain open.
 - Internal staff-task workspace: reception/accountant assignment with several assignees, details, Low/Normal/High/Urgent priority, optional deadlines/overdue indication, comments, and attachments. Status updates automatically from actions; mappings and multi-assignee completion remain open. Assignment/comment/status/deadline/overdue events notify live in the website. Management sees full authorized-branch task details; staff see full created/assigned task details. Live events and files must obey API scope. Exact staff grants stay deferred; assignment does not grant clinical/finance authority. See [internal staff tasks](../planning/15-internal-staff-tasks.md).
 - See [external provider guide](../planning/16-external-provider-guide.md) for browser configuration responsibilities.
+
+## Confirmed clarification - 4 October 2026
+
+- Doctors may issue finalized clinical reports and prescriptions directly, without a separate management approval step, within granted permissions, assigned-patient scope, and applicable qualifications.
+- Internal tasks close automatically once the required completion condition is met, without creator approval; the multi-assignee completion condition remains open. Staff notifications are retained in an unread list, including events missed while the website was closed. Transport and detailed recipient rules remain open.

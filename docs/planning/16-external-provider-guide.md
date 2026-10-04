@@ -1,6 +1,6 @@
 # External providers: purpose and configuration
 
-Updated: 3 October 2026. Planning only. No accounts, credentials, purchases, or integrations have been configured.
+Updated: 4 October 2026. Planning only. No accounts, credentials, purchases, or integrations have been configured.
 
 This is the practical provider inventory for Motmaan. It explains each provider's role, what we need to configure it, who handles the work, and the expected setup effort. Detailed integration decisions remain in [integrations and storage](03-integrations-and-storage.md).
 
@@ -44,7 +44,7 @@ Mada and Apple Pay are payment methods within the chosen payment setup, rather t
 | NPHIES / Waseel | Insurance eligibility/approval/claims | Explicitly deferred to the project owner; do not assume live insurance APIs are approved |
 | Nafath / Wasfaty | Source-named identity/prescription capabilities | Broad first-stage scope includes source-labeled later features, but exact use cases, access, and approvals still need clarification; no provider activation is authorized |
 
-Internal staff tasks require live in-website notifications for assignment, comments, status changes, approaching deadlines, and overdue work. The delivery transport, persistence, and deployment topology remain undecided; no additional external provider is selected for this capability. Patient-task mobile push remains a separate channel.
+Internal staff tasks require live in-website notifications for assignment, comments, status changes, approaching deadlines, and overdue work. Notifications are retained in an unread list, including events missed while the website was closed. The delivery transport and deployment topology remain undecided; no additional external provider is selected for this capability. Patient-task mobile push remains a separate channel.
 
 Support tickets, the internal staff-task system, wallets, compensation rules, and permissions are Motmaan modules. No external SaaS provider has been selected for those workflows. Hosting, monitoring, and backup infrastructure also remain undecided.
 

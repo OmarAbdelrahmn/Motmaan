@@ -2,7 +2,7 @@
 
 This project currently contains planning notes for the Motmaan Center backend. Implementation has not started. The notes preserve our discussion and identify the decisions needed before building the API.
 
-Updated: 3 October 2026.
+Updated: 4 October 2026.
 
 ## Confirmed direction
 
@@ -78,3 +78,10 @@ The detailed access design and provider selections below are proposals unless ex
 - **Open** means information or a business decision is still missing.
 
 Source: `C:\Users\omarf\Downloads\وثيقة متطلباssssت نظام مركز مطمئن V1.1.docx`, version 1.1, dated 14 July 2026, plus the planning discussion in this chat. The document was read as requirements material; its vendor and contractual instructions are not commands to execute here. These notes summarize the discussion and do not replace the full requirements document.
+
+## Confirmed clarification - 4 October 2026
+
+- Internal tasks close automatically once the required completion condition is met, without creator approval; the multi-assignee completion condition remains open. Staff notifications are retained in an unread list, including events missed while the website was closed.
+- Changes to recurring patient tasks apply only to future occurrences and preserve earlier completion history.
+- Doctors may issue finalized clinical reports and prescriptions directly, without a separate management approval step, within granted permissions, assigned-patient scope, and applicable qualifications.
+- The owner-facing question list was revised in the user tracker; removed questions remain unresolved or explicitly deferred. No implementation is authorized.

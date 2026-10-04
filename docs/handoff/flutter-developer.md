@@ -1,6 +1,6 @@
 # Flutter developer handoff
 
-Updated: 3 October 2026. Status: planning handoff. The project is not in implementation; this file captures current product direction and should be updated as decisions are confirmed.
+Updated: 4 October 2026. Status: planning handoff. The project is not in implementation; this file captures current product direction and should be updated as decisions are confirmed.
 
 ## Product and technical context
 
@@ -38,7 +38,7 @@ Updated: 3 October 2026. Status: planning handoff. The project is not in impleme
 - Patient-imported Arabic data may have an English machine translation from the backend. Preserve/display the Arabic original and mark translated text as machine-generated; do not call translation APIs directly from Flutter. Clinical translation behavior is in [integration planning](../planning/03-integrations-and-storage.md).
 - Within 48 hours from session end, patients may optionally review the session and doctor, with a rating out of 10. Management sees all reviews; the patient author sees their own, and the session doctor sees that review. Other users do not see it; see [patient feedback](../planning/14-patient-session-feedback.md).
 - A patient's tasks include repeatable self-care actions (for example, three actions daily/weekly) and recommendations to join a Motmaan program related to their needs.
-- Doctors assign patient tasks. Doctors control patient-task reminder scheduling; the backend sends push notifications according to the doctor-defined schedule and task recurrence, and the app displays them. Patients can mark task occurrences complete or missed and provide a reason; doctors can review progress. Doctor controls include time of day, selected weekdays, start/end dates, and reminders per day. Numeric limits, schedule-edit effects, and weekly summaries remain open.
+- Doctors assign patient tasks. Doctors control patient-task reminder scheduling; the backend sends push notifications according to the doctor-defined schedule and task recurrence, and the app displays them. Patients can mark task occurrences complete or missed and provide a reason; doctors can review progress. Doctor controls include time of day, selected weekdays, start/end dates, and reminders per day. Changes to recurring patient tasks apply only to future occurrences and preserve earlier completion history. Numeric limits and weekly summaries remain open.
 - Family visibility direction has been discussed, but the user asked to defer its detailed implementation rules. Do not invent which clinical fields are shared or add automatic access changes when a child becomes an adult.
 
 ### Appointment status, countdown, reminders, and video
@@ -75,7 +75,7 @@ Updated: 3 October 2026. Status: planning handoff. The project is not in impleme
 - Patient-visible internal-only case metadata and recording access.
 - Expertise filter taxonomy and public profile fields; patient-facing filters should use approved API catalog entries.
 - Support-ticket attachment/reopen rules, survey format, and service targets.
-- Numeric patient-task schedule limits, effects of task edits, and weekly-summary behavior; doctor timing/weekday/date/reminder-count controls are confirmed.
+- Numeric patient-task schedule limits and weekly-summary behavior; doctor timing/weekday/date/reminder-count controls are confirmed.
 - Detailed reconciliation of source-only feature details and role/permission matrix. All project requirements/features are in stage one except explicit deferred items.
 - Notification channels and lead-time values; staff authentication does not apply to the patient app.
 
@@ -102,3 +102,8 @@ When the user confirms a rule that changes the Flutter app's screens, behavior, 
 - Ticket satisfaction comments are optional; one submission per ticket. Show submitted state from the API across devices; expiry remains open.
 - Doctors control patient-task times, weekdays, start/end dates, and reminder count per day; the backend sends recurrence-based push and the app displays it. Administration still controls appointment reminder lead time. Internal reception/accountant tasks and their live website notifications belong to the staff web workspace; no patient-mobile staff-task screens have been requested.
 - See [external provider guide](../planning/16-external-provider-guide.md) for client configuration responsibilities.
+
+## Confirmed clarification - 4 October 2026
+
+- Doctors may issue finalized clinical reports and prescriptions directly, without a separate management approval step, within granted permissions, assigned-patient scope, and applicable qualifications.
+- Changes to recurring patient tasks apply only to future occurrences and preserve earlier completion history. Display API-provided task versions and preserve historical progress.

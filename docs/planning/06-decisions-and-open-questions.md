@@ -1,6 +1,6 @@
 # Decisions and open questions
 
-Updated: 3 October 2026. This register separates user decisions, requirements recorded from the source document, and recommendations. Nothing here authorizes implementation; the project remains in planning.
+Updated: 4 October 2026. This register separates user decisions, requirements recorded from the source document, and recommendations. Nothing here authorizes implementation; the project remains in planning.
 
 ## User decisions
 
@@ -34,7 +34,9 @@ Updated: 3 October 2026. This register separates user decisions, requirements re
 | Expertise seed list | Exact labels are undecided; recommendation is for a psychiatric clinical lead to propose Arabic/English labels for management approval. |
 | Doctor activity/access | Management controls doctor active status; only active doctors can log in to the doctor dashboard. |
 | Roles and interface | Manager, reception, administrator, doctor, plus accountant capability for internal tasks. UI shows/hides actions according to permissions; backend independently enforces permissions and branch scope. Detailed permission matrix remains deferred. |
+| Direct clinical issuance | Doctors may issue finalized clinical reports and prescriptions directly, without a separate management approval step, within granted permissions, assigned-patient scope, and applicable qualifications. |
 | Doctor clinical scope | Doctors are expected to handle all listed clinical work: diagnoses, treatment plans, prescriptions, reports, session records, and tasks, within permissions, assigned-patient scope, and applicable qualifications. |
+| Patient-task edits | Changes to recurring patient tasks apply only to future occurrences and preserve earlier completion history. |
 | Patient tasks | Doctors control assigned daily/weekly self-care actions, Motmaan program recommendations, and their reminder schedule. Patients mark completion or missed with reason; backend calculates and sends recurrence-based push notifications in Asia/Riyadh and the app displays them. Confirmed doctor controls: time of day, selected weekdays, start/end dates, and reminders per day. Numeric limits and weekly summaries remain open. |
 | Support tickets | Patients submit; administrators resolve; statuses Open, In progress, Waiting for patient, Resolved, Closed. Send push updates and show an in-ticket new-message indicator. On Closed, email a survey rated out of 10 with optional comments, once per ticket, linked to the resolver. Management sees all results; the patient sees their own response. |
 | Practitioner percentages | Percentage rates are configurable in the system. Scope (per doctor/service/etc.) and exact revenue base remain open. |
@@ -43,6 +45,7 @@ Updated: 3 October 2026. This register separates user decisions, requirements re
 | Patient session feedback | Patients may optionally review sessions and doctors within 48 hours from session end, using a rating out of 10 and written comments (proposed as optional). Management sees all; the author sees their own and the session doctor sees its review. Mobile edits are allowed within the original 48-hour window; web editing/retraction remains open. No other users see it. |
 | Ticket satisfaction feedback | On ticket closure, email a satisfaction survey rated out of 10, with optional written comments and one submission per ticket. Link the response to the resolving administrator. Management sees all results; the patient sees their own response. |
 | Task notification schedule | Doctor controls patient-task reminder timing; backend schedules recurrence-based push notifications in `Asia/Riyadh`. This supersedes the earlier admin-controlled patient-task schedule. Appointment reminder lead time remains admin-controlled. |
+| Internal-task completion and notifications | Internal tasks close automatically once the required completion condition is met, without creator approval; the multi-assignee completion condition remains open. Staff notifications are retained in an unread list, including events missed while the website was closed. |
 | Internal staff tasks | Reception/accountant tasks with details, several assignees, Low/Normal/High/Urgent priority, optional due date/overdue indicator, comments, and attachments. Status derives automatically from actions; exact mappings and multi-assignee completion remain open. All proposed events (assignment/comments/status/deadline/overdue) notify live inside the website. Management sees full task details in authorized branch scope; other staff see full details of created/assigned tasks. |
 | Employed/external doctors | Same operational behavior and access rules within permissions, assigned-patient scope, and branch scope. Prioritize employed doctors in patient discovery/booking; show external doctors when employed doctors are full for the requested booking. Compensation arrangements remain distinct. Search uses selected start/end dates; equal dates mean one day. Evaluate fallback over the selected range and matching filters; mixed-date display details remain open. |
 
@@ -60,10 +63,10 @@ The active batch of ten user questions is maintained in [user notes and open que
 - Emdaad export coverage, field/file mapping, reconciliation, and cutover verification for the confirmed full migration.
 - Degree/applicant-data verification procedure before doctor activation; any additional qualification checks remain open.
 - Exact expertise labels, public profile fields, qualifications/documents, and post-hiring expertise edits.
-- Support-ticket service targets and survey response window; session-review web editing/retraction; patient-task schedule limits, changes to existing occurrences, and weekly summaries.
+- Support-ticket service targets and survey response window; session-review web editing/retraction; patient-task schedule limits, weekly summaries, and detailed treatment-task limits. Future-only edits with preserved earlier history are confirmed.
 - Cross-branch exceptions and authorized reporting scope under branch-restricted access; detailed assignment/transfer remains deferred.
 - External-doctor fallback display for mixed-date availability and settlement statements; the selected start/end date range is confirmed.
-- Internal task action-to-status mapping, multi-assignee completion/approval, notification persistence/recipients, file constraints, and escalation. Task priorities, multiple assignees, optional due dates, live website events, full scoped visibility, comments, and files are confirmed.
+- Internal task action-to-status mapping, multi-assignee completion condition, notification recipients, file constraints, and escalation. Task priorities, multiple assignees, optional due dates, live website events, full scoped visibility, comments, and files are confirmed.
 - Assessment platform API/SSO and patient recovery edge cases.
 - Agora-to-bucket behavior, processing/backup, and storage-region terms.
 - Correct no-show handling, clinic/doctor absence, technical failure, and policy changes to existing bookings.
@@ -96,3 +99,7 @@ The active batch of ten user questions is maintained in [user notes and open que
 ## Next planning work
 
 Continue requirements clarification using the question tracker. When the user returns to deferred permission details and the remaining business questions are resolved, develop a data-ownership model and API contracts that connect each use case to authorization, resource scope, financial effects, audit, concurrency, and meaningful acceptance scenarios. No code, migration, provider configuration, or deployment is part of this planning update.
+
+## Owner-message revision - 4 October 2026
+
+The user resolved automatic task closure without creator approval, persistent unread staff notifications, future-only patient-task edits with preserved history, and direct finalized clinical report/prescription issuance. The revised owner questions are in the tracker. Package-stop refunds, support hours/response targets, the SMS provider, and detailed staff permissions/deactivation were removed from this owner message only; they remain unresolved or previously deferred. Package family sharing is now explicitly included in the owner question. Preparing this message does not answer or change the deferred status of the other questions.

@@ -1,6 +1,6 @@
 # Identity roles permissions and dashboard access
 
-Updated: 3 October 2026. Status: user-requested access direction with a proposed detailed model.
+Updated: 4 October 2026. Status: user-requested access direction with a proposed detailed model.
 
 The user wants management, doctor or specialist, and patient experiences. Management and specialist dashboards must show details based on permissions, and entry must be restricted to authorized staff. The recommendation is one coherent identity and authorization model serving these experiences, with stronger staff authentication and a separate patient OTP flow.
 
@@ -154,3 +154,7 @@ Agree the staff landing experience, initial role matrix, who may grant sensitive
 - [ASP.NET Core role authorization](https://learn.microsoft.com/en-us/aspnet/core/security/authorization/roles?view=aspnetcore-10.0)
 - [ASP.NET Core policy authorization](https://learn.microsoft.com/en-us/aspnet/core/security/authorization/policies?view=aspnetcore-10.0)
 - [ASP.NET Core resource authorization](https://learn.microsoft.com/en-us/aspnet/core/security/authorization/resource-based?view=aspnetcore-10.0)
+
+## Confirmed clarification - 4 October 2026
+
+- Doctors may issue finalized clinical reports and prescriptions directly, without a separate management approval step, within granted permissions, assigned-patient scope, and applicable qualifications.

@@ -1,6 +1,6 @@
 # Customer mobile appointment countdown and reminders
 
-Updated: 3 October 2026. Status: confirmed mobile capabilities with proposed detailed behavior. This note is for planning the customer iOS and Android applications; no app or API code has been created.
+Updated: 4 October 2026. Status: confirmed mobile capabilities with proposed detailed behavior. This note is for planning the customer iOS and Android applications; no app or API code has been created.
 
 ## Confirmed direction
 
@@ -27,7 +27,7 @@ App push is the initial proposed mobile reminder channel; the existing WhatsApp/
 
 The backend schedules reminders independently of whether the mobile app is open. Store a logical reminder identity and delivery attempts; deduplicate duplicate scheduling, record provider outcomes, and define bounded retries and useful deadlines. Do not promise exact notification display timing on a device.
 
-**Patient task notifications:** Doctors control assigned daily/weekly tasks and their reminder schedule, including time of day, selected weekdays, start/end dates, and number of reminders per day. The backend calculates and sends push notifications according to these settings and task recurrence; the mobile app displays them. Use `Asia/Riyadh`. Numeric defaults/limits, task-edit effects on existing occurrences, and weekly-summary behavior remain open. This supersedes earlier admin-controlled patient-task timing; appointment reminder lead time stays admin-controlled.
+**Patient task notifications:** Doctors control assigned daily/weekly tasks and their reminder schedule, including time of day, selected weekdays, start/end dates, and number of reminders per day. The backend calculates and sends push notifications according to these settings and task recurrence; the mobile app displays them. Use `Asia/Riyadh`. Changes to recurring patient tasks apply only to future occurrences and preserve earlier completion history. Numeric defaults/limits and weekly-summary behavior remain open. This supersedes earlier admin-controlled patient-task timing; appointment reminder lead time stays admin-controlled.
 
 Rescheduling should invalidate stale reminders and schedule replacements. Cancellation, postponement, and completion should suppress reminders that are no longer applicable. For bookings made after the reminder's intended time, define whether to send an immediate acknowledgment/reminder or skip it. Agree notification recipients for family bookings and device registration across web/mobile sessions.
 

@@ -1,6 +1,6 @@
 # Internal staff tasks
 
-Updated: 3 October 2026. Planning only; no implementation is authorized.
+Updated: 4 October 2026. Planning only; no implementation is authorized.
 
 ## Confirmed requirement
 
@@ -11,6 +11,8 @@ Updated: 3 October 2026. Planning only; no implementation is authorized.
 - A task can have several assignees.
 - A due date is optional; show overdue work when a due date has passed.
 - Support discussion comments and file attachments.
+- Tasks close automatically after the required completion condition is met, without a creator approval step. Whether all assignees must finish remains open.
+- Staff notifications persist in an unread list, including events missed while the website is closed.
 - Status changes happen automatically from task actions. Exact labels and action-to-status mapping still need definition; the answer does not approve arbitrary manual status changes.
 - Assignment, comments, status changes, approaching deadlines, and overdue events produce live notifications inside the website. External email/SMS/mobile-push delivery is not confirmed for internal tasks.
 - Management sees full task details within its authorized branch scope. Other staff see full details of tasks they created or are assigned; action rights still depend on permissions.
@@ -24,14 +26,14 @@ A management-dashboard task list and detail page, with filters for assignee, sta
 
 Suggested status labels remain New, In progress, Blocked, Completed, Cancelled. The confirmed rule is to derive status from actions, rather than treat a status dropdown as the workflow. Proposed examples: creation produces New, starting work produces In progress, and an explicit block/cancel action produces its matching state. Completion must follow an agreed multi-assignee rule; one person's completion must not silently close everyone else's work before that rule is decided. These mappings are proposals.
 
-An overdue indicator is based on the optional due date; whether it creates a separate status remains open. Deadline warning offsets and notification recipients per event remain open. Live website notifications are confirmed; transport technology, persistent unread history, reconnect behavior, and notifications while the website is closed remain undecided.
+An overdue indicator is based on the optional due date; whether it creates a separate status remains open. Deadline warning offsets and notification recipients per event remain open. Live website notifications and persistent unread history, including events missed while the website is closed, are confirmed. Transport technology and reconnect behavior remain open.
 
 Apply server-side action permissions and task scope to task reads, live events, and attachment downloads. Assignment must not grant clinical-record access or authority to spend funds, approve refunds, or post accounting entries. References to appointments/tickets/documents reveal only authorized context. Keep audit history and bounded lists; confirmed attachments require private validated storage with file limits still to define. Full task details never grant unrelated module access.
 
 ## Open details
 
-- Exact automatic action-to-status mapping, per-assignee progress, whole-task completion, reassignment, and completion approval.
-- Deadline warning offsets, notification recipients, persistent unread history, and escalation.
+- Exact automatic action-to-status mapping, per-assignee progress, whole-task completion condition, and reassignment. Creator approval is not required.
+- Deadline warning offsets, notification recipients and escalation. Persistent unread history is confirmed.
 - File types/sizes, linked records, recurring work, and audit/retention details.
 - Branch ownership and cross-branch assignment.
 
