@@ -1,6 +1,6 @@
 # Booking and financial workflows
 
-Updated: 2 October 2026. Status: proposed rules with unresolved business decisions.
+Updated: 4 October 2026. Status: confirmed directions and proposed rules with unresolved business decisions.
 
 Booking and payment form the first workflow to define and eventually implement. A correct appointment depends on patient access, service pricing, specialist availability, room capacity, consent, and payment verification.
 
@@ -48,7 +48,19 @@ Temporary payment holds are explicitly deferred. Booking by bank transfer is als
 
 Room allocation is required at confirmation by the source. The proposed hold should reserve room capacity too, so payment does not succeed for an impossible in-person booking. Finalize the exact allocation strategy.
 
+## Confirmed scheduling and session actions — 4 October 2026
+
+- Reception marks an in-person patient Arrived; the treating doctor explicitly confirms the end-session process before the session is marked Finished and a rating request is sent to the patient. These separate attendance and completion events supersede patient self-recording of in-person arrival. Online join evidence remains separate. Keep payment settlement separate from both events; rating is optional and not a completion/payment condition. See [patient feedback](14-patient-session-feedback.md).
+- Patients book from the doctor's scheduled free slots and see the next available appointment date/time, including when it is a week away. Waiting-room queue position and estimated wait were not selected.
+- Doctors and management can control the doctor's daily session count and session time/duration. Session duration is configurable, not a fixed universal value. Five daily sessions and X minutes are illustrative, not defaults. Schedules support different working hours per weekday, breaks between sessions, and days off. Changes to session count or duration apply only to unbooked slots; existing bookings retain their booked date/time and duration. Exact duration configuration scope, break settings, and handling of days off that conflict with existing bookings remain open; do not infer automatic cancellation or rescheduling.
+- The doctor presses Ready for patient to notify both reception and the patient. This trigger is confirmed; notification channels remain open and advance reminders remain separate.
+- Preserve branch scope, selected search dates/filters, and employed-first/external fallback. If there are no available appointments at all in the search results, show next-available date/time suggestions separately, including dates beyond the selected range. Do not silently widen the range or suggest unavailable/unauthorized capacity; retain matching non-date filters and existing doctor-priority rules. If results exist, do not automatically add out-of-range suggestions merely because one doctor has no slots. Exact suggestion count and search horizon remain open. Existing reservations must remain unchanged by count/duration setting edits. Proposed safeguard: prevent new slots from overlapping those reservations. Cancellation/rescheduling policies remain separately deferred.
+
 ## State design
+
+The 4 October clinical clarification distinguishes patient departure/actual consultation end from later session-note writing and doctor-confirmed Finished status. Prescriptions may be written before departure. Do not require notes before the patient can leave. Exact completion validation remains open. Rating delivery is email after confirmation plus a next-app-opening popup if unanswered, within existing eligibility.
+
+**Confirmed overrun behavior:** Measure allocated duration from actual consultation start. At expiry, show the doctor a red warning if unfinished; notify reception if it remains unfinished after a system-configured delay from expiry. Delay value/default and configuration owner remain open. The doctor can extend the active session using a period configurable by doctor or management; no numeric defaults/limits were approved. This explicit active-session extension is distinct from changing general scheduling defaults. Expiry does not complete the session or trigger no-show/rating. Preserve attended/ongoing consultation protection. No-show timing still uses scheduled start plus the separate attendance grace period. Actual-start capture, extension recalculation, subsequent appointment conflicts, and financial consequences remain unresolved; no automatic booking shifts or extra charges are approved. See [customer appointments](10-customer-mobile-appointments.md).
 
 Keep booking state, payment state, attendance, recording state, and accounting synchronization separate. Preserve the required appointment labels through mappings to stable business meanings. Administrator-created labels must not redefine billing or authorization rules implicitly.
 

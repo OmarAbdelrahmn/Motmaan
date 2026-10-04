@@ -1,8 +1,10 @@
 # Integrations and file storage
 
-Updated: 3 October 2026. Provider choices remain provisional unless required by the source document; source naming does not establish merchant approval, account access, or a final contract.
+Updated: 4 October 2026. Provider choices remain provisional unless required by the source document; source naming does not establish merchant approval, account access, or a final contract.
 
 See [external provider guide](16-external-provider-guide.md) for each provider's purpose, configuration checklist, responsibility, selection status, and estimated setup effort. The guide is maintained alongside this integration note.
+
+The [official provider documentation review](17-provider-documentation-development-notes.md) marks dependencies and future development checks. It adds research evidence without changing provider selections or deferred business policies.
 
 ## Providers named in the requirements
 
@@ -12,8 +14,8 @@ See [external provider guide](16-external-provider-guide.md) for each provider's
 | Tabby | Installment payment | Provider-specific checkout, authorization, capture where applicable, status reconciliation, cancellation and refunds |
 | Tamara | Installment payment | Provider-specific checkout, authorization, capture where applicable, status notifications, cancellation and refunds |
 | Qoyod | Accounting and electronic invoicing | Customer and service mapping, invoices, payment records, credit notes, receipts, reconciliation |
-| Wati | WhatsApp delivery | Templates, confirmations, reminders, payment links, treatment and assessment notifications, delivery history |
-| Current SMS provider | SMS messaging | Patient OTP, accepted-doctor account invitations, operational messages, and delivery status; provider identity and capabilities remain unknown |
+| Wati | WhatsApp delivery; user-identified SMS handling candidate | Templates, confirmations, reminders, payment links, treatment/assessment notifications and delivery history; evaluate documented SMS path and actual transactional API in [Wati notes](17-provider-documentation-development-notes.md#whatsapp-and-sms-handling-wati) |
+| SMS delivery route | SMS messaging | Patient OTP, accepted-doctor invitations, operational messages and receipts. Wati is identified for evaluation; actual existing account and supported Saudi route remain unconfirmed |
 | Translation API | Arabic-to-English translation for data imported by users | Candidate: Google Cloud Translation. Run calls server-side; preserve source text and translated text, expose machine-translation provenance, and confirm health-data privacy/residency and clinical-review requirements before enabling clinical data translation. |
 | Agora | Embedded audio/video and recording | Call authorization, tokens, recording lifecycle, events, recording references |
 | Center assessment platform | Psychological tests and scales | SSO, paid access, assessment requests, result import, ordering-specialist attribution |
@@ -41,6 +43,8 @@ Provider callbacks or server-side status checks must confirm success before an o
 
 ## Supporting services to select
 
+- **User clarification / research:** Evaluate Wati for WhatsApp and SMS handling. The [Wati review](17-provider-documentation-development-notes.md#whatsapp-and-sms-handling-wati) records its documented SMS integration and Saudi delivery dependencies. Do not assume the campaign/fallback capability supplies every required transactional SMS operation. Existing SMS account/access and patient OTP channel policy remain open; acceptance SMS remains required.
+
 - **Proposed:** Firebase Cloud Messaging for app push, with APNs setup for iOS.
 - **User requirement:** Translate user-imported Arabic-language data into English using a suitable API; Google Cloud Translation is the named candidate to evaluate, not a final vendor choice. Retain the Arabic original, store translation provenance, and make clear when text is machine-translated. Before sending patient/clinical data, approve data-processing terms, data location, retention, and applicable health-data requirements. The user deferred exact formats and presentation.
 - **Recommendation:** A clinician should review machine translations before relying on them in clinical decisions or approved reports. The user has not yet chosen the review workflow.
@@ -64,7 +68,7 @@ Run a small proof of concept across intended clients: join, interruption and rec
 | Google Cloud Storage in Dammam, me-central2 | Documented Saudi object-storage location; KSA billing goes through CNTXT | Recorder compatibility, access, regional configuration, terms, and cost |
 | Oracle OCI Object Storage in Riyadh or Jeddah | Operating Saudi regions and managed object storage | Recorder compatibility, access, configuration, terms, and cost |
 
-Our proposed starting candidate is Google Cloud Storage in Dammam under the center's account. This is conditional on successful direct recording delivery and confirmation of the processing/storage arrangement. Do not assume any S3-compatible destination is supported by Agora.
+Our proposed starting candidate is Google Cloud Storage in Dammam under the center's account. This is conditional on successful direct recording delivery and confirmation of the processing/storage arrangement. Agora's current reference documents an S3-compatible storage option; that does not establish compatibility with every destination or the particular proposed OCI Saudi bucket. Verify the exact endpoint, credentials, and recording output. See the [storage configuration review](17-provider-documentation-development-notes.md#online-sessions-and-recording-agora).
 
 Cloud storage in the center's account is the interpretation discussed for center-controlled storage. Obtain clarity on whether the source's prohibition on third-party storage means no provider-owned retained recordings or requires physically center-owned infrastructure. Saudi storage alone does not establish the location of live-media processing or temporary recording backup.
 
@@ -82,9 +86,9 @@ Private file requests pass through API authorization. Issue a short-lived URL on
 
 Recording retention is one year in the source. Coordinate lifecycle deletion with versions, replicas, and backup policies so deleted recordings are not unintentionally retained or restored. Medical documents need a separately agreed retention policy. Object-storage durability does not replace a recovery plan for accidental deletion or database/file consistency.
 
-## Later or simpler connections
+## Additional connections and scope dependencies
 
-- Actual NPHIES or Waseel insurance exchange, Wasfaty prescriptions, and Nafath identity verification are separately approved work.
+- Insurance scope, including actual NPHIES/Waseel exchange, remains explicitly user-deferred. Wasfaty and Nafath source requirements are included in the user's broad first-stage direction, but exact use cases, onboarding, and API access remain unresolved. Source wording about separate approval does not override the latest user scope decision or authorize provider activation.
 - Daftra is an alternative to Qoyod if its APIs cannot meet the requirements.
 - ICD-10 and medication catalogs can be maintained as imported reference datasets; confirm source, license, and update process.
 - Calendar addition can use export or native calendar support; full synchronization needs a separate definition.

@@ -43,6 +43,12 @@ Updated: 4 October 2026. Status: planning handoff. The project is not in impleme
 
 ### Appointment status, countdown, reminders, and video
 
+- Reception records in-person Arrived status. Actual consultation end is patient departure; notes are written afterward and a prescription may precede departure. The doctor's later Finished confirmation triggers an emailed session/doctor rating request. If unanswered, show a rating popup on the next app opening from API-authoritative submission/eligibility/deadline state; email/web submissions suppress the unanswered popup. Rating remains optional, out of 10, with the existing 48-hour-from-session-end/mobile-edit rules. Popup repetition, multiple pending reviews, missing-email behavior, and late-confirmation timing remain open. Do not provide patient-operated attendance/completion actions; online join evidence remains separate.
+- Doctor overrun warnings, reception escalation, and session extension are staff workflows. Overrun duration runs from actual consultation start; reception is alerted after a system-configured delay if still unfinished. Delay value/default/owner and actual-start capture remain open. The doctor may extend an active session by a period configurable by doctor or management. No new patient duration countdown/end action or automatic booking shift is approved; display only API-provided state. Keep booked duration distinct from active extension and preserve attendance/ongoing-consultation no-show protection. No-show still uses scheduled start plus its separate grace period. Extension limits and next-booking conflicts remain open.
+- Booking shows scheduled free doctor slots and next-available date/time. If the search returns no available appointments at all, show separate next-available suggestions, potentially outside the selected range, while retaining matching non-date filters, branch scope, and employed-first/external fallback. Do not silently widen the range. Suggestion count/horizon remain open. Doctor/management settings include daily session count, configurable duration, weekday working hours, breaks, and days off; five sessions/day and X minutes are examples only.
+- Session count/duration setting changes affect only unbooked slots. Existing bookings keep their booked date/time and duration; display the appointment's API-provided values rather than applying the doctor's latest duration setting. Exact duration configuration scope (such as per service) remains open.
+- Doctor-ready notifications to patient and reception are triggered by the doctor's Ready for patient button. Channels remain open; advance reminders stay separate. Waiting-room queue position and estimated wait were not selected.
+
 - Show an appointment countdown and advance reminders using lead times set by administration. No numeric default is approved.
 - The mobile app may show the time until an upcoming in-person appointment; server/API time and appointment state are authoritative. A countdown never proves attendance or marks an appointment complete/no-show.
 - Patient no-shows retain the paid fee or consume one package session for both in-person and online appointments. The API evaluates no-show at appointment start plus its configurable grace period, unless attendance or an active consultation is recorded.
@@ -63,6 +69,16 @@ Updated: 4 October 2026. Status: planning handoff. The project is not in impleme
 - Handle weak/intermittent mobile networks, app resume, duplicate taps, and provider redirects without duplicating bookings or payments.
 - Refresh appointment/payment state from the API after returning from checkout, reopening the app, or restoring connectivity.
 - Register/unregister push devices through the API according to the eventual notification design. FCM/APNs are proposed, not selected.
+
+## Provider documentation findings for later development
+
+Read the [4 October provider review](../planning/17-provider-documentation-development-notes.md) alongside the provider guide. These are research findings and proposed verification tasks; no SDK or provider account is selected by this update.
+
+- With the chosen checkout flow, register required app identifiers and use only approved public configuration. Keep payment-pending and refund-pending views distinct; recover API state on return/resume before allowing another attempt. BNPL approval and capture mapping belongs to the agreed backend/gateway contract.
+- If FCM is selected, complete APNs capabilities/key setup, handle token availability and refresh, and update API device binding on login/logout/account changes. Verify permission denial and foreground/background/terminated/force-stop behavior on real devices. Push is supplementary to persisted appointment/task/ticket state.
+- For calls, use appointment-authorized tokens and handle expiry, reconnection, and recorder readiness through the eventual API contract. A successful join or checkout SDK callback does not establish recording readiness or paid booking state.
+- Keep clinical text out of lock-screen previews and provider telemetry; fetch authorized details after a notification tap. Translation display and clinical-review procedure remain open/deferred as recorded in planning.
+- Wati is now a named WhatsApp/SMS evaluation candidate; see [Wati delivery notes](../planning/17-provider-documentation-development-notes.md#whatsapp-and-sms-handling-wati). OTP transport/fallback is backend-managed. Display API challenge expiry and resend state; never infer verification from delivery or restart expiry after a channel change. A WhatsApp-first login flow is not selected. No Wati/Twilio secret belongs in Flutter.
 
 ## Open or deferred items affecting Flutter
 

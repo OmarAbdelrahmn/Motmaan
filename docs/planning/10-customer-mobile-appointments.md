@@ -15,7 +15,7 @@ Both reminder lead time and no-show grace period are administration-configured; 
 
 An upcoming appointment card shows patient beneficiary, specialist, service, appointment mode, exact date and time, and time remaining. A countdown supplements the absolute appointment time so users can understand after-midnight Ramadan appointments and family bookings.
 
-When the appointment starts, change the countdown to an appropriate status instead of displaying an unexplained negative duration. The in-person Arrived action and online Join action follow their separately authorized rules. Do not mark a session completed because its display timer expires.
+When the appointment starts, change the countdown to an appropriate status instead of displaying an unexplained negative duration. Reception marks an in-person patient Arrived; the patient app displays that status. Online Join follows its separately authorized rules. The doctor marks the session Finished; do not mark it completed because its display timer expires.
 
 Calculate the displayed countdown from the server-supplied appointment instant and time reference. Refresh authoritative state after app resume, changes, or connectivity restoration; continuous API polling every second is unnecessary. Device clock changes must not determine booking deadlines, attendance, or financial effects.
 
@@ -33,11 +33,35 @@ Rescheduling should invalidate stale reminders and schedule replacements. Cancel
 
 ## Attendance and no-show
 
-The source provides a customer Arrived action for in-person visits, attendance on online join, and authorized staff confirmation. Agree the validity checks for customer arrival and attendance corrections. A displayed countdown or a delivered notification is not evidence of attendance.
+**Confirmed on 4 October 2026:** Reception marks the patient Arrived for an in-person appointment, and the treating doctor marks the session Finished. This supersedes the source's patient-operated in-person Arrived action. The patient app/website displays authoritative attendance and completion; a patient tap, countdown expiry, or delivered notification does not record either event. Online attendance evidence on joining remains a separate workflow; this clarification does not require reception confirmation of an online join. Attendance correction rules remain open.
 
 The user replaced the source's scheduled-end timing with scheduled start plus an admin-configured grace period. Recorded attendance or an active online consultation prevents automatic no-show even before completion is recorded. The API's cutoff and attendance state are authoritative; the mobile display does not perform the financial transition. Define optional UI text during the grace window without confusing the countdown-to-start with attendance eligibility.
 
 Patient no-show retention applies to paid sessions and package entitlements. Preserve No-show as a distinct classification and consume only once. The doctor receives no completed-session incentive for that appointment. Do not automatically classify clinician absence or an online service failure as patient absence.
+
+## Arrival, doctor capacity, and next available appointments
+
+Clarified on 4 October 2026:
+
+- **Confirmed:** Reception records Arrived. The doctor explicitly confirms the end-session process; after that confirmation the session is Finished and the patient receives a request to rate the session/doctor. Attendance, readiness, completion, and feedback remain separate; see [patient feedback](14-patient-session-feedback.md).
+- **Confirmed:** Patient booking is based on the doctor's scheduled free appointment slots. Show the next available date/time, even if it is a week away. A patient waiting-queue position or estimated waiting-room time was not selected.
+- **Confirmed:** Both doctors and management can control doctor session count and session time/duration. Duration is configurable. Five sessions per day and X minutes were examples, not fixed limits or defaults. Schedules support different weekday working hours, breaks between sessions, and days off. Count/duration setting changes apply only to unbooked slots; existing bookings retain their date/time and duration. Exact duration configuration scope, break settings, and handling days off that conflict with existing bookings remain open.
+- **Confirmed:** The doctor presses Ready for patient to notify both patient and reception. Channels remain open; this is separate from advance appointment reminders and does not change the booked time.
+
+Keep existing no-show rules, selected-date-range search, employed-doctor priority/external fallback, and branch scope in force. **Confirmed:** Only when the search returns no available appointments at all, show separate next-available suggestions, which may fall beyond the selected date range. Retain matching non-date filters and existing doctor-priority rules; do not silently change the range. Existing results do not trigger extra out-of-range suggestions merely because one doctor has no slots. Suggestion count and search horizon remain open. Preserving existing bookings under session count/duration setting changes is confirmed. Proposed safeguard: prevent new slots from overlapping existing reservations. Deferred cancellation, rescheduling, assignment, and detailed permissions remain deferred.
+
+## Clinical end, overrun warnings, and extension
+
+Confirmed on 4 October 2026:
+
+- The in-person consultation ends when the patient leaves; the doctor writes session notes afterward and may write a prescription before the patient leaves. Keep actual consultation end and later doctor-confirmed Finished status distinct. The rating email follows Finished confirmation; an unanswered review prompts a popup on the patient's next app opening, within eligibility. See [patient feedback](14-patient-session-feedback.md).
+- Measure the allocated session duration from the actual consultation start. When that duration expires while the session remains unfinished, show a red warning to the doctor. If it remains unfinished after a system-configured delay from the warning/expiry, notify reception about the overrun. A 1.5-hour session is an example, not a universal duration. No reception-delay value, default, or setting owner has been selected. How actual consultation start is recorded remains open; do not equate arrival or Ready for patient with actual start without a decision.
+- The doctor can explicitly extend the active session by a period configured in the system by the doctor or management. Exact period values, defaults, limits, repeat-extension rules, and authority scope remain open. This is a deliberate extension of the active session, distinct from general duration-setting edits that preserve existing bookings.
+- The warning must not automatically mark Finished, terminate an attended consultation, apply a no-show, or send a rating request. An active consultation still prevents no-show under the existing rule.
+
+Proposed safeguards: record extensions and distinguish booked duration, effective end, actual consultation end, and confirmation time; recalculate warning/escalation eligibility after an extension or completion and avoid stale/duplicate reception alerts. Do not silently move subsequent bookings or change fees/incentives. Overlap handling, warning dismissal after the patient has left but documentation is pending, applicability to online sessions, and any extension pricing consequences remain unresolved. Existing cancellation/rescheduling and detailed permission topics stay deferred.
+
+Timing clarification: the original overrun warning is due at actual consultation start plus allocated duration; reception escalation is due after the configured delay if still unfinished. Extension recalculation remains a proposed safeguard until its detailed behavior is settled. The no-show cutoff still uses scheduled appointment start plus its separate attendance grace period; this answer changes overrun timing only.
 
 ## Planned verification
 

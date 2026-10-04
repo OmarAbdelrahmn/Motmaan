@@ -1,10 +1,13 @@
 # Patient session feedback
 
-Updated: 3 October 2026. Status: feedback and mobile review editing confirmed; remaining reporting details are open. No implementation has started.
+Updated: 4 October 2026. Status: feedback, doctor-confirmed completion trigger, and mobile review editing confirmed; remaining delivery/reporting details are open. No implementation has started.
 
 ## Optional session and doctor reviews
 
 - After a session, each patient may optionally review the session and the doctor who provided it.
+- **Confirmed trigger:** The doctor explicitly confirms the end-session process. After that successful confirmation marks the session Finished, send the patient a request to rate the session and doctor. Do not trigger the request from scheduled end time, reception attendance, or the Ready for patient action. Rating remains optional; it does not determine session completion or payment.
+- **Confirmed clinical sequence:** The in-person clinical session ends when the patient leaves; the doctor writes session notes afterward. The doctor may write a prescription before the patient leaves. Distinguish patient departure/actual consultation end from later documentation and Finished confirmation. Do not require notes before the patient can leave or invent a mandatory note-save gate for completion; exact confirmation validation remains open.
+- **Confirmed delivery:** Email the rating request after doctor-confirmed completion. If the patient has not submitted a review, show a rating popup the next time they open the app, subject to the existing review eligibility/window. A review submitted through email/web must suppress the unanswered popup in the app. Popup dismissal/repetition, multiple pending reviews, and patients without a usable email remain open. No WhatsApp/SMS or push rating delivery was selected.
 - Management can see all session feedback. The patient who submitted a review can see their own review, and the doctor who treated that session can see its review. Do not expose it to other patients, unrelated doctors, or the public.
 - The feedback should be linked to the patient, completed session, and treating doctor so management can review it in context.
 - Do not treat feedback as a public doctor rating. Management may review and report on all session feedback.
@@ -22,6 +25,9 @@ Updated: 3 October 2026. Status: feedback and mobile review editing confirmed; r
 - Do not expose ticket satisfaction responses to unrelated users or doctors.
 
 ## Proposed controls and unresolved details
+
+- Proposed: send one logical rating invitation per completed session and preserve its state across retries/repeated doctor confirmation. Keep the rating form accessible in appointment details after popup dismissal. Do not send completion-based invitations for cancelled/no-show sessions. Email plus a next-app-opening popup for unanswered reviews is confirmed; wording, repeated reminders/popups, and missing-email handling remain open.
+- The existing 48-hour deadline from session end remains unchanged. The user answered the late-confirmation question with overrun alerts and extension behavior, without selecting a new rating-window start. Actual consultation end versus confirmation time therefore remains a queued clarification; do not reset the deadline at scheduled end, email delivery, or app opening. Required fields/validation in the completion confirmation remain to define. See [session overruns](10-customer-mobile-appointments.md).
 
 - Proposed: keep one logical review per eligible patient/session and update it through the confirmed mobile edit flow instead of creating duplicate reviews. Keep protected revision history for management; its reporting/retention details remain open.
 - Keep session/doctor feedback separate from support-ticket satisfaction so a ticket survey does not become a clinical or practitioner rating.

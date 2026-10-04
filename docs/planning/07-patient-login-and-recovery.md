@@ -76,6 +76,10 @@ Phone OTP and email recovery must remain patient authentication contexts even wh
 - Phone recycling, duplicate contact conflicts, username/email normalization and uniqueness, and imported-account matching.
 - Browser and mobile session mechanisms, device management, and notification delivery provider.
 
+## Messaging candidate clarification — 4 October 2026
+
+The user identified Wati for WhatsApp/SMS handling. The [provider review](17-provider-documentation-development-notes.md#whatsapp-and-sms-handling-wati) records its authentication-message and fallback capabilities and unresolved Saudi route/API dependencies. This does not select WhatsApp-first login or prove Wati provides challenge generation/verification. Preserve the purpose-bound, single-use backend challenge, expiry, resend and attempt controls across transport retries or fallback; late delivery must not extend validity. Final channel policy and numeric limits remain open.
+
 ## Reference
 
 [OWASP recovery guidance](https://cheatsheetseries.owasp.org/cheatsheets/Forgot_Password_Cheat_Sheet.html) supports expiring single-use recovery challenges, consistent responses, abuse controls, and session invalidation after recovery. Its password-reset examples inform these controls; this plan does not add patient passwords.

@@ -1,6 +1,6 @@
 # Online sessions and recording delivery
 
-Updated: 2 October 2026. Status: proposed Agora Cloud Recording workflow, subject to provider and storage validation.
+Updated: 4 October 2026. Status: proposed Agora Cloud Recording workflow, subject to provider and storage validation.
 
 Agora can upload recordings directly to the configured supported private bucket. The ASP.NET Core API controls the recorder and stores metadata; the usual flow does not download the video to the API and upload it again. Joining a call does not automatically enable recording.
 
@@ -61,6 +61,8 @@ Delete recordings after one year under the agreed interpretation of the retentio
 Agora can use Agora Cloud Backup if direct upload fails; event type 32, backuped, indicates at least one file reached that fallback. It is not equivalent to all objects being available in our bucket. Confirm whether fallback storage is acceptable under the center-controlled-storage requirement. If prohibited, establish a supported recording architecture that satisfies the constraint before choosing Cloud Recording.
 
 Saudi bucket location alone does not guarantee Saudi media processing. Validate the exact storage vendor and region, recording configuration, fallback behavior, and contractual processing arrangement.
+
+The [4 October provider review](17-provider-documentation-development-notes.md#online-sessions-and-recording-agora) records current storage configuration and event-verification details. The official reference now includes an S3-compatible endpoint option; it still requires proof against the chosen Saudi destination. Recording retention must also account for recoverable deleted objects, versions, replicas, and backups; see the review's storage section. Neither public capability establishes account-specific readiness.
 
 ## Planned proof of concept
 

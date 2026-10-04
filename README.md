@@ -41,6 +41,11 @@ Updated: 4 October 2026.
 - The customer mobile app shows an appointment countdown and sends advance reminders at an administration-configured lead time. The countdown is interpreted as time until the appointment starts.
 - Practitioners apply through Join us on the main website. Authorized acceptance automatically provisions the doctor account and role and schedules an SMS invitation.
 - All websites must be optimized for mobile and desktop.
+- Reception marks in-person patients Arrived; the doctor explicitly confirms session end, then the session is Finished and the patient receives an optional rating request. The existing rating scale and 48-hour-from-session-end window remain in force. The doctor's Ready for patient button notifies both patient and reception; notification channels remain open.
+- Patients book scheduled free slots. If the search returns no available appointments at all, show separate next-available suggestions, potentially beyond the selected date range, retaining matching non-date filters and existing doctor-priority/branch rules. Doctors and management control daily session count, configurable duration, different weekday working hours, breaks, and days off; five sessions per day and X minutes are examples only.
+- Session duration is configurable. Session count/duration setting changes apply only to unbooked slots; existing bookings retain their booked date/time and duration.
+- Actual in-person consultation end is the patient's departure; the doctor writes notes afterward and may issue a prescription before departure. Later doctor-confirmed completion triggers a rating email, with a popup on the next app opening if unanswered within eligibility. The rating-window start under late confirmation remains unresolved; the existing 48-hour-from-session-end rule stands.
+- Count allocated session duration from actual consultation start. At expiry show a red doctor warning if unfinished; notify reception after a system-configured delay if still unfinished. The doctor can extend the active session by a period configurable by doctor or management. Delay value/default/owner, actual-start capture, extension values/limits, and following-booking conflicts remain open; 1.5 hours is an example only. The scheduled-start no-show rule is unchanged.
 
 The detailed access design and provider selections below are proposals unless explicitly marked otherwise.
 
@@ -67,6 +72,7 @@ The detailed access design and provider selections below are proposals unless ex
 | [New chat project context](PROJECT_CONTEXT_FOR_NEW_CHAT.md) | Portable summary of user instructions and the current planning source of truth |
 | [Internal staff tasks](docs/planning/15-internal-staff-tasks.md) | Staff assignment, priority, details, and open workflow choices |
 | [External provider guide](docs/planning/16-external-provider-guide.md) | Provider purpose, selection status, configuration, responsibility, and setup effort |
+| [Provider documentation development notes](docs/planning/17-provider-documentation-development-notes.md) | Official-documentation findings, important development priorities, evidence gaps, and future verification scenarios |
 
 [Project instructions](AGENTS.md) preserve the planning stage and the user's directions for future implementation.
 

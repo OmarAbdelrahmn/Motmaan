@@ -37,6 +37,15 @@ Updated: 4 October 2026. This file keeps the decisions made in the planning conv
 - Administrators have full control over package offers and settings. Exact fields and safeguards remain to define.
 - For in-person and online no-shows, retain payment or consume one package session; no doctor incentive. Mark after scheduled start plus dynamic admin-defined grace period, unless attendance or active online session is recorded.
 - The patient app shows an appointment countdown and advance notice; admin sets reminder lead time.
+- Reception marks in-person patients Arrived; the treating doctor marks the session Finished. Patient self-recording of in-person arrival is superseded; online attendance evidence remains separate.
+- Patients book scheduled free doctor slots and see the next available date/time, even if it is a week away. Waiting-room queue/estimated-wait display was not selected. Doctors and management control daily session count and session time/duration; five sessions per day and X minutes are examples only. See [booking and finance](02-booking-and-finance.md) and [customer appointments](10-customer-mobile-appointments.md).
+- Session duration is configurable. Session count/duration setting changes affect only unbooked slots; existing bookings retain their booked date/time and duration. Exact configuration scope (such as per service) remains open; no numeric defaults were selected.
+- Schedules support different working hours per weekday, breaks between sessions, and days off. Exact break settings and handling days off conflicting with existing bookings remain open; no automatic cancellation/rescheduling is approved.
+- When the search has no available appointments at all, show separate next-available date/time suggestions, including beyond the selected range. Keep matching non-date filters, branch scope, and employed-first/external fallback; do not silently widen the range. Exact suggestion count/search horizon remain open.
+- The doctor presses Ready for patient to notify both reception and the patient. Trigger and recipients are confirmed; channels remain open. Advance reminders stay separate.
+- The doctor explicitly confirms the end-session process; after confirmation marks the session Finished, email a request to rate the session/doctor. If unanswered, show a rating popup on the patient's next app opening within eligibility. Reviews remain optional, out of 10, with existing visibility/editing rules. The existing 48-hour-from-session-end rule remains in force; the user's overrun answer did not resolve actual-end versus late-confirmation timing. Confirmation validation, popup repetition, and missing-email handling remain open. See [patient feedback](14-patient-session-feedback.md).
+- Actual in-person consultation end means the patient leaves. The doctor writes notes afterward and may write a prescription before departure. Do not require notes before clinical end/patient departure or invent a mandatory note-save gate. Later Finished confirmation and actual consultation end are distinct.
+- Measure allocated session duration from actual consultation start. At expiry, show the doctor a red warning if unfinished; notify reception after a system-configured delay if it remains unfinished. No delay value/default or setting owner was selected. The doctor may extend the active session by a period configurable by doctor or management. A 1.5-hour session is illustrative, not a default. Actual-start capture, extension values/limits, and following-booking conflicts remain open; no automatic completion, no-show, booking shifts, or charges are selected. Scheduled-start no-show grace is unchanged. See [customer appointments](10-customer-mobile-appointments.md).
 
 ### Doctors, recruitment, expertise, and patient tasks
 
@@ -63,20 +72,47 @@ Updated: 4 October 2026. This file keeps the decisions made in the planning conv
 - Support translation of imported Arabic user data into English using a suitable API. Google Cloud Translation is an evaluation candidate, not a final vendor. Keep the Arabic source, label machine translation, and approve privacy/residency before processing health data externally. Translation of specific formats and presentation is noted for later; human clinical review is the recommended approach, not yet selected by the user.
 - Agora is the source-named provisional online session provider. Proposed recording delivery goes directly into a supported private center bucket; one-year retention is a source requirement. Playback is limited by management permission. Provider/storage fit remains to validate.
 - Center-controlled private Saudi-region storage is proposed; Google Cloud Storage in Dammam is a candidate, with OCI Saudi as an alternative.
-- Qoyod is the named accounting/e-invoicing system. Wati is source-named for WhatsApp. SMS provider and assessment API/SSO remain to confirm.
+- Qoyod is the named accounting/e-invoicing system. Wati is source-named for WhatsApp; on 4 October the user also identified it for WhatsApp/SMS evaluation. Its role and research dependencies are in the [expanded Wati notes](17-provider-documentation-development-notes.md#whatsapp-and-sms-handling-wati). Final SMS route, existing account/access, and assessment API/SSO remain to confirm; identifying the platform does not approve activation or change OTP channels.
 - The user requested a dedicated external-provider Markdown guide showing each provider's role and configuration clearly. See [external provider guide](16-external-provider-guide.md); keep it current when provider decisions change.
 - Family-sharing details and child-to-adult transition are explicitly deferred. Current direction: both parents can see children's details and one another's details; children cannot see parents' details; parent need not have a patient record; no automatic adulthood change, administrator decides.
 - Insurance scope is deferred to ask the project owner.
 
+## Provider documentation review — 4 October 2026
+
+The requested documentation review is recorded in [provider development notes](17-provider-documentation-development-notes.md), with priorities marked in the [provider guide](16-external-provider-guide.md). It separates public technical facts, recommendations, and missing account/vendor evidence. It adds development dependencies for payments/accounting, recording/storage, push, messaging, translation, and migration. No queued business question was answered by provider documentation; the queue and deferred topics below retain their status.
+
 ## Next ten questions
 
-The current queue has three items after the 4 October answers and owner-message removals. The owner-facing version below also includes selected previously deferred topics; their answers are still pending.
+The current queue has five items: three outstanding owner questions, the unanswered rating-window clarification, and the extension-conflict question. Actual-start overrun timing and delayed reception escalation are now answered. Delay value/default, configuration owner, and actual-start capture remain detailed dependencies, not selected defaults. The owner-facing version below also includes selected previously deferred topics; their answers are still pending.
 
 1. What are the internal multi-assignee task details, including whether all assignees must complete their parts or one assignee can complete the task for everyone? Multiple assignees remain a confirmed requirement; the owner message asks about support and details.
 2. What are the full details of the system's assessment/test platform, including tests, patient usage, results, and available integration?
 3. Can a package contain different services, can patients choose any eligible doctor, and can the package be shared among family members?
+4. If the doctor confirms session end late, should the 48-hour rating window still run from actual consultation end (current rule), or instead start from the doctor's confirmation? The latest answer defined overrun warnings/extensions, not this deadline; a confirmation-based window remains unapproved.
+5. If an extension overlaps the doctor's next booked appointment, should the system block the extension or flag the conflict for staff handling? Existing bookings must not silently shift; broader rescheduling remains deferred.
+
+The arrival discussion is resolved as reception-recorded attendance and doctor-confirmed completion followed by a rating request. The user redirected queue visibility toward **scheduled doctor capacity and next available appointments**. Duration is configurable, existing bookings are preserved under count/duration setting edits, and weekday hours/breaks/days off are supported. Out-of-range suggestions appear when no appointments are available at all. The doctor-ready button is confirmed. Remaining details include precise duration/break configuration, day-off conflicts, suggestion limits, notification channels, and delayed end-session confirmation. These details do not reopen deferred cancellation, rescheduling, assignment, or detailed permissions.
 
 ### Resolved on 4 October 2026
+
+- Overrun timing answer: count allocated session duration from actual consultation start. Capturing that start event remains to define; arrival/readiness are not automatically the start.
+- Reception escalation answer: notify reception after a system-configured delay following duration expiry/red warning if still unfinished. No value/default or configuration owner was selected. The scheduled-start no-show rule remains unchanged.
+
+- Clinical-sequence answer: the patient leaves at consultation end, then the doctor writes notes; a prescription may be written before departure. Do not require notes before patient departure/clinical end. Exact later confirmation validation is unresolved.
+- Rating-delivery answer: send email after doctor-confirmed completion; if no review is submitted, show a popup on the next app opening, within eligibility. Submission across channels suppresses the unanswered popup; repetition and missing-email handling remain open.
+- Overrun addition: red doctor warning at actual-start-based duration expiry, delayed reception notification if still unfinished, and a doctor-operated extension using a period configurable by doctor or management. Delay value/default/owner, actual-start capture, extension values/limits, and subsequent-booking conflicts remain open. This answer did not resolve the rating-window anchor.
+
+- Weekday schedule answer: support different weekday working hours, breaks between sessions, and days off.
+- Suggestion answer: offer next-available appointments only if the search has no available appointments at all; display out-of-range suggestions separately.
+- Doctor readiness answer: the doctor presses Ready for patient to notify patient and reception; channels remain open.
+- New completion direction: doctor explicitly confirms session end, then email the patient a session/doctor rating request and show a next-app-opening popup if unanswered. Existing optional rating and 48-hour-from-session-end rules remain in force; late-confirmation handling remains open.
+
+- Duration follow-up: session duration is configurable; exact configuration scope (such as per service) remains open.
+- Settings-change follow-up: apply session count/duration edits only to unbooked slots. Existing bookings retain their booked date/time and duration.
+
+- Reception marks in-person arrival; the doctor marks session Finished. Online join attendance remains separate.
+- Show free scheduled doctor slots and the next available date/time. Doctors and management control daily session count and session time/duration; no numeric defaults were selected.
+- Doctor-ready recipients and button trigger are confirmed; notification channels remain unresolved.
 
 - Internal tasks close automatically after the required completion condition is met; creator approval is not required. The multi-assignee completion condition remains open.
 - Retain staff notifications in an unread list, including events missed while the website was closed.
@@ -87,7 +123,7 @@ The current queue has three items after the 4 October answers and owner-message 
 
 - Stopping an already-started package and refunding unused sessions.
 - Support working hours, response targets, and urgent-ticket targets.
-- Existing SMS provider and available integration access.
+- Existing SMS account/provider route and available integration access. Wati is now identified for evaluation; account access, Saudi route and required transactional operations are still unresolved.
 - Detailed staff permission matrix and doctor-deactivation effects; these retain their prior deferred status.
 
 ## Revised owner questions - 4 October 2026
