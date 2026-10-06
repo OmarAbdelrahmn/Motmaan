@@ -1,6 +1,6 @@
 # Practitioner expertise catalog and patient filters
 
-Updated: 3 October 2026. Status: user-requested planning requirement; workflow details remain open. No implementation has started.
+Updated: 4 October 2026. Status: expertise requirement and management approval of post-hiring public biography/expertise updates confirmed; detailed workflow remains open. No implementation has started.
 
 ## Goal
 
@@ -9,14 +9,14 @@ Maintain a database-backed catalog of areas in which each psychiatric doctor has
 ## Confirmed direction
 
 - The expertise list is stored in the database and can be edited by administrators.
-- Doctor applicants provide expertise information as part of Join us.
+- Doctor applicants select several therapeutic expertise values as part of Join us; multi-selection is explicitly confirmed. Exact Arabic/English labels and selection limits remain open.
 - Patient-facing discovery uses these expertise entries as doctor filters, helping match a patient's concern to doctors who treat it.
 - Doctor search filters should also include specialty, language, appointment mode, and availability.
 - Initial public recruitment is doctor-only; administrators control openings/applications.
 - Management approves the candidate's expertise/degrees for the public profile and interviews the candidate before acceptance.
 - Management verifies degrees and applicant data before doctor activation; the verification procedure remains open.
-- Prioritize employed doctors in patient discovery/booking. Show external doctors when employed doctors are full for the requested booking. Both use the same operational access rules; compensation remains distinct.
-- Availability search accepts start and end dates. Equal dates mean a single-day search; different dates mean the selected date range. Evaluate employed-first/external fallback over that selection, using the same matching filters.
+- Prioritize available salary-paid practitioners in patient discovery/booking. Preserve external fallback when prioritized practitioners are full over the selected dates and matching filters. Both use the same operational access rules; compensation remains distinct.
+- Availability search accepts start and end dates. Equal dates mean a single-day search; different dates mean the selected date range. Evaluate salary-paid availability priority/external fallback over that selection, using the same matching filters.
 
 ## Recommended model
 
@@ -31,17 +31,17 @@ Maintain a database-backed catalog of areas in which each psychiatric doctor has
 
 ## Open decisions
 
-### Deferred doctor preferences / display priority
+### Confirmed doctor display priority
 
-The user requested doctor-level **تفضيلات** that affect priority/order when doctors are shown to patients, and explicitly asked to discuss this later. Preserve it as a deferred product requirement. The exact meaning of preferences, who configures them, ranking criteria/weights, and interaction with employed-first/external fallback remain unresolved. Do not replace the existing employed-doctor rule or infer a priority algorithm from this note. This concerns user-facing doctor discovery; clinical response urgency is not established by the wording.
+The user clarified preferences as **salary-paid and available** practitioners taking priority ahead of percentage-paid practitioners. This resolves the deferred criteria question. Apply the current branch, date-range and matching-filter rules, and the prior external fallback when prioritized doctors are fully booked. No exact tie-break order, configurable weights, or mixed-date presentation is approved; configuration ownership remains open. Render API-authoritative order and do not expose compensation contracts/rates to patients.
 
 ### Other open details
 
 - Exact catalog categories and Arabic/English labels for psychiatric treatment expertise.
-- Review and approval details for expertise/profile updates after hiring.
+- **Confirmed on 4 October 2026:** Post-hiring public biography and expertise changes require management approval before publication. Exact submission/rejection workflow remains open. Proposed presentation: keep the last approved public values visible while an update awaits review.
 - Whether candidates may suggest new expertise values or only select existing ones.
-- Exact personal-information fields, expertise details, degree/qualification fields, supporting documents, and which details are public.
-- How management verifies degrees/applicant data and any additional license checks before activation; exact applicant documents remain deferred.
+- Current-site personal/qualification/document baseline is recorded in [recruitment reference](19-recruitment-current-website-reference.md); expertise labels/limits, extra supporting evidence, and public-field mapping remain open.
+- How management verifies degrees/applicant data and any additional license checks before activation; baseline documents are CV and health-specialties certificate, with extra documents and verification procedure still open.
 - Availability calculation/display and treatment of mixed results when employed doctors have slots on some selected dates. Single-day and date-range selection are confirmed; apply branch and selected search filters consistently. No arbitrary date-range limit is approved yet.
 - Whether additional patient filters are needed beyond expertise/concern, specialty, language, appointment mode, and availability.
 - Evidence/credential verification, who may edit the catalog, translations, archive behavior, and review/audit permissions.
@@ -50,7 +50,7 @@ The user requested doctor-level **تفضيلات** that affect priority/order wh
 
 - **Join us:** candidate selects or describes expertise alongside application information; no dashboard account is created before authorized acceptance.
 - **Management:** authorized administrators maintain the catalog and review candidate/profile expertise according to rules still to be decided.
-- **Doctor profile:** show only approved, public information. Doctors' own edit permissions remain open.
+- **Doctor profile:** show only approved public information. Post-hiring biography/expertise updates require management approval before publication; update submission and rejection details remain open.
 - **Patient website/app:** filter public doctor results using active catalog entries. Search must respect availability and booking eligibility returned by the API.
 
 Related: [System scope](01-system-scope.md), [recruitment and compensation](08-practitioner-compensation-and-recruitment.md), [decisions and open questions](06-decisions-and-open-questions.md), [Flutter handoff](../handoff/flutter-developer.md), and [web handoff](../handoff/web-frontend-developer.md).

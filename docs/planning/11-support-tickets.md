@@ -1,6 +1,6 @@
 # Support ticket system
 
-Updated: 3 October 2026. Status: patient support-ticket flow and basic statuses are confirmed; remaining operational details are open. No implementation has started.
+Updated: 4 October 2026. Status: patient support-ticket flow, basic statuses, and patient reopening without a time limit confirmed; other details remain open. No implementation has started.
 
 ## Goal
 
@@ -16,6 +16,8 @@ Give patients a trackable way to ask Motmaan for help and give authorized staff 
 6. Preserve the conversation, assignment, status changes, and resolution in the ticket history.
 
 **Confirmed:** Only patients submit support tickets. Administrators handle and resolve them. Use the statuses Open, In progress, Waiting for patient, Resolved, and Closed. Send push notifications and show a new-message/update indicator in the patient's ticket experience. When the ticket is Closed, email the patient a satisfaction survey with a rating out of 10 and optional written comments; allow one submission per ticket and associate it with the resolving administrator. Management sees all results; the patient sees their own response. Other users do not see it. Survey expiry and service targets remain open.
+
+**Confirmed online-session exception:** A patient may open a ticket if a connection problem prevents completion of an online session. Management reviews the case and may grant a free replacement session. Opening/resolving a ticket does not automatically create an entitlement or authorize its handler to grant one; management approval is the confirmed decision point. Linking the case to its appointment and recording review/grant outcome is proposed; detailed grants, review criteria and replacement-session conditions remain open. See [online sessions](04-online-sessions.md).
 
 ## Suggested ticket data
 
@@ -35,8 +37,10 @@ Give patients a trackable way to ask Motmaan for help and give authorized staff 
 
 ## Questions before implementation
 
+**Confirmed on 4 October 2026:** Patients may reopen their resolved or closed tickets without a time limit. Reopening does not authorize a second satisfaction-survey submission; keep the existing one-response-per-ticket rule. The resulting status mapping remains open.
+
 - Which administrator/support permissions allow viewing, assigning, replying, resolving, and closing tickets?
-- Can patients reopen a resolved ticket, and for how long?
+- How does reopening map to the existing statuses? Reopening without a time limit is confirmed.
 - Are attachments supported, which file types/sizes are allowed, and how long are they retained?
 - What comment length, survey response deadline, and reopened/reclosed ticket behavior should apply? Optional comments and one submission per ticket are confirmed.
 - What response hours, priorities, escalation rules, and service targets apply?

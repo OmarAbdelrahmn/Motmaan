@@ -32,6 +32,8 @@ Apply server-side action permissions and task scope to task reads, live events, 
 
 ## Open details
 
+**Deferred by the user on 4 October 2026:** Whether all assignees must complete their parts or one employee can complete a shared task for everyone. Keep multiple assignees and automatic closure once the eventual completion condition is met; no condition is selected yet. Do not re-ask this question until the user returns to it.
+
 - Exact automatic action-to-status mapping, per-assignee progress, whole-task completion condition, and reassignment. Creator approval is not required.
 - Deadline warning offsets, notification recipients and escalation. Persistent unread history is confirmed.
 - File types/sizes, linked records, recurring work, and audit/retention details.

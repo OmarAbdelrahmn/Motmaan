@@ -1,6 +1,6 @@
 # Performance security and responsive websites
 
-Updated: 3 October 2026. The user confirmed performance and security as priorities and required all websites to work well on mobile and desktop. The detailed engineering controls below are proposed implementation standards, not claims of tested behavior.
+Updated: 4 October 2026. The user confirmed performance and security as priorities and required all websites to work well on mobile and desktop. The detailed engineering controls below are proposed implementation standards, not claims of tested behavior.
 
 ## Implementation approach
 
@@ -49,7 +49,9 @@ Branding interpretation: display the center's name, logo, and identity consisten
 
 All proposed checks are required: security, user acceptance, payment/accounting reconciliation, successful backup restoration, representative performance verification, and monitoring. The two-month target does not prove readiness. Exact thresholds, sign-off owners, and milestones remain open.
 
-Proposed acceptance coverage includes branch restrictions on queries, reports, exports, files, and background workflows; no clinical or financial privilege gained from internal task assignment; employed-doctor priority and external-doctor fallback. These are future checks, not verified implementation behavior.
+Proposed acceptance coverage includes branch restrictions on queries, reports, exports, files, and background workflows; no clinical or financial privilege gained from internal task assignment; salary-paid availability priority and external-doctor fallback. These are future checks, not verified implementation behavior.
+
+**Review follow-ups R12–R14:** Name owners and measurable thresholds for the required checks. Add a supported browser/device matrix, clinical draft/cache/logout behavior, API compatibility for older installed mobile clients, app distribution/signing ownership, store/privacy declarations and account deletion/request handling. Prepare trial migration and cutover/rollback evidence alongside restore tests; export discussion retains its user-deferred status. See the [readiness review](20-development-readiness-review.md) for current gaps and official mobile-policy references, and the [shared contract checklist](../handoff/shared-contract-checklist.md) for client acceptance criteria. These are proposed delivery artifacts, not completed checks or approved policy defaults.
 
 ## Verification when implementation starts
 

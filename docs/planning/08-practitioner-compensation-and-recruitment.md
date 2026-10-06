@@ -1,12 +1,12 @@
 # Practitioner compensation and public recruitment
 
-Updated: 3 October 2026. Status: confirmed user capabilities with proposed detailed workflows.
+Updated: 4 October 2026. Status: confirmed user capabilities with proposed detailed workflows.
 
 The user confirmed a percentage compensation arrangement and a salary arrangement with an incentive on monthly revenue above a target. In the first stage, candidates apply for doctor roles through the public Join us route; administrators control openings and applications. Authorized acceptance automatically creates or safely resolves the doctor account, assigns the doctor role, and schedules an SMS invitation. Other job types may be added later. No application code or actual external communications are part of this planning update.
 
 Management controls whether a doctor is active. Only active doctors can log in to the doctor dashboard. Management verifies degrees and applicant data before activation; the detailed verification procedure remains open. Deactivation effects on existing sessions and reactivation remain deferred.
 
-**Confirmed:** Employed and external doctors use the same operational behavior and access rules, within permissions, assigned-patient scope, and branch scope. Prioritize employed doctors in discovery/booking; show external doctors when employed doctors are full for the requested booking. Compensation remains distinct. Search uses start/end dates; equal dates mean one day. Evaluate fallback over the selected range and matching filters; mixed-date display remains open.
+**Confirmed:** Employed and external doctors use the same operational behavior and access rules, within permissions, assigned-patient scope, and branch scope. Prioritize available salary-paid practitioners in discovery/booking; preserve external fallback when prioritized practitioners are full over the selected dates and matching filters. Compensation remains distinct. Search uses start/end dates; equal dates mean one day. Evaluate fallback over the selected range and matching filters; mixed-date display remains open.
 
 ## Compensation arrangements
 
@@ -15,7 +15,7 @@ Management controls whether a doctor is active. Only active doctors can log in t
 | Salary with target incentive | Fixed salary plus a percentage of eligible monthly revenue above the practitioner's target | Salary amount, target, incentive rate, eligible revenue, period boundaries, adjustments, approval and payment tracking |
 | Percentage | A practitioner can receive a share of eligible service revenue | Rate, revenue base, service eligibility, allocation, rounding, accrual and reversal rules |
 
-**Confirmed system control:** Percentage rates must be changeable through the system. The rate's configuration scope (per practitioner, service, or another grouping), who may change it, approval/audit requirements, and the percentage calculation base remain open. Do not hardcode an example rate as a default.
+**Confirmed system control:** Percentage rates must be changeable through the system. Rates vary by practitioner and use net revenue after tax and discounts. Additional deductions implied by “and so on,” service-specific overrides, edit authority, and approval/audit requirements remain open. Do not hardcode an example rate as a default.
 
 This clarification matches the source's salary-plus-target-incentive concept. It resolves the earlier open question about whether salary can include a percentage incentive. The percentage-only arrangement remains separate; ordinary percentage on all services must not be added to the salary plan unless separately requested.
 
@@ -62,13 +62,13 @@ The initial Join us scope is doctor recruitment only. Administrators control whe
 
 Doctor candidates identify their areas of expertise from an editable database-backed catalog (for example, a concern or treatment area). The same catalog is linked to doctor profiles so patients can filter doctors by a concern. Catalog ownership, language labels, candidate entry/approval rules, and which profile details are public are described in [practitioner expertise](13-practitioner-expertise.md). Candidate expertise should not be treated as a credential or clinical endorsement by itself.
 
-**Confirmed application information:** Collect normal personal information, expertise, and degrees. Management verifies degrees and applicant data before activation. Exact fields/documents remain deferred; verification procedure and public-profile mapping remain open.
+**Confirmed application information:** Use the existing Motmaan specialist form as the field/document reference, plus a multiple-selection therapeutic-expertise field. The observed required uploads are CV and Saudi Commission for Health Specialties certificate. See the [current website field reference](19-recruitment-current-website-reference.md) for all common, specialist, administrative, and conditional fields. Management verification before activation and public-profile mapping remain separate and open.
 
-**Noted for later by the user:** Finalize the exact candidate personal-information fields and degree/document checklist during a later clarification round.
+The user returned to the applicant-field question and directed a website review. The baseline is now documented; additional credential evidence, file validation, and verification procedure remain open.
 
-The main website provides a Join us page that works on mobile and desktop. Candidates provide the normal doctor-applicant personal information, expertise, and degrees/academic qualifications. Management reviews their application, interviews them, and approves expertise/degrees for the public profile before acceptance. The clinic-identity wording is interpreted as the center name, logo, and branding, not applicant tracking or disclosure of a visitor's identity. Exact candidate fields/documents, interview process, public fields, and brand assets remain open.
+The main website provides a Join us page that works on mobile and desktop. Candidates provide the normal doctor-applicant personal information, expertise, and degrees/academic qualifications. Management reviews their application, interviews them, and approves expertise/degrees for the public profile before acceptance. The clinic-identity wording is interpreted as the center name, logo, and branding, not applicant tracking or disclosure of a visitor's identity. Baseline fields/documents are recorded from the current site; interview process, extra credential evidence, public fields, and brand assets remain open.
 
-Candidates can submit a general interest application or apply to a vacancy if vacancies are included. A full vacancy publishing module has not yet been confirmed. Initial proposed fields are name, phone/email contact, specialty, qualifications, experience, preferred location or availability, and an optional CV or requested supporting documents. Do not collect patient medical history or unnecessary identity documents in this form.
+Candidates can submit a general interest application or apply to a vacancy if vacancies are included. A full vacancy publishing module has not yet been confirmed. The observed baseline includes personal/contact data, qualifications, specialty/department, professional classification, experience, requested role and work type, employment/license questions, required CV and required health-specialties certificate; expertise is the user's additional multi-select requirement. Do not collect patient medical history or unnecessary identity documents in this form.
 
 Public application submission does not require granting a patient or staff dashboard account. Contact verification is a proposed abuse and contact-quality control; its timing and channel are open. An optional candidate tracking portal is not yet requested.
 
@@ -114,7 +114,7 @@ Contacting a candidate is a supported future workflow, not an instruction to cal
 
 Link automatically provisioned staff/practitioner records to the accepted application rather than exposing the recruiting record publicly. Avoid duplicate identities when the person is already a patient, while retaining separate patient and staff authentication contexts. Resolve existing identities through verified evidence or authorized review; matching a phone number alone must not silently transfer an existing account to a candidate.
 
-Public employment recruitment is distinct from the source's future external-doctor marketplace. The latter includes external self-registration, platform accreditation, commissions/wallets, and marketplace operations. Do not import that full future scope into this simple recruitment workflow.
+Public employment recruitment is distinct from the source's external-doctor marketplace, which includes external self-registration, platform accreditation, commissions/wallets and marketplace operations. The source called it future work, but that phasing is superseded by the user's broad first-stage direction. Keep those capabilities separately visible in the scope inventory, reconcile their exact use cases with Motmaan-only operations, and do not silently implement them through the simple doctor-only Join us workflow. Detailed acceptance criteria remain open; see review finding R01 in the [readiness review](20-development-readiness-review.md).
 
 ## Upload and access handling
 
@@ -126,6 +126,13 @@ Define candidate privacy wording, document access, retention, withdrawal, and de
 
 ## Decisions still needed
 
-Settle practitioner-specific terms, percentage-rate scope and calculation base, salary frequency, period attribution, refund timing/month-close corrections, package price allocation, assessment completion eligibility, payroll scope, named openings versus a general doctor application, contact verification, required fields/documents, credential verification, who can accept, existing-identity reconciliation, staff invitation setup, the acceptance SMS template, additional notifications, and candidate-data retention. Automatic doctor account creation/role assignment after acceptance and the net completed-and-paid-session basis for monthly incentives are already confirmed.
+Settle practitioner-specific rates/terms, optional service-specific rates, further net-revenue deductions, salary frequency, period attribution, refund timing/month-close corrections, package price allocation, assessment completion eligibility, payroll scope, named openings versus a general doctor application, contact verification, upload limits/extra credential documents beyond the observed baseline, credential verification, who can accept, existing-identity reconciliation, staff invitation setup, the acceptance SMS template, additional notifications, and candidate-data retention. Automatic doctor account creation/role assignment after acceptance and the net completed-and-paid-session basis for monthly incentives are already confirmed.
 
 Related notes: [Identity and access](05-identity-and-access.md), [Booking and finance](02-booking-and-finance.md), and [Quality priorities](09-performance-security-and-responsive-websites.md).
+
+## Latest compensation, discovery, and recruitment clarification — 4 October 2026
+
+- Practitioner percentage compensation differs by practitioner, using net revenue after tax and discounts. Do not assume unspecified deductions. Above-target commission applies only to additional eligible revenue above the configured target; the prior salary/incentive structure is reconfirmed.
+- For a discounted SAR 1,000 four-session package originally SAR 1,200, session revenue allocation is SAR 250. Refund after two used sessions reprices them at SAR 300 each and returns SAR 400; see [finance](02-booking-and-finance.md). Refund-related commission reallocation/reversal remains open and must not be inferred from patient refund repricing.
+- Patient-facing priority is for available salary-paid practitioners ahead of percentage-paid practitioners. Retain branch/date/filter scope and the existing external fallback policy; tie-breaking and mixed-date display remain open. Compensation terms/rates stay private.
+- Current recruitment fields were reviewed at the user's request for both specialists and administrative applicants. Administrative roles are recorded as a reference; the initial doctor-only job scope and automatic doctor provisioning rule are not expanded by that review. See the [field reference](19-recruitment-current-website-reference.md).

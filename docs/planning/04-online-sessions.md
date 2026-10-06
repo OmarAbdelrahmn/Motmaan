@@ -1,8 +1,10 @@
 # Online sessions and recording delivery
 
-Updated: 4 October 2026. Status: proposed Agora Cloud Recording workflow, subject to provider and storage validation.
+Updated: 4 October 2026. Status: online-session recording is mandatory by user decision; the proposed Agora Cloud Recording workflow remains subject to provider and storage validation.
 
 Agora can upload recordings directly to the configured supported private bucket. The ASP.NET Core API controls the recorder and stores metadata; the usual flow does not download the video to the API and upload it again. Joining a call does not automatically enable recording.
+
+**Confirmed on 4 October 2026:** Every online consultation must be recorded for safety and performance review. Offering an unrecorded consultation is not selected. Preserve recorded consent and independently authorized playback; this does not grant patients or all doctors access to recordings. Exact consent/refusal handling and recorder-unavailable or mid-session recorder-failure behavior remain open; do not assume mandatory recording means bypassing consent or proceeding without recording.
 
 ## Proposed sequence
 
@@ -30,7 +32,7 @@ sequenceDiagram
 
 Check the appointment, participant ownership, permitted joining time, and recorded consent. Issue participant-specific tokens. Storage credentials must never be supplied to the web or mobile clients.
 
-The proposed start trigger is the specialist starting the consultation with the patient present. Finalize this trigger so relevant clinical conversation is not allowed before recording is ready when recording is mandatory.
+The proposed start trigger is the specialist starting the consultation with the patient present. Recording is now mandatory; finalize readiness/consent gating so relevant clinical conversation is not allowed before recording is ready. This is a proposed control for the confirmed mandatory-recording rule; exact readiness and failure behavior remain open.
 
 Call acquire immediately before starting: its resource is short-lived, so do not acquire it when the appointment is booked days earlier. Use a separate recorder UID, call start with storage and output configuration, and persist the resourceId and sid. Select composite audio/video for combined review unless another mode is approved; output may contain multiple assets.
 
@@ -41,6 +43,8 @@ Prevent concurrent duplicate starts and record attempts. Do not blindly retry a 
 Use explicit consultation end rather than the nominal appointment end. The source permits sessions to continue past their scheduled duration. Define reconnect grace and handling of abandoned sessions; one participant temporarily disconnecting is not by itself a consultation end.
 
 **Confirmed financial policy:** Patient no-shows in online sessions retain the payment or consume one package entitlement, just as in-person no-shows. They remain non-completed and earn no completed-session doctor incentive. Patient attendance events and an ongoing consultation should prevent a no-show job from treating an overrun as absence. Define how to distinguish patient absence from clinician absence or a technical failure before automatically applying the financial consequence.
+
+**Confirmed clarification on 4 October 2026:** If a connection problem prevents completion, management may review the case and grant the patient a free replacement session. The patient may open a support ticket to request review. Replacement is discretionary after management review, not automatic on disconnection or ticket submission. The user's expectation of reliable internet is an operating expectation, not measured provider availability. Review criteria, granted-session eligibility/expiry/practitioner, partial-session accounting and correction of an incorrectly assigned no-show remain open. No blanket partial-charge rule, automatic refund or automatic Finished transition is selected.
 
 **Confirmed timing:** Check for patient no-show at scheduled start plus the admin-configured attendance grace period, rather than scheduled end. Attendance grace is separate from reconnect grace and recording idle timeout; it does not terminate an attended consultation.
 

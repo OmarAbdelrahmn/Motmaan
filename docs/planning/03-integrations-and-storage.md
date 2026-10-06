@@ -39,7 +39,7 @@ Qoyod records accounting and issues the official accounting/e-invoicing document
 
 **User direction supersedes the source's split-provider shortlist for required online methods:** Patient checkout must offer mada, Apple Pay, credit/debit cards, Tabby, and Tamara together. Evaluate one payment gateway integration that exposes all of them, instead of assuming MyFatoorah plus separate BNPL integrations. Gateway choice remains open; see the provider research above.
 
-Provider callbacks or server-side status checks must confirm success before an online booking is confirmed. Store Motmaan's payment/refund transaction record, reconcile gateway events idempotently, and sync the necessary accounting details to Qoyod. Cash is accepted only at an attended in-person session. Booking by bank transfer is deferred for later discussion.
+Provider callbacks or server-side status checks must confirm success before an online booking is confirmed. Store Motmaan's payment/refund transaction record, reconcile gateway events idempotently, and sync the necessary accounting details to Qoyod. Cash is accepted only at an attended in-person session. Booking by bank transfer is not allowed.
 
 ## Supporting services to select
 
@@ -88,11 +88,11 @@ Recording retention is one year in the source. Coordinate lifecycle deletion wit
 
 ## Additional connections and scope dependencies
 
-- Insurance scope, including actual NPHIES/Waseel exchange, remains explicitly user-deferred. Wasfaty and Nafath source requirements are included in the user's broad first-stage direction, but exact use cases, onboarding, and API access remain unresolved. Source wording about separate approval does not override the latest user scope decision or authorize provider activation.
+- **Confirmed:** No insurance in the current release. Prepare the system for future NPHIES/Waseel integration; live eligibility/approval/claims and provider activation are explicitly future work, with operations/contracts undecided. Wasfaty and Nafath source requirements are included in the user's broad first-stage direction, but exact use cases, onboarding, and API access remain unresolved. Source wording about separate approval does not override the latest user scope decision or authorize provider activation.
 - Daftra is an alternative to Qoyod if its APIs cannot meet the requirements.
 - ICD-10 and medication catalogs can be maintained as imported reference datasets; confirm source, license, and update process.
 - Calendar addition can use export or native calendar support; full synchronization needs a separate definition.
-- Google reviews use a link. Bank transfers use staff verification in the source. Neither requires an additional live API by default.
+- Google reviews use a link. Bank-transfer bookings appear in the source but are now prohibited by the user. Wallet bank payouts are a separate confirmed request/approval workflow; their execution channel remains undecided.
 - Emdaad is a migration source, not a proposed ongoing live integration.
 
 ## Integration prerequisites
@@ -115,3 +115,9 @@ Obtain account ownership, API documentation, sandbox credentials, enabled produc
 - [Oracle regions](https://docs.oracle.com/en-us/iaas/Content/General/Concepts/regions.htm)
 - [LiveKit self-hosting](https://docs.livekit.io/transport/self-hosting/)
 - [Daily customer-owned recording storage](https://docs.daily.co/guides/products/live-streaming-recording/storing-recordings-in-a-custom-s3-bucket)
+
+## Existing assessment platform and future insurance — 4 October 2026
+
+- The user reports that the assessment platform already exists and is expected to launch this week. Integrate it with Motmaan rather than recreate it. Name, URL, API/SSO, result and payment contracts are still unknown; clarification is now requested from its programmer, replacing the earlier discussion deferral. The [Arabic integration questions](18-assessment-platform-integration-questions.md) are ready to forward.
+- Prepare for future NPHIES/Waseel capability without enabling insurance in the present release. Proposed planning boundary: keep patient/beneficiary identity, provider references and financial ownership explicit, with a future adapter boundary; detailed schemas and insurance-specific operations should await verified contracts. No implementation is authorized.
+- Wallet bank withdrawal is distinct from prohibited booking by transfer: service-refund balance only, request inside wallet, approval by system administrator or accountant. The actual bank channel/API, execution operator, verification, statuses, and reconciliation are still open.

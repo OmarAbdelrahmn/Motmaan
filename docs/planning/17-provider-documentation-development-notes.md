@@ -4,6 +4,10 @@ Reviewed: 4 October 2026. **Planning research only.** Official public documentat
 
 **Documented** describes provider behavior in the cited public reference. **Recommendation** is a proposed Motmaan development safeguard. **Open** requires account-specific evidence or a project decision. Research does not select providers, approve health-data processing, answer deferred business questions, or authorize implementation. Recheck versions, limits, and merchant configuration when development starts.
 
+## Current account inventory clarification
+
+After this public-documentation review, the owner confirmed that no external-provider accounts are currently available and that they will be responsible for all accounts. Prior statements about unconfirmed existing account access below describe the research gap; the current answer is no accounts yet. [Provider setup questions P01–P12](16-external-provider-guide.md) track selections and evidence still needed. Staff login is username/verified email/phone plus password, with default-on self-managed SMS verification and authorized administrator control; patient OTP uses SMS with the confirmed six-digit/five-minute/60-second/five-attempt defaults; the provider route remains unselected and untested. Public provider documentation does not resolve the remaining authentication/authorization policies.
+
 ## Priority markers
 
 | Marker | Meaning |
@@ -20,7 +24,7 @@ Status: preferred candidate, subject to merchant and all-method approval.
 - **Documented / P2:** `reference.idempotent` protects charge/authorization/refund retries for **24 hours**. [Idempotency](https://developers.tap.company/docs/idempotency).
 - **Recommendation / P2:** Persist one key per logical payment attempt or refund operation, reuse it for retries, and retain local duplicate protection beyond the provider window. A deliberate new attempt needs a distinct identity and reconciliation of the earlier attempt. Verify merchant, environment, amount, currency, and Motmaan reference before changing booking state.
 - **Documented / P2:** Full/partial refunds exist. `PENDING` or `ACCEPTED` is not `REFUNDED`; the documented refund-v2 logic requires support activation and is marked beta. [Refund lifecycle](https://developers.tap.company/reference/refunds).
-- **Open / P1:** Obtain written all-method approval for Motmaan's business category, enabled refund lifecycle, fees, settlements, SDK coverage, and Tabby/Tamara capture handling through Tap. Provider checkout expiry does not decide Motmaan's deferred slot-hold duration.
+- **Open / P1:** Obtain written all-method approval for Motmaan's business category, enabled refund lifecycle, fees, settlements, SDK coverage, and Tabby/Tamara capture handling through Tap. Motmaan's slot hold is now confirmed as seven minutes; align the provider flow with that deadline and define late-payment handling.
 
 **Future verification:** Duplicate taps; lost redirect; invalid signature; SAR amount formatting; timeout followed by retry; retry after 24 hours; partial refund; accepted refund that later fails; payment arriving after a slot is released. The last scenario requires an explicit resolution policy.
 
@@ -136,11 +140,11 @@ These are alternatives, not additional mandatory integrations.
 |---|---|---|
 | SMS | Wati identified for evaluation; documented Twilio path has unresolved Saudi domestic-route and transactional API dependencies | Confirm the actual existing SMS service/account, supported Motmaan sender route, OTP ownership, expiry/resend/attempt limits, Arabic support, authenticated receipts, quotas and invitation flow. Platform identity is now recorded; account and integration access remain unresolved. See the Wati section. |
 | Email/SMTP | Vendor/transport contract unavailable | Obtain sending/authentication setup, delivery/bounce contract, quotas, and credential handling. Define single-use recovery/verification/survey links without assuming a vendor. |
-| Assessment platform | Identity/API/SSO/result contract unavailable | Obtain authentication, patient matching, assessment IDs, paid-access rules, completion/results contract, sample files, versioning, corrections, and ordering-doctor attribution. The active owner question remains unanswered. |
+| Assessment platform | Existing platform per user; name/API/SSO/result contract unavailable | Forward [programmer questions](18-assessment-platform-integration-questions.md) for authentication, patient/family matching, assessment IDs, paid-access rules, results/sample files, versioning, corrections and ordering-doctor attribution. Platform existence is resolved; integration capabilities remain unverified. |
 | Emdaad | Export/schema/files unverified | Request complete export inventory and file access; reconcile record counts, relationships, balances, packages, attachments, and file checksums in a trial migration. No ongoing Emdaad integration is assumed. |
 | Daftra | Fallback only; not evaluated in this review | If Qoyod is unsuitable, compare actual invoice/payment/credit-note APIs, account access, correction and reconciliation guarantees before replacing it. |
 | Nafath / Wasfaty | Exact Motmaan use cases and onboarding/API access unavailable | Source requirements are in first-stage scope under current direction, but obtain approved use cases, official integration package, credentials/sandbox and responsibility boundaries. Do not infer activation from source naming. |
-| NPHIES / Waseel | Insurance scope explicitly deferred | Preserve deferred status; obtain authorized requirements and official integration material when the owner returns to it. |
+| NPHIES / Waseel | No current insurance; future integration readiness requested | Live insurance operations remain future work. Obtain official contracts/use cases when the owner returns to implementation; readiness does not authorize provider activation. |
 | Hosting, monitoring, backup | Topology/providers not selected | Agree measurable performance, restore and availability objectives before selecting infrastructure; do not invent hosting SDKs or quotas. |
 
 This review records gaps rather than claiming inaccessible/private specifications were read. Qoyod and Tamara's large documentation pages could not be fully fetched by the browser research tool; the specific facts above were available through official indexed excerpts and related official pages. Full account-specific specifications and sandbox verification remain pending.

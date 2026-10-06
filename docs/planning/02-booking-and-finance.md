@@ -33,20 +33,20 @@ flowchart LR
     H --> I[Specialist completes session]
 ```
 
-Temporary payment holds are explicitly deferred. Booking by bank transfer is also noted for later; no verification or hold workflow has been selected.
+**Confirmed checkout:** Reserve the selected appointment for seven minutes while payment is pending, show a countdown, and release the unpaid hold at expiry with «انتهى وقت الدفع، يرجى المحاولة مرة أخرى». Booking by bank transfer is not allowed. Server time and trusted provider payment state govern expiry and confirmation; the app timer is display only.
 
 | Decision | Proposed starting rule |
 |---|---|
 | Availability | Service eligibility, specialist schedule, no overlapping booking or hold, and a room for in-person care |
 | Price | Server-calculated, including specialist price, approved discount rules, and validated tax treatment |
 | Confirmation | For online payment, provider-confirmed successful payment is required before the appointment becomes confirmed; retain separate fulfillment rules for paid package entitlements and eligible free follow-ups |
-| Online payment | Bounded hold with a configurable deadline |
-| Bank transfer | Deferred by the user. If considered later, proof alone should not confirm receipt; define staff verification and timing then. |
+| Online payment | Confirmed seven-minute checkout hold with visible countdown; release unpaid capacity at expiry |
+| Bank transfer | Not allowed for bookings; no transfer-proof booking flow |
 | Late payment | Record the payment, recheck capacity, and resolve or refund if the slot is unavailable |
 | Attendance | Separate evidence from appointment completion and financial settlement |
 | Completion | Authorized treating specialist records completion |
 
-Room allocation is required at confirmation by the source. The proposed hold should reserve room capacity too, so payment does not succeed for an impossible in-person booking. Finalize the exact allocation strategy.
+**Confirmed on 4 October 2026:** Allocate rooms per appointment. Reception selects the room; show reception suggestions of rooms available for that appointment rather than automatically assigning a room or reserving it for a practitioner's entire shift. Room allocation at confirmation is a source requirement; how reception's selection fits self-service booking and confirmation timing remains open. The proposed hold should reserve room capacity too, so payment does not succeed for an impossible in-person booking. Suggestions must respect branch scope and current reservations/holds, with availability rechecked when the selection is saved; ranking and service-specific room constraints remain open.
 
 ## Confirmed scheduling and session actions — 4 October 2026
 
@@ -54,13 +54,13 @@ Room allocation is required at confirmation by the source. The proposed hold sho
 - Patients book from the doctor's scheduled free slots and see the next available appointment date/time, including when it is a week away. Waiting-room queue position and estimated wait were not selected.
 - Doctors and management can control the doctor's daily session count and session time/duration. Session duration is configurable, not a fixed universal value. Five daily sessions and X minutes are illustrative, not defaults. Schedules support different working hours per weekday, breaks between sessions, and days off. Changes to session count or duration apply only to unbooked slots; existing bookings retain their booked date/time and duration. Exact duration configuration scope, break settings, and handling of days off that conflict with existing bookings remain open; do not infer automatic cancellation or rescheduling.
 - The doctor presses Ready for patient to notify both reception and the patient. This trigger is confirmed; notification channels remain open and advance reminders remain separate.
-- Preserve branch scope, selected search dates/filters, and employed-first/external fallback. If there are no available appointments at all in the search results, show next-available date/time suggestions separately, including dates beyond the selected range. Do not silently widen the range or suggest unavailable/unauthorized capacity; retain matching non-date filters and existing doctor-priority rules. If results exist, do not automatically add out-of-range suggestions merely because one doctor has no slots. Exact suggestion count and search horizon remain open. Existing reservations must remain unchanged by count/duration setting edits. Proposed safeguard: prevent new slots from overlapping those reservations. Cancellation/rescheduling policies remain separately deferred.
+- Preserve branch scope, selected search dates/filters, and salary-paid availability priority/external fallback. If there are no available appointments at all in the search results, show next-available date/time suggestions separately, including dates beyond the selected range. Do not silently widen the range or suggest unavailable/unauthorized capacity; retain matching non-date filters and existing doctor-priority rules. If results exist, do not automatically add out-of-range suggestions merely because one doctor has no slots. Exact suggestion count and search horizon remain open. Existing reservations must remain unchanged by count/duration setting edits. Proposed safeguard: prevent new slots from overlapping those reservations. Patient cancellation and modification are blocked with less than 24 hours remaining; authorized staff exceptions and other change details remain open.
 
 ## State design
 
-The 4 October clinical clarification distinguishes patient departure/actual consultation end from later session-note writing and doctor-confirmed Finished status. Prescriptions may be written before departure. Do not require notes before the patient can leave. Exact completion validation remains open. Rating delivery is email after confirmation plus a next-app-opening popup if unanswered, within existing eligibility.
+The 4 October clinical clarification distinguishes patient departure/actual consultation end from later session-note writing and doctor-confirmed Finished status. Prescriptions may be written before departure. Do not require notes before the patient can leave. Exact completion validation remains open. Rating delivery is email after confirmation plus a next-app-opening popup if unanswered, within existing eligibility. The 48-hour review window starts at actual consultation end even if confirmation is delayed; reception records actual in-person end if the doctor forgets. Detailed recording/correction permissions remain open; actual-end recording is distinct from the existing doctor-confirmed Finished/invitation step.
 
-**Confirmed overrun behavior:** Measure allocated duration from actual consultation start. At expiry, show the doctor a red warning if unfinished; notify reception if it remains unfinished after a system-configured delay from expiry. Delay value/default and configuration owner remain open. The doctor can extend the active session using a period configurable by doctor or management; no numeric defaults/limits were approved. This explicit active-session extension is distinct from changing general scheduling defaults. Expiry does not complete the session or trigger no-show/rating. Preserve attended/ongoing consultation protection. No-show timing still uses scheduled start plus the separate attendance grace period. Actual-start capture, extension recalculation, subsequent appointment conflicts, and financial consequences remain unresolved; no automatic booking shifts or extra charges are approved. See [customer appointments](10-customer-mobile-appointments.md).
+**Confirmed overrun behavior:** Measure allocated duration from actual consultation start. At expiry, show the doctor a red warning if unfinished; notify reception if it remains unfinished after a system-configured delay from expiry. Delay value/default and configuration owner remain open. The doctor can extend the active session using a period configurable by doctor or management; no numeric defaults/limits were approved. This explicit active-session extension is distinct from changing general scheduling defaults. Expiry does not complete the session or trigger no-show/rating. Preserve attended/ongoing consultation protection. No-show timing still uses scheduled start plus the separate attendance grace period. Allow extension into a later booked appointment with a warning to the doctor that another patient is waiting. Actual-start capture, extension recalculation, exact waiting/conflict detection and financial consequences remain unresolved; no automatic booking shifts or extra charges are approved. See [customer appointments](10-customer-mobile-appointments.md).
 
 Keep booking state, payment state, attendance, recording state, and accounting synchronization separate. Preserve the required appointment labels through mappings to stable business meanings. Administrator-created labels must not redefine billing or authorization rules implicitly.
 
@@ -89,25 +89,31 @@ The user chose retention of the fee for patient no-shows, for both in-person and
 - This decision applies to patient nonattendance. Late cancellation, clinician absence, center failure, and online technical-failure adjudication need their own rules; they are not automatically patient no-shows.
 - Define authorized correction and restoration behavior if a no-show was assigned incorrectly. Auditing and entitlement history must preserve the original action and its correction.
 
-For a later package refund, decide how previously consumed no-show entitlements affect the refund formula; the source example reprices completed sessions and does not settle this new edge case.
+**Confirmed latest answer:** For a later package-stop refund, reprice consumed no-show sessions at the standalone/base price outside the package, just like used completed sessions. No-show still does not generate a doctor incentive or completed-session target progress.
 
 ## Changes to a booking
 
 For every cancellation, reschedule, center postponement, specialist transfer, and no-show, define the actor, deadline, financial effect, resulting state, reason, notification, and audit event.
 
-**Confirmed cancellation direction:** If a patient cancels within the allowed cancellation window, they choose either a refund to the original payment method or credit to their wallet. For a package booking, return the reserved session entitlement to the patient's available sessions. The cutoff is administrator-configurable; no default duration has been chosen. Actual refund processing time and rules for cancellation after the cutoff remain open.
+**Confirmed cancellation direction:** The latest user policy blocks patient cancellation or appointment modification when less than 24 hours remain before scheduled start. At exactly 24 hours, the wording permits the action; this boundary is the documented interpretation of “less than.” This supersedes the earlier unspecified administrator-configured cutoff. Before the cutoff, preserve the original-method refund or wallet choice and restoration of the reserved package session. Processing times remain open.
 
-**Deferred per user:** The consequence of patient cancellation after the configured cutoff and the rescheduling rules are left for later.
+No late self-service cancellation/rescheduling is allowed. Staff overrides, center-initiated changes, one-time exceptions mentioned in the source, and the scope of an allowed modification still need explicit rules. Do not automatically equate an attempted blocked change with no-show or charge.
 
-**Confirmed Motmaan/doctor-initiated cancellation direction:** If Motmaan or the assigned doctor cancels, credit the patient in the internal Motmaan wallet. If the patient wants that wallet balance transferred to their bank account, they must contact administration. Define the actual payout review, approval, processing, and accounting steps later.
+**Confirmed Motmaan/doctor cancellation:** Credit the internal Motmaan wallet. The patient now requests a bank payout inside the wallet; a system administrator or accountant approves. This supersedes the earlier contact-administration-only workflow. Only service-refund credits are withdrawable; coupon/promotional credit is not. Bank verification, execution, rejection, timing, and reconciliation remain open.
+
+**Confirmed packages:** The patient selects the suitable practitioner and that practitioner's package. Current packages repeat sessions, rather than mixing services. Family members may use sessions from the package, and may change practitioner and pay a price difference if one exists. Administrators still control package offers, sale/expiry, and settings. Future treatment pathways involving different practitioners/services are explicitly deferred. A family-shared entitlement does not merge clinical records or give every member authority to view another member's records or withdraw wallet funds.
+
+The earlier question about assigning a practitioner to a practitioner-unspecified package is no longer applicable to initial package purchase. **Confirmed follow-up:** A practitioner switch supports both (1) the new practitioner providing the selected session only while the existing practitioner retains ongoing follow-up, and (2) transferring ongoing follow-up responsibility to the new practitioner. Neither mode is an automatic consequence of every booking. Who chooses/approves the mode, its effective time, detailed clinical access and substitute coverage remain open. Both modes preserve the confirmed package consumption and applicable price-difference rules; they do not introduce the deferred treatment-pathway feature.
 
 Online booking confirmation must use trusted payment-provider confirmation (such as an authenticated webhook or a server-side provider status check). A client redirect or app callback alone must not confirm payment. Match the provider event to the expected order and amount and make repeated notifications idempotent.
 
 **Confirmed package direction:** Administrators create package offers and control their sale and expiry settings and package configuration. Specify the configurable fields and rules before implementation.
 
+**Historical composition deferral, superseded:** Current packages repeat sessions for a selected practitioner. Future mixed-practitioner/service treatment pathways remain deferred; administration's package-control requirement remains in force.
+
 - Customer postponement within the modification window does not consume the session charge; after the window the source says it is charged.
 - Center postponement preserves the customer's financial entitlement.
-- Specialist transfers can require a price difference. Define cheaper-specialist transfers and pending difference-payment behavior too.
+- Specialist transfers can require an additional price-difference payment. **Confirmed latest answer:** Switching to a cheaper practitioner does not return the difference. Pending difference-payment behavior remains open.
 - A free follow-up is specified with the same specialist within 14 days, with configurable duration and service eligibility. Define eligibility trigger, usage limit, expiry boundary, and unavailable-slot behavior.
 - A waiting-list offer has an exclusive confirmation/payment window. Define queue ordering and atomic reservation of the offered capacity.
 
@@ -119,7 +125,13 @@ Use a transaction history for wallets and package entitlements. Enforce balance 
 
 Snapshot prices, discounts, tax decisions, commission rules, and applicable policies when their business events occur. Define effective dates so new settings do not silently rewrite historical transactions.
 
-Package refund example from the document: four sessions purchased for SAR 2,200; two completed sessions repriced at SAR 600 each; remaining refund SAR 1,000 to the wallet. Define late-cancellation consumption, taxes, transfers, expired sessions, and cases with no refundable remainder.
+**Confirmed package refund:** Reprice used sessions at their original standalone/base price, then return the remainder of the paid package amount. Latest user example: four sessions originally SAR 1,200, discounted to SAR 1,000; allocated discounted session revenue is SAR 250. After two sessions, deduct 2 × SAR 300 = SAR 600 and return SAR 400. This confirms stopping a started package and refunding its unused remainder.
+
+For this example: refund = SAR 1,000 − (2 × SAR 300) = SAR 400. These figures are examples, not default package prices. Keep discounted session revenue allocation distinct from base-price repricing for refunds. Sharing must include all used family sessions in the same package calculation.
+
+**Confirmed latest package answers:** No difference is refunded for a cheaper-practitioner switch. Package-stop refunds use the standalone/base price outside the package for consumed sessions, including no-show sessions. The reply reconfirms standalone pricing but does not explicitly distinguish the original practitioner's price from the performing practitioner's price after a transfer; retain that attribution as unresolved rather than inventing a selection. Discounted completed-session revenue allocation and no-show incentive exclusion remain distinct from refund repricing.
+
+Remaining finance details: tax-inclusive versus tax-exclusive quoted amounts, which practitioner's standalone price applies after a transfer and how paid differences are handled, rounding, expired packages, negative remainder, refund destination/processing, and commission reversals after a refund. Do not infer an additional patient debt or a new commission entitlement from the repricing rule. The user requested moving the next discussion outside package details; keep these remaining dependencies recorded without re-asking them in the next batch.
 
 Commission is required only for completed, fully paid services. Package commission accrues as sessions complete. Full-time target-based and part-time net-revenue-sharing rules differ. Agree allocation of package discounts, rounding, and reversal of previously accrued commission after refunds.
 
@@ -129,10 +141,29 @@ Commission is required only for completed, fully paid services. Package commissi
 
 **Recommended planning ownership, accepted by the user:** Motmaan is the operational source of truth for orders, appointments, payments, refunds, wallet entries, and package entitlements. After verified payment or another relevant financial event, Motmaan reliably synchronizes the required accounting data to Qoyod; Qoyod issues and owns the official accounting/e-invoicing documents. Motmaan stores Qoyod references and sync status for reconciliation. Use durable retries and idempotent event handling to prevent duplicate official invoices. Validate the exact Qoyod account/API configuration and finance rules before implementation; do not issue a second official invoice in Motmaan by default.
 
-Cash payment is accepted only at an in-person session when the patient attends. Do not treat cash as an online checkout option or as permission to confirm a booking before attendance. Booking by bank transfer is deferred for later discussion.
+Cash payment is accepted only at an in-person session when the patient attends. Do not treat cash as an online checkout option or as permission to confirm a booking before attendance. Booking by bank transfer is not allowed.
 
 Tax classification must be validated with finance by service and beneficiary. Do not encode the document's nationality shorthand as a universal exemption rule. Reference: [ZATCA clarification on healthcare supplied to citizens](https://x.com/Zatca_care/status/1994204337090806266).
 
 ## Future verification scenarios
 
 When coding begins, verify simultaneous booking of the same capacity, duplicate payment callbacks, payment after expiry, repeated wallet spending, repeated entitlement consumption, recorded attendance before a no-show job, active online sessions past scheduled end, exactly-once no-show consumption, and correction of an incorrectly recorded no-show. These are planned acceptance scenarios; no implementation or tests have been created.
+
+## Readiness follow-ups — R05 and R06
+
+Reviewer findings, 4 October 2026; no business policy selected:
+
+- Define the lifecycle preceding an attended cash payment: staff-created reservation, walk-in, capacity ownership, unpaid state and authority to collect/record money. Cash-at-attendance does not itself define advance booking eligibility.
+- Separate guaranteed room capacity from reception's later named-room selection. Decide how self-service confirmation works when reception has not chosen a room, including simultaneous reservations and all rooms occupied. The diagram above is a proposed workflow, not evidence that this policy is settled.
+- Select a patient-visible outcome for trusted payment arriving after the seven-minute hold expires, especially when another patient owns the slot. Record/reconcile payment without inventing a confirmed booking or an automatic second charge.
+- Define modification as an atomic business transition: what happens to the old appointment/entitlement if the replacement slot or price-difference payment fails? Preserve the confirmed patient cutoff and keep staff exceptions open/deferred.
+- Complete payout/refund and accounting examples before their implementation, including mixed credit origins and closed-period corrections. Package detail questions remain outside the selected next owner batch.
+
+See the [readiness review](20-development-readiness-review.md) and [shared contract checklist](../handoff/shared-contract-checklist.md).
+
+## Latest finance clarification — 4 October 2026
+
+- Percentage rates vary by practitioner and are calculated on net revenue after tax and discounts. The user's “and so on” does not identify further deductions; gateway fees or other costs require clarification. Rate-edit ownership, possible service-specific overrides, allocation, rounding, and closed-period reversals remain open.
+- Above-target commissions remain separately confirmed: apply the agreed incentive rate to additional eligible revenue above the practitioner's target. Existing completed/fully-paid eligibility and no-show exclusion remain in force.
+- Proposed wallet controls: preserve credit origin, show total/spendable/withdrawable balances separately, reserve requested withdrawable funds to prevent concurrent spending or duplicate payouts, and distinguish approval from successful bank execution. Request fields, payout executor/provider, approval policy for mixed credit origins, and bank reconciliation are open.
+- Planned acceptance checks now include the exact 24-hour boundary, simultaneous checkout and seven-minute expiry, payment arriving after expiry, cross-family package consumption, a SAR 400 refund for the confirmed example, practitioner transfer/difference payment, coupon withdrawal rejection, concurrent wallet spend/payout, and repeated payout approval. These are future checks, not implemented tests.
