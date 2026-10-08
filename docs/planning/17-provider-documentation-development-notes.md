@@ -1,12 +1,12 @@
 # Provider documentation: important points for future development
 
-Reviewed: 4 October 2026. **Planning research only.** Official public documentation was reviewed from the links in the [provider guide](16-external-provider-guide.md), with related official references where needed. No provider account, private API, payment, message, or integration was tested.
+Reviewed: 4 October 2026; MyFatoorah sources revisited 7 October 2026. **Planning research only.** Official public documentation was reviewed from the links in the [provider guide](16-external-provider-guide.md), with related official references where needed. No provider account, private API, payment, message, or integration was tested.
 
 **Documented** describes provider behavior in the cited public reference. **Recommendation** is a proposed Motmaan development safeguard. **Open** requires account-specific evidence or a project decision. Research does not select providers, approve health-data processing, answer deferred business questions, or authorize implementation. Recheck versions, limits, and merchant configuration when development starts.
 
 ## Current account inventory clarification
 
-After this public-documentation review, the owner confirmed that no external-provider accounts are currently available and that they will be responsible for all accounts. Prior statements about unconfirmed existing account access below describe the research gap; the current answer is no accounts yet. [Provider setup questions P01–P12](16-external-provider-guide.md) track selections and evidence still needed. Staff login is username/verified email/phone plus password, with default-on self-managed SMS verification and authorized administrator control; patient OTP uses SMS with the confirmed six-digit/five-minute/60-second/five-attempt defaults; the provider route remains unselected and untested. Public provider documentation does not resolve the remaining authentication/authorization policies.
+After the earlier public-documentation review, the owner reported no external-provider accounts available as of 4 October and retained responsibility for all accounts. On 7 October the owner reported the MyFatoorah account and Tabby/Tamara integrations ready; credential access, enabled methods and successful integration remain to document technically. [Provider setup questions P01–P12](16-external-provider-guide.md) track the remaining evidence. Staff login is username/verified email/phone plus password, with default-on self-managed SMS verification and authorized administrator control; patient OTP uses SMS with the confirmed six-digit/five-minute/60-second/five-attempt defaults; the SMS route remains unselected and untested. Public provider documentation does not resolve the remaining authentication/authorization policies.
 
 ## Priority markers
 
@@ -15,9 +15,17 @@ After this public-documentation review, the owner confirmed that no external-pro
 | **P1 — dependency** | Resolve before committing to the affected provider or workflow; could change scope, cost, data handling, or architecture. |
 | **P2 — development** | Carry into implementation contracts and verification after implementation is authorized. |
 
-## Payment: Tap Payments
+## Payment: MyFatoorah — selected 7 October 2026
 
-Status: preferred candidate, subject to merchant and all-method approval.
+**User decision:** MyFatoorah is the online payment provider. The owner reports Tabby and Tamara integrations ready for integration. This does not specify whether those methods are connected through MyFatoorah or directly, and no account-specific transaction has been verified in this documentation review.
+
+- **Documented / P1:** MyFatoorah lists mada, Apple Pay, cards and Tamara among its payment methods, while noting that availability depends on the account and agreement. Tabby was not established by the published method list reviewed here. Obtain the enabled methods for Motmaan and the intended Tabby/Tamara route. [Integration options and method list](https://docs.myfatoorah.com/docs/choose-your-payment-integration).
+- **Documented / P2:** Webhook V2 uses a required secret/signature and supports payment and refund status events. MyFatoorah advises combining authenticated webhooks with server-side payment-status retrieval; redirects can be lost and duplicate events can occur. Use provider-verified state for booking confirmation and idempotent reconciliation. [Webhook V2](https://docs.myfatoorah.com/docs/webhook-v2), [status guidelines](https://docs.myfatoorah.com/docs/v3-updating-payment-status-guidelines).
+- **Open / P1:** Confirm account/test/live access, supported checkout pattern for both clients, seven-minute hold compatibility, late successful payments, capture and refund paths for each enabled method, settlement references, and whether MyFatoorah or a direct BNPL integration owns each operation. Do not issue both gateway and direct captures/refunds for one order.
+
+### Historical comparison: Tap Payments
+
+Status: previously preferred evaluation candidate; superseded by the MyFatoorah selection.
 
 - **Documented / P2:** Test/live public and secret keys are separate. Secret keys belong on the backend. Web SDK domains and mobile bundle IDs require registration. Hosted checkout and tokenization are different integration paths; authorization is not supported by every method. [Tap setup](https://developers.tap.company/docs/get-started).
 - **Documented / P2:** Webhooks use `post.url`; validate `hashstring` with HMAC-SHA256 over Tap's specified field sequence. Amount formatting matters: SAR uses two decimal places. This is not a generic hash of the raw JSON body. [Webhook verification](https://developers.tap.company/docs/webhook).
@@ -28,27 +36,39 @@ Status: preferred candidate, subject to merchant and all-method approval.
 
 **Future verification:** Duplicate taps; lost redirect; invalid signature; SAR amount formatting; timeout followed by retry; retry after 24 hours; partial refund; accepted refund that later fails; payment arriving after a slot is released. The last scenario requires an explicit resolution policy.
 
+## Payment candidate research: Moyasar — 6 October 2026
+
+Status: historical researched comparison candidate only. Public pages and developer documentation were reviewed; no Motmaan account, merchant approval, sandbox transaction, or integration was tested.
+
+- **Documented / P2:** Moyasar advertises mada, Visa, Mastercard, American Express, Apple Pay and Samsung Pay, with STC Pay also listed in its FAQ and developer overview. It offers a Flutter SDK for cards, Apple Pay, Samsung Pay and STC Pay, as well as web checkout options. Confirm the exact required mada/debit behavior and method availability for Motmaan's account and each client. [Methods and FAQ](https://moyasar.com/en/resources/faqs/), [Flutter SDK](https://docs.moyasar.com/sdk/flutter/installation), [developer overview](https://docs.moyasar.com/).
+- **Documented / P2:** Payment creation supports a merchant-supplied `given_id` for idempotency; payment operations include retrieval, capture, void and full/partial refunds. Webhooks include paid, failed, authorized, captured, voided and refunded events. Verify event authentication and reconcile provider status server-side before confirming a booking. [Create payment](https://docs.moyasar.com/api/payments/01-create-payment), [payment operations](https://docs.moyasar.com/guides/payment-operations), [webhook events](https://docs.moyasar.com/api/other/webhooks/available-webhooks).
+- **Documented / P1:** Moyasar says its service currently focuses on Saudi Arabia, offers sandbox exploration, and requires sales activation for live payments. Fees are quoted by sales; advertised approval timing is not a Motmaan commitment. [FAQ and activation](https://moyasar.com/en/resources/faqs/).
+- **Open / P1:** Public materials reviewed did not establish Tabby or Tamara as available Moyasar payment methods. Since both are required on the patient app and website, obtain written confirmation that Moyasar can provide both under one Motmaan merchant setup, including healthcare eligibility, settlement, capture, cancellation and refund responsibility. If not, it does not meet the current one-gateway evaluation requirement without changing scope or adding another integration.
+- **Open / P1:** Request Motmaan-specific merchant eligibility, all-method activation, commercial fees, settlement timing/reserves, dispute process, refund constraints, and confirmation that the clinical-services business model is acceptable. Public PCI/regulatory statements do not establish Motmaan's account approval or compliance obligations.
+
+**Historical assessment:** This candidate has a documented Flutter path and payment lifecycle controls, but its Tabby/Tamara coverage and merchant approval were unconfirmed. MyFatoorah is now selected; revisit this comparison only if the provider plan changes.
+
 ## Installments: Tabby
 
-Status: required method; gateway activation first, direct integration conditional.
+Status: required method; owner reports integration ready. MyFatoorah-mediated versus direct connection remains to be specified.
 
 - **Documented / P1:** Direct Saudi integrations use **`https://api.tabby.sa`** for all calls. Examples using `api.tabby.ai` must not be copied indiscriminately; cross-region routing is incomplete. Test/live behavior is determined by keys. [Regional API hosts](https://docs.tabby.ai/api-reference/overview).
 - **Documented / P2:** Capture applies to authorized payments; partial capture leaves the payment authorized until completed or closed. Capture/refund requests expose operation `reference_id` values for idempotency. [Capture](https://docs.tabby.ai/api-reference/payments/capture-a-payment), [refund](https://docs.tabby.ai/api-reference/payments/refund-a-payment).
 - **Documented / P2:** Webhooks use lowercase statuses; retrieval uses uppercase. An `authorized` notification can contain capture confirmation, and a refund may retain `closed` status. Inspect capture/refund records as well as status. Registration is per merchant-code/key pair, with an optional configured authentication header. Only HTTP 200 acknowledges delivery; duplicate and unordered delivery is possible, with finite retries. [Payment webhooks](https://docs.tabby.ai/pay-in-4-custom-integration/webhooks).
 - **Recommendation / P2:** Authenticate, durably retain required event data, deduplicate, and prevent state regression. An unmatched event needs retry or durable recovery; do not acknowledge and discard it. Do not trigger another capture from capture confirmation.
-- **Open / P1:** Establish what Tap handles and what Motmaan must handle, including capture timing for booked services and packages, refunds, disputes, required customer fields, and eligibility. Direct Tabby rules do not prove Tap's contract.
+- **Open / P1:** Establish whether MyFatoorah exposes Tabby for Motmaan or whether the ready integration is direct; assign capture timing, refunds, disputes, required fields and eligibility accordingly. Direct Tabby rules do not prove a MyFatoorah contract.
 
 **Future verification:** Saudi retrieval/refund endpoint; capture event before authorization event; webhook before local commit; duplicate capture/refund; declined eligibility; partial capture and refund reconciliation.
 
 ## Installments: Tamara
 
-Status: required method; gateway activation first, direct integration conditional.
+Status: required method; owner reports integration ready. MyFatoorah-mediated versus direct connection remains to be specified.
 
 - **Documented / P2:** Direct integration has sandbox/production base URLs and separate API, notification, and public widget credentials. Verify the `tamaraToken` JWT using the notification token and HS256; decoding alone does not establish authenticity. [API setup and notification authentication](https://docs.tamara.co/reference/tamara-api-reference-documentation).
 - **Documented / P2:** HTTPS webhooks distinguish approved, authorised, captured, canceled, refunded, declined, and expired orders, with separate operation IDs and amounts. [Webhook events](https://docs.tamara.co/reference/getting-started-with-webhooks).
 - **Documented / P1:** The authorise endpoint follows approval unless the merchant's supported auto-authorisation flow is enabled. The reference documents auto-capture after **21 days** from authorisation if capture has not occurred. [Authorise order](https://docs.tamara.co/reference/authoriseorder).
 - **Recommendation / P2:** Store order and operation references, validate token and transaction identity, and map provider states explicitly. Approval, capture, and settlement must not collapse into one generic success flag.
-- **Open / P1:** Confirm the actual gateway-mediated lifecycle, auto-authorisation/capture configuration, healthcare eligibility, package/advance-booking behavior, and refund handling. Do not add direct Tamara calls alongside Tap without an agreed responsibility boundary.
+- **Open / P1:** Confirm the MyFatoorah-mediated or direct lifecycle, auto-authorisation/capture configuration, healthcare eligibility, package/advance-booking behavior, and refund handling. Do not add direct Tamara calls alongside MyFatoorah without an agreed responsibility boundary.
 
 **Future verification:** Forged token; duplicate approval; authorisation timeout; delayed capture; auto-capture boundary; partial refund; canceled/expired checkout; the same order arriving through multiple event paths.
 
@@ -69,7 +89,7 @@ Status: source-named provisional choice; exact storage and processing arrangemen
 - **Documented / P1:** Cloud Recording supports customer cloud storage and automatic backup on Agora servers when the destination fails. [Recording overview](https://docs.agora.io/en/realtime-media/cloud-recording).
 - **Documented / P1:** The current storage reference lists Google Cloud with `vendor=6`, `region=0`; it also lists an S3-compatible path with `vendor=11`, `region=0`, and `extensionParams.endpoint`. These recorder values do not select a Saudi processing location. S3 compatibility is a documented option, but does not establish compatibility with a particular OCI bucket. [Storage configuration](https://docs.agora.io/en/realtime-media/cloud-recording/reference/region-vendor).
 - **Documented / P2:** Event 31 means all recording files reached specified storage. Event 32 means at least one file used Agora Cloud Backup. Signature headers distinguish HMAC-SHA1 and HMAC-SHA256 verification; use the algorithm matching the selected header. [Recording notifications](https://docs.agora.io/en/realtime-media/cloud-recording/build/handle-events/receive-notifications).
-- **Recommendation / P2:** Keep recording Processing until trusted completion and object verification; track every asset, recorder attempt, and identifier. Apply appointment/branch authorization before call-token issuance and independent recording-playback permission before playback URLs. See the existing [recording workflow](04-online-sessions.md).
+- **Confirmed AUD-06 / engineering follow-up P2:** keep media unavailable for playback until complete verified assets, retryable processing/renditions and manifest validation; track every asset, recorder attempt, and identifier. Apply appointment/branch authorization before call-token issuance and independent recording-playback permission before playback URLs. See the existing [recording workflow](04-online-sessions.md).
 - **Open / P1:** Prove direct upload to the exact Saudi private bucket, credential compatibility, temporary/fallback storage and processing locations, consent/start policy, and whether backup behavior meets center-controlled retention requirements.
 
 **Future verification:** Mobile/web reconnection; duplicate start; start timeout with remote success; destination failure; event 32 without local assets; delayed finalization; unauthorized playback; missing HLS segment; deletion of all assets.
@@ -108,9 +128,13 @@ Status: source-named for WhatsApp; user identified Wati for WhatsApp/SMS evaluat
 - **Documented / P1:** Twilio's Saudi guide says domestic-brand sender-ID registration is unsupported, two-way SMS is unsupported, and message URLs require allowlisting. **Open:** Confirm a supported domestic Motmaan sending route with Wati/Twilio before assuming this integration can replace the existing SMS service. The generic connected-phone-number setup alone is insufficient. [Twilio Saudi delivery constraints](https://www.twilio.com/en-us/guidelines/sa/sms).
 - **Recommendation / P2:** Version Arabic/English template mappings, normalize destination numbers to the provider's format, retain message references and delivery states, and prevent duplicate sends after uncertain responses. Keep health details out of message previews; links should require Motmaan authorization.
 - **Recommendation / P2:** Keep OTP expiry, single-use verification, attempts, and resend limits in the backend's challenge lifecycle. A delayed fallback must not deliver an already-expired/superseded code; it must not reset expiry or generate a second active challenge. Correlate WhatsApp and SMS attempts under the same notification/challenge and keep transport receipts separate from successful login.
-- **Open / P1:** Confirm workspace/plan, V3 endpoints for transactional SMS/OTP/invitations and fallback, automatic-fallback timing/cancellation, authenticated receipts, Saudi sender approval, Arabic encoding/segment cost, quotas and combined Wati/Twilio charges, consent handling, and health-data location/retention. SMS campaign UI documentation does not establish a general-purpose transactional SMS API. Patient SMS versus WhatsApp-first OTP channel choice remains open; doctor acceptance SMS remains required.
+- **Open / P1:** Confirm workspace/plan, V3 endpoints for transactional SMS/OTP/invitations and fallback, automatic-fallback timing/cancellation, authenticated receipts, Saudi sender approval, Arabic encoding/segment cost, quotas and combined Wati/Twilio charges, consent handling, and health-data location/retention. SMS campaign UI documentation does not establish a general-purpose transactional SMS API. Patient SMS OTP is confirmed; WhatsApp-first login is not selected. Doctor acceptance SMS remains required. AUD-04 keeps Wati evaluated without replacing it; verify Saudi OTP, registered sender, Arabic content, receipts and reliability.
 
 **Future verification:** Rejected template; mismatched placeholders; expired session; offline tenant; 401/403 without JSON; accepted-then-failed delivery; repeated callback; Arabic rendering and Saudi network delivery; WhatsApp failure followed by SMS; late fallback after code expiry/resend; duplicate receipts across channels; SMS invitation link allowed by the route; standalone transactional SMS access. Tests remain future work, with synthetic content and approved recipients.
+
+## Current owner clarification for media/files and hosting
+
+Dated provider facts below remain research, not newly verified account capabilities. [04](04-online-sessions.md) owns confirmed readiness, resumable ingestion/recovery and adaptive playback (AUD-06); [03](03-integrations-and-storage.md#secure-file-lifecycle--aud-23) applies supported transfer reliability to ordinary files (AUD-23). Validate provider-controlled delivery separately from client uploads and irrecoverable live-capture loss. [22](22-azure-hosting-and-deployment.md) owns Qatar interim data-suitability gates and approved-only Saudi migration; regional/provider evidence remains pending.
 
 ## Translation: Google Cloud Translation
 
@@ -119,9 +143,9 @@ Status: evaluation candidate for confirmed Arabic-to-English capability.
 - **Documented / P1:** Advanced Translation documents global and EU/US multi-regional endpoints; the default is global. This reference does **not establish Saudi processing**. A Dammam storage bucket does not determine translation processing location. [Endpoints](https://docs.cloud.google.com/translate/docs/advanced/endpoints).
 - **Documented:** Google's data-use FAQ limits content use to providing the service. This alone does not establish suitability for Motmaan health data. [Data use](https://docs.cloud.google.com/translate/data-usage).
 - **Recommendation / P2:** Preserve Arabic, label machine output, record provider/model/language/source version, bound requests and spending, and review clinical meaning before relying on translations. Human clinical review remains a recommendation.
-- **Open / P1:** Exact formats/presentation remain user-deferred. Resolve approved data categories, processing terms/location, supported edition/endpoint, retention, quotas, and clinical-review procedure before sensitive content is submitted.
+- **Open / P1:** AUD-16 resolves general display-language behavior beyond medical text, including names transliteration and original preservation. Exact file formats remain open/noted for later. Resolve approved data categories, processing terms/location, supported edition/endpoint, retention, quotas, and clinical-review procedure before sensitive content is submitted.
 
-**Future verification:** Synthetic Arabic clinical terminology, numbers/dosages, negation and RTL; changed-source translation; partial failure; quota exhaustion; preservation of originals.
+**Future verification:** Arabic names use appropriate transliteration rather than semantic meanings; Web/Flutter selected-language display, original preservation, corrected derived values and no translation of IDs/codes/phones/financial identifiers. Also verify approved clinical terminology, numbers/dosages, negation and RTL, changed-source invalidation, partial failure and quota exhaustion. These are future checks; document 03 owns approved behavior.
 
 ## Comparison providers
 
@@ -130,7 +154,7 @@ These are alternatives, not additional mandatory integrations.
 | Provider | Documented point to retain | Development implication / open dependency |
 |---|---|---|
 | PayTabs | `payment_methods: ["all"]` shows methods configured on that account. Callback/IPN HMAC-SHA256 checks the raw body with the profile server key; browser-return verification is a different procedure. [Methods](https://support.paytabs.com/en/support/solutions/articles/60000805455-request-parameters-payment-methods-payment-methods-), [verification](https://support.paytabs.com/en/support/solutions/articles/60000718961) | **P1:** All-method activation is account-specific. **P2:** Keep return and callback validators separate; compare refunds, capture, SDKs, reconciliation, and merchant terms with Tap. |
-| MyFatoorah | Documents server-side status retrieval on return plus authenticated payment webhooks, and duplicate-safe processing when both arrive. [Status guidelines](https://docs.myfatoorah.com/docs/v3-updating-payment-status-guidelines) | **P2:** Reuse the trusted-state and duplicate-processing requirements if selected; source naming does not require another gateway. |
+| Moyasar | Historical comparison: public docs describe Flutter SDKs, mada/cards and wallets, `given_id` idempotency, payment retrieval, capture/void/refund, and payment webhooks. [FAQ](https://moyasar.com/en/resources/faqs/), [Flutter SDK](https://docs.moyasar.com/sdk/flutter/installation), [API](https://docs.moyasar.com/api/payments/01-create-payment) | Its Tabby/Tamara coverage and Motmaan eligibility were unconfirmed; MyFatoorah is now the selected provider. |
 | LiveKit | Self-hosted recording requires deploying Egress separately; managed Egress is available in LiveKit Cloud. [Egress](https://docs.livekit.io/transport/media/ingress-egress/egress/) | **P1:** Include media connectivity, recorder capacity, operational support, and chosen storage/processing location in comparison. |
 | Daily | Its customer Amazon S3 recording flow writes directly to the bucket and requires versioning plus IAM setup. [Customer recording storage](https://docs.daily.co/guides/products/live-streaming-recording/storing-recordings-in-a-custom-s3-bucket) | **P1:** This establishes an Amazon S3 flow, not compatibility with the proposed GCS/OCI destination. Version retention also affects deletion. |
 
@@ -157,6 +181,6 @@ This review records gaps rather than claiming inaccessible/private specification
 - Protect slot ownership, wallet balances, package entitlements, refunds, and accounting publication with appropriate database concurrency controls and atomic local commits. External HTTP effects are not rolled back by database transactions.
 - For reliable external work, plan durable scheduling/publication with idempotent workers and bounded retries; acknowledge valid webhooks only after processing or durable acceptance. Establish recovery for events that arrive before their local record.
 - Verify ambiguous remote outcomes before repeating payments, invoices, refunds, or recording starts. Measure backlog, failures, latency, reconciliation differences, and storage usage with representative volumes.
-- Use the [api-pattern reliability reference](C:/Users/omarf/.codex/skills/api-pattern/references/reliability.md) and [verification reference](C:/Users/omarf/.codex/skills/api-pattern/references/verification.md) in future backend work. Their historical infrastructure examples do not select a job system or database provider for Motmaan.
+- Use the [api-pattern reliability reference](C:/Users/omarf/.codex/skills/api-pattern/references/reliability.md) and [verification reference](C:/Users/omarf/.codex/skills/api-pattern/references/verification.md) in future backend work. Their historical infrastructure examples do not select infrastructure. Current owner choices are Azure SQL and outbox/Hangfire; AUD-21 preserves SQL-first/later selective Redis.
 
 Related: [decisions](06-decisions-and-open-questions.md), [user tracker](12-user-notes-and-open-questions.md), [Flutter handoff](../handoff/flutter-developer.md), [web handoff](../handoff/web-frontend-developer.md).

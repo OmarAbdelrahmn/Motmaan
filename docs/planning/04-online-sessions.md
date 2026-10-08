@@ -1,8 +1,8 @@
 # Online sessions and recording delivery
 
-Updated: 4 October 2026. Status: online-session recording is mandatory by user decision; the proposed Agora Cloud Recording workflow remains subject to provider and storage validation.
+Updated: 8 October 2026. **AUD-06: Confirmed — Critical Requirement.** This document owns recording/media reliability and adaptive playback. Validate the design against Agora and the selected storage path. No implementation or acceptance test has been performed.
 
-Agora can upload recordings directly to the configured supported private bucket. The ASP.NET Core API controls the recorder and stores metadata; the usual flow does not download the video to the API and upload it again. Joining a call does not automatically enable recording.
+Agora remains the preferred recording direction unless testing demonstrates it cannot satisfy the requirements. Its documented direct delivery to a supported private bucket is a candidate architecture, not proof that Motmaan's destination/network works. The ASP.NET Core API controls the recorder and stores metadata; the usual flow does not download the video to the API and upload it again. Joining a call does not automatically enable recording.
 
 **Confirmed on 4 October 2026:** Every online consultation must be recorded for safety and performance review. Offering an unrecorded consultation is not selected. Preserve recorded consent and independently authorized playback; this does not grant patients or all doctors access to recordings. Exact consent/refusal handling and recorder-unavailable or mid-session recorder-failure behavior remain open; do not assume mandatory recording means bypassing consent or proceeding without recording.
 
@@ -16,23 +16,26 @@ sequenceDiagram
     participant Store as Private recordings bucket
     People->>API: Request appointment access
     API-->>People: Authorized participant tokens
-    People->>Agora: Join call
+    People->>Agora: Connect in waiting state
     API->>Agora: Acquire recording resource and start recorder
     Agora-->>API: Recording resource and session identifiers
-    Agora->>Store: Upload recording output
+    API->>Agora: Verify recording readiness and health
+    API-->>People: Permit clinical start only when recording ready
+    Agora->>Store: Deliver recording segments/assets
     People->>API: Authorized specialist ends consultation
     API->>Agora: Stop recorder
     Agora->>Store: Complete output and upload
     Agora-->>API: Authenticated upload completion notification
-    API->>Store: Verify expected objects
-    API->>API: Persist references and mark ready
+    API->>Store: Verify complete assets and integrity
+    API->>API: Process/transcode and validate renditions/manifest
+    API->>API: Mark securely playable only after validation
 ```
 
 ## Authorization and start
 
 Check the appointment, participant ownership, permitted joining time, and recorded consent. Issue participant-specific tokens. Storage credentials must never be supplied to the web or mobile clients.
 
-The proposed start trigger is the specialist starting the consultation with the patient present. Recording is now mandatory; finalize readiness/consent gating so relevant clinical conversation is not allowed before recording is ready. This is a proposed control for the confirmed mandatory-recording rule; exact readiness and failure behavior remain open.
+The proposed start trigger is the specialist requesting clinical start with the patient present. **Confirmed:** verify recording readiness before allowing the clinical consultation to begin. Connection, readiness and active capture are distinct; neither a connected call nor HTTP start success proves healthy recording. Consent/refusal handling and the operational response to mid-session capture failure remain open; these gaps do not permit an unrecorded consultation option.
 
 Call acquire immediately before starting: its resource is short-lived, so do not acquire it when the appointment is booked days earlier. Use a separate recorder UID, call start with storage and output configuration, and persist the resourceId and sid. Select composite audio/video for combined review unless another mode is approved; output may contain multiple assets.
 
@@ -50,13 +53,50 @@ Use explicit consultation end rather than the nominal appointment end. The sourc
 
 Keep output Processing until upload completion is confirmed. Agora event type 31, uploaded, means all recording files reached the specified cloud storage. Verify webhook signatures, match the expected recording identity, deduplicate notices, tolerate out-of-order events, and verify output objects before readiness.
 
-Recording metadata should support appointment ID, channel, recorder UID, resourceId, sid, recording mode, state, attempt history, timestamps, failure information, output assets, and deletion due date. Store object keys rather than a permanent public URL. A conceptual lifecycle is Starting, Recording, Processing, Ready, Failed, and Deleted; failure recovery transitions still need design.
+Recording metadata should support appointment ID, channel, recorder UID, resourceId, sid, recording mode, state, attempt history, timestamps, failure information, output assets, and deletion due date. Store object keys rather than a permanent public URL. The lifecycle must distinguish video connection, recording readiness, active recording, recording interruption, recording completion, media upload/ingestion, processing, playback readiness, and failure/recovery/deletion. Serialized states and recovery transitions remain engineering work.
+
+## Confirmed resumable transfer and recovery — AUD-06
+
+If a supported upload stops at **48%**, resume from the last **server-confirmed committed chunk or segment**, rather than restarting from zero. A client progress percentage is not evidence of committed content.
+
+Required capabilities for supported transfer flows:
+
+- Chunked/multipart transfer with unique upload-session identifiers, persistent progress and server confirmation of completed parts.
+- Resume after temporary disconnect and application/worker restart; bounded safe retries with exponential backoff and idempotent part submission.
+- Part validation and checksums where supported; detect missing, duplicated or corrupted parts. Verify final assembly and completeness before accepting the asset.
+- Authorized upload-session access, safe credential renewal without losing verified progress, proper cancellation/cleanup, clear backend progress/failure states and operational monitoring.
+
+A client file uploader and a managed recorder have different recovery boundaries. Investigate actual Agora capture, cloud delivery, segmentation, storage and recovery capabilities before finalizing the design. A generic chunk uploader cannot resume an internal provider operation by assumption. If output is segmented, track each segment independently and verify/recover its ingestion. **Recoverable upload interruption is distinct from irrecoverable loss of live capture:** do not claim that missing footage can be reconstructed without provider evidence. Unsupported provider recovery must be exposed as a capability gap, not silently described as reliable resume.
+
+## Confirmed processing and adaptive playback — AUD-06
+
+Pipeline: **Recording completed → asset verification → processing/transcoding → rendition generation → manifest validation → secure playback readiness.** Processing is retryable and observable, with verified checkpoints and meaningful failures; retain originals until safe disposition under the approved lifecycle. Partial or corrupted recordings must never be marked fully processed.
+
+Plan adaptive streaming using HLS or MPEG-DASH where justified. Generate available renditions such as **1080p, 720p, 480p and 360p** only when supported by the original recording. Automatically select quality for network conditions; manual selection is supported where practical. Do not upscale poor source footage just to advertise higher resolution. Exact codecs, rendition ladder, worker/transcoder and format remain validated engineering choices.
+
+## Mandatory future acceptance scenarios
+
+1. Internet interruption at 48% upload progress.
+2. Successful resume from the last server-confirmed part without retransmitting every completed part.
+3. Duplicate chunk submission has no duplicate effect.
+4. Server or worker restart preserves upload progress; also validate app restart recovery.
+5. Expired upload credentials require safe renewal/current authorization without losing verified progress.
+6. Corrupted media part prevents false completion.
+7. Missing media segment prevents false completion and exposes recovery/failure.
+8. Recording failure before consultation blocks clinical start; connection alone never passes readiness.
+9. Recording interruption during consultation is detected/reported; test the eventual approved clinical response without pretending lost footage is recoverable.
+10. Failed transcoding followed by successful retry produces validated outputs once.
+11. Adaptive playback switches among available qualities as network conditions change.
+12. Unauthorized playback is denied; include expired/revoked grants and cross-patient/branch upload-session access.
+13. Storage or recording-provider outage exposes truthful state, monitoring and supported recovery.
+
+These are future acceptance requirements, not completed tests. [Private-file lifecycle](03-integrations-and-storage.md#secure-file-lifecycle--aud-23) applies the transfer design to ordinary supported uploads without requiring PDF/image video processing.
 
 ## Playback and retention
 
 The source restricts playback to independently authorized people chosen by management. Being the treating specialist or patient does not itself grant recording-view permission.
 
-Check the permission and recording scope before issuing playback access. Log access and available playback events; a generated URL alone proves access was granted, not that the full recording was watched. Use short-lived URLs. HLS playback may require controlled access to both playlist and segment objects.
+Check the permission and recording scope before issuing playback access. Log access and available playback events; a generated URL alone proves access was granted, not that the full recording was watched. Use expiring access grants. Signed URLs alone do not satisfy every sensitive playback case: evaluate revocation, network restrictions and playback control. Protect manifests and every segment/rendition, with private storage, appropriate encryption and audit trails. Backup/recovery must follow approved retention and deletion rules; downloaded content cannot be recalled by revoking a grant.
 
 Delete recordings after one year under the agreed interpretation of the retention start date. Include all output assets and relevant versions/replicas in deletion handling and record the deletion result. Define how backup retention prevents restoration of expired recordings.
 

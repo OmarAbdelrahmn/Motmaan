@@ -1,6 +1,6 @@
 # Patient login profile verification and account recovery
 
-Updated: 4 October 2026. Status: patient direction and established-email lost-phone recovery confirmed, with proposed detailed workflows. No implementation has started.
+Updated: 8 October 2026. Status: patient direction and established-email lost-phone recovery confirmed, with proposed detailed workflows. No implementation has started.
 
 Patients sign in with a phone number and a sent verification code. After sign-in they can optionally add a username or email in the patient dashboard or mobile application and recover access using verified evidence. The website and apps use the same account and backend rules.
 
@@ -10,11 +10,11 @@ The sent PIN described in the conversation is interpreted as a one-time password
 
 **Current confirmed access answers:** Patient login uses SMS with a six-digit code, five-minute validity, resend after 60 seconds and five failed attempts per challenge. Imported-record links are preverified during migration where adequate evidence exists, with reception handling unverified/ambiguous cases before access; this approach was selected by the assistant under explicit user delegation. Clinical-record and recording access require separate grants. The owner explicitly authorizes access-management administrators who may assign those grants within branch/patient scope. If a patient loses both phone and verified email, reception verifies identity and an authorized account administrator approves recovery. A deactivated doctor may finish/save only an already-active consultation; new work is blocked immediately and the remaining access ends when that consultation is closed. Proof checklists, detailed role defaults and technical session mechanisms remain to specify.
 
-The user has returned to authentication, authorization and external providers for detailed planning. The earlier discussion deferral for staff permissions/deactivation is superseded for this selected workflow; no permission matrix is approved yet. Related family/assignment access questions can be clarified here, while unrelated financial rules, Emdaad export formats, multi-assignee task completion and translation-format deferrals remain unchanged. See [the detailed workflow](21-authentication-and-authorization-workflows.md).
+The user has returned to authentication, authorization and external providers for detailed planning. The earlier discussion deferral for staff permissions/deactivation is superseded for this selected workflow; no permission matrix is approved yet. Further identity/family lifecycle details are deferred under AUD-10; confirmed access rules remain, while unrelated financial rules, Emdaad export formats, multi-assignee task completion and translation-format deferrals remain unchanged. See [the detailed workflow](21-authentication-and-authorization-workflows.md).
 
 Staff lost-phone recovery is approved through an authorized account administrator after identity verification; recovery of the last available administrator requires owner verification. An adult family member must explicitly consent before a parent or another authorized family member can view their clinical records. Family membership, package sharing and payment rights do not establish clinical consent; detailed consent/proof/revocation and minor rules remain open.
 
-**New confirmed answers:** Staff/doctors sign in with username, verified email or phone number plus password. SMS additional verification is enabled by default; each user manages their own setting, and an administrator with the appropriate permission can manage it for all accounts. This concerns staff/doctor additional verification, not optional bypass of patient login OTP. No external-provider accounts are currently available; the project owner will be responsible for all of them. Existing provider preferences are not final selections.
+**Earlier confirmed answers:** Staff/doctors sign in with username, verified email or phone number plus password. Ordinary staff SMS is enabled by default and self/authorized-administrator managed, subject to mandatory privileged verification/step-up (AUD-08). This concerns staff/doctor additional verification, not optional bypass of patient login OTP. The project owner is responsible for external-provider accounts. The 4 October inventory found none available then; the later MyFatoorah selection and Tabby/Tamara readiness report need account-specific access details.
 
 
 ## Confirmed direction
@@ -80,7 +80,9 @@ Rate-limit delivery and verification without allowing arbitrary recovery request
 
 Phone OTP and email recovery must remain patient authentication contexts even when the account also has a staff profile. Staff access still requires its own approved authentication strength and permissions.
 
-## Open decisions
+## Open and deferred details
+
+**AUD-10: Deferred.** Further identity/family/guardian/beneficiary/consent lifecycle/evidence choices below are preserved for later; do not redesign or invent them. Existing patient SMS, recovery actors, verified linking and consent rules remain. Nondeferred technical mechanics can be designed without changing policy.
 
 - **Review follow-up R13, 4 October 2026:** Define account deletion request/status, identity verification, active appointments and balances, family-grant revocation, retained-data explanation and web/mobile entry points. Account deletion is distinct from logout, disablement and leaving a family; no medical-record destruction policy is selected. See the store-policy evidence and recommended release work in the [readiness review](20-development-readiness-review.md).
 

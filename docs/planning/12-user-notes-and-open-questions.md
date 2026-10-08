@@ -1,6 +1,6 @@
 # User notes and open questions
 
-Updated: 5 October 2026. This file keeps the decisions made in the planning conversation, topics explicitly deferred, and the current question batch. Detailed requirements live in the linked topic files.
+Updated: 8 October 2026. This file keeps the decisions made in the planning conversation, topics explicitly deferred, and the current question batch. Detailed requirements live in the linked topic files.
 
 ## How this tracker works
 
@@ -20,33 +20,35 @@ The user explicitly selected this workflow for detailed questions. Staff permiss
 **Current unanswered batch:**
 
 1. **P02/P03 — SMS/email selection:** requirements-led Saudi transactional SMS and verified Motmaan-domain email; Wati only if actual route/API meets requirements; vendor price/delivery proof pending.
-2. **P05 — Payment evaluation:** Tap first with PayTabs alternative; all five payment methods require account-specific confirmation.
+2. **P05 — MyFatoorah connection details:** The owner reports the account and Tabby/Tamara integrations ready. Obtain technical access/evidence for enabled methods, sandbox/live separation and whether Tabby/Tamara are exposed by MyFatoorah or connect directly. Define checkout, capture, refund, settlement and event responsibilities for each path; account readiness is answered, while technical verification remains.
 3. **P08 — Mobile publishing/push:** FCM/APNs and Motmaan-owned Apple/Google accounts with limited developer access and no clinical payloads in notifications.
 
-The sensitive-access boundary and granting authority, patient SMS defaults, imported-link approach, patient assisted-recovery actors and core doctor-deactivation behavior are resolved below. Exact role defaults, evidence checklists, contact rules, minor/self-exit, transfer/access duration and provider choices/evidence remain open. P01 account inventory/ownership is already answered; no accounts currently available.
+The sensitive-access boundary and granting authority, patient SMS defaults, imported-link approach, patient assisted-recovery actors and core doctor-deactivation behavior are resolved below. Role baselines plus individual staff customizations, endpoint-specific action permissions, role-selected dashboards and development role test accounts are now confirmed. Exact catalog, multi-role conflict precedence/delegation and remaining provider evidence remain open; within-role additions/removals are answered. Further identity/family lifecycle is deferred (AUD-10), with existing transfer/access deferrals preserved. P01 ownership is answered; its 4 October inventory predates the reported ready payment account.
 
-**Next authentication decisions after this provider batch:** required new-patient fields and contact uniqueness (A04/A05), concurrent device/session controls (A07), invitation/password defaults (A08/A12), consent/minor/transfer details (A10), and account-deletion request behavior (A11). Identity evidence checklists and the new operation contracts are proposed review artifacts, not owner answers.
+**Next authentication decisions after this provider batch:** unresolved multi-role conflict precedence and delegation ceilings (A06); within-role allowed/removed overrides, audit and safe revocation are confirmed by AUD-09; the exact endpoint-permission catalog and any non-CRUD action names are developer contract work for review, not a repeat of the answered granularity rule. Further identity/family lifecycle and consent/minor details are deferred under AUD-10; concurrent-device/session controls (A07), invitation/password technical defaults (A08/A12), account deletion (A11) and already separately parked transfer details retain their status. Identity evidence checklists and operation contracts are proposed review artifacts, not owner answers.
 
 Earlier room-allocation ownership, mandatory recording, interruption review and pre-operation seeding remain confirmed. Their unresolved business details remain in the topic files.
 
 ### Other unresolved topics — outside the selected batch
 
-1. **منصة المقاييس:** ننتظر رد مبرمج المنصة على [أسئلة الربط](18-assessment-platform-integration-questions.md)، خصوصًا API/SSO والنتائج والدفع وطريقة العرض.
-2. **تفاصيل تغيير الأخصائي:** الخياران معتمدان: جلسة فقط أو نقل مسؤولية المتابعة. من يختار نوع التغيير ومن يوافق عليه؟ متى يبدأ وينتهي الاطلاع المؤقت، وما صلاحيات الأخصائي السابق بعد نقل المتابعة؟ ما أثر النقل على المواعيد والمهام والمقاييس القائمة؟ البديل عند الغياب يحتاج قاعدة مستقلة.
-3. **الأسرة:** موافقة الفرد البالغ الصريحة قبل الاطلاع على سجله السريري معتمدة. كيف تُثبت وتُسحب هذه الموافقة وكيف يُثبت الربط؟ ما المعلومات والإجراءات التي يمكن للأبوين الوصول إليها عن بقية الأفراد؟ هل الخروج الذاتي يشمل القاصر؟ وكيف يتوافق مع الإجراء الإداري السابق لبلوغ الطفل؟ ما أثر الخروج على المواعيد القائمة والجلسات المشتركة والفواتير التي دفعها الوالد؟
-4. **بقية تفاصيل الباقات — خارج الدفعة الحالية بطلب المستخدم:** عدم إعادة الفرق عند الانتقال لأخصائي أقل سعرًا، واستخدام السعر الأساسي خارج الباقة للجلسات المستهلكة بما فيها عدم الحضور محسومان. نسبة سعر الأخصائي الأصلي أو المنفذ بعد النقل، ومعاملة فروق الأسعار المدفوعة تبقى تفاصيل غير محسومة؛ لا يعاد سؤال السعر الأساسي مقابل السعر المخفض.
-5. **المحفظة:** ما بيانات الحساب والتحقق المطلوبة، ومن ينفذ التحويل بعد الموافقة، وكم يستغرق؟ ما الحالات/الرفض/التنفيذ الفاشل؟ كيف توزع دفعة خدمة استُخدم فيها مال وكوبون ثم استُردت؟ الطلب من داخل المحفظة والجهة الموافقة وعدم سحب الكوبونات محسومة.
-6. **النسب:** ما الخصومات الإضافية المقصودة بعد الضريبة والخصم، ومن يملك تعديل النسبة؟ هل توجد نسب بحسب الخدمة أيضًا؟ كيف تعكس استردادات الباقات على عمولة سبق إثباتها/صرفها؟ نسبة كل طبيب وأساس صافي الإيراد محسومان.
-7. **التوظيف والخبرات:** ما قائمة الخبرات العلاجية العربية والإنجليزية وحدود الاختيار؟ هل طلب مراجعة نموذج الإداري مرجع فقط، أم مطلوب توسيع نطاق وظائف الإطلاق السابق؟ تحقق الشهادات والمرفقات الإضافية وقيود الملفات تحتاج تفاصيل؛ الحقول الحالية موثقة وليست سؤالًا يعاد بالكامل.
-8. **ترجمة البيانات:** ما أنواع البيانات والملفات العربية المطلوب ترجمتها، وكيف تُعرض الترجمة؟ بقي هذا السؤال دون إجابة وله وضع التأجيل السابق.
+1. **تفاصيل تغيير الأخصائي:** الخياران معتمدان: جلسة فقط أو نقل مسؤولية المتابعة. من يختار نوع التغيير ومن يوافق عليه؟ متى يبدأ وينتهي الاطلاع المؤقت، وما صلاحيات الأخصائي السابق بعد نقل المتابعة؟ ما أثر النقل على المواعيد والمهام والمقاييس القائمة؟ البديل عند الغياب يحتاج قاعدة مستقلة.
+2. **بقية تفاصيل الباقات — خارج الدفعة الحالية بطلب المستخدم:** عدم إعادة الفرق عند الانتقال لأخصائي أقل سعرًا، واستخدام السعر الأساسي خارج الباقة للجلسات المستهلكة بما فيها عدم الحضور محسومان. نسبة سعر الأخصائي الأصلي أو المنفذ بعد النقل، ومعاملة فروق الأسعار المدفوعة تبقى تفاصيل غير محسومة؛ لا يعاد سؤال السعر الأساسي مقابل السعر المخفض.
+3. **المحفظة:** ما بيانات الحساب والتحقق المطلوبة، ومن ينفذ التحويل بعد الموافقة، وكم يستغرق؟ ما الحالات/الرفض/التنفيذ الفاشل؟ كيف توزع دفعة خدمة استُخدم فيها مال وكوبون ثم استُردت؟ الطلب من داخل المحفظة والجهة الموافقة وعدم سحب الكوبونات محسومة.
+4. **النسب — أثناء التطوير (AUD-14):** تُوثق نسبة كل طبيب وأساس صافي الإيراد وصيغ الحوافز الحالية كما هي. إسناد الفترة وتصحيحات الاسترداد والتغييرات وسط الفترة والكشوف المغلقة والمكتسب مقابل المصروف تُحسم عند تطويرها بموافقة المالك/المالية عند تغيير سياسة مالية؛ بقية الخصومات ومعدلات الخدمة تحتاج موافقة.
+5. **التوظيف والخبرات:** ما قائمة الخبرات العلاجية العربية والإنجليزية وحدود الاختيار؟ هل طلب مراجعة نموذج الإداري مرجع فقط، أم مطلوب توسيع نطاق وظائف الإطلاق السابق؟ تحقق الشهادات والمرفقات الإضافية وقيود الملفات تحتاج تفاصيل؛ الحقول الحالية موثقة وليست سؤالًا يعاد بالكامل.
+6. **الترجمة:** سلوك العرض حسب لغة الواجهة محسوم (AUD-16) ويشمل البيانات المناسبة غير الطبية والأسماء مع حفظ الأصل. المتبقي اختيار المزود والموافقة على معالجة البيانات الحساسة وصيغ الملفات وآلية المراجعة السريرية؛ لا يُعاد سؤال طريقة العرض العامة.
 
 تفاصيل ضبط ترتيب الأطباء والتعادل، استثناءات تعديل/إلغاء الموظفين، ضرائب/تقريب الاسترداد، ومن يحجز باسم فرد الأسرة تبقى تبعيات مفتوحة في ملفات الموضوع. مهلة السبع دقائق ومنع التحويل البنكي وحد 24 ساعة ليست أسئلة مفتوحة.
 
+
 ### Other previously parked unresolved items
 
+- Azure hosting follow-ups: service-by-service Qatar interim suitability and service/account access, later Saudi availability; tiers/monthly budget, baseline validation, operator and later selective Redis provisioning; Blob recorder/network compatibility. Azure SQL Database and Azure Managed Redis are answered and must not be re-asked. See [deployment preparation](22-azure-hosting-and-deployment.md).
+- Background processing follow-ups: transactional outbox and Hangfire are confirmed, so technology selection is answered. Exact job/API contracts, worker/storage topology, provider idempotency/reconciliation guarantees, batch/concurrency/retry limits, latency/retention/alert thresholds and recovery ownership remain engineering work. See [detailed background workflow design](23-outbox-and-background-jobs.md). Existing deferred booking/payment rules remain deferred.
+- Engineering tools are selected as recorded below; exact package versions, contracts and operating limits remain developer design work. Detailed SignalR event design is deferred (AUD-20); transport choice remains proposed: SignalR for connected clients with FCM/APNs for eligible mobile push is recommended; Flutter client, shared transport/hosting, message/read/recovery contracts and P08 provider setup remain unconfirmed. See [approved tools and proposed messaging](24-approved-engineering-tools-and-realtime.md).
 - Support working hours, response targets, and urgent-ticket targets.
 - Existing SMS account/provider route and available integration access. Wati is now identified for evaluation; account access, Saudi route and required transactional operations are still unresolved.
-- Detailed staff permission matrix and doctor-deactivation effects are now in the selected active authentication/authorization discussion; separate sensitive grants, their owner-authorized granting administrators and current-consultation-only deactivation are confirmed; remaining matrix and lifecycle details are open.
+- Detailed staff permission matrix and doctor-deactivation effects are now in the selected active authentication/authorization discussion; separate sensitive grants, their owner-authorized granting administrators and current-consultation-only deactivation are confirmed; remaining granular defaults/mechanics are open; further identity/family lifecycle is deferred (AUD-10).
 
 ### Review follow-ups — recommendations, not owner answers
 
@@ -54,15 +56,35 @@ The [readiness review](20-development-readiness-review.md) classifies findings R
 
 Newly surfaced questions are recorded for later discussion, not presented as approved rules:
 
-- **R05, booking:** How does a cash visit enter the schedule before attendance, and when is room capacity guaranteed during self-service checkout? What happens to verified payment arriving after a released hold?
+- **R05, booking — discussion deferred by owner on 7 October:** How does a cash visit enter the schedule before attendance, and when is room capacity guaranteed during self-service checkout? What happens to verified payment arriving after a released hold? Keep as a gate before booking/payment implementation.
 - **R07, completion:** What should happen to the rating invitation if doctor confirmation is after the fixed 48-hour window? Do overrun alerts stop at actual clinical end while documentation remains pending?
 - **R13, account lifecycle:** How are account deletion requests handled with active bookings, family grants, wallet funds and retained records? This is distinct from family exit.
-- **R01/R14, delivery:** Who owns scope acceptance, clinical/finance review and launch sign-off, and what actual team/dependency schedule supports the two-month target?
+- **R01/R14, release evidence:** AUD-03 confirms planning already addressed. Preserve existing milestones/responsibilities/schedule; only missing documentation links, acceptance/sign-off evidence or named operating contacts need follow-up, without inventing staffing or dates.
 
 Engineering follow-ups: workflow contracts and examples (R02), clinical form inventory (R10), task/notification/metric definitions (R11), shared UI and client compatibility baseline (R12), and provider evidence (R09). Assign owners without inventing business policy. Permission and related family/transfer access questions are now part of the selected discussion; unrelated package and migration-export deferrals retain their existing status.
 
+## Resolved owner audit responses — 8 October 2026
+
+All 28 owner responses are recorded in the [decision register](06-decisions-and-open-questions.md#owner-decisions-on-the-8-october-audit) and [audit tracker](25-full-project-audit.md#current-owner-response-tracker). Do not re-ask resolved policy or infer implementation from documentation:
+
+- Confirmed: authority/reconciliation (AUD-01), Qatar interim with production data review (05), recording reliability/readiness/adaptive playback (06), privileged verification (08), within-role allowed/removed overrides with 90/85 example (09), later-booking extension block (12), clinical versions (15), language-aware dynamic display (16), reception operational closure (19), SQL first/selective Redis later (21), shared reliable file lifecycle (23), obsolete-artifact deletion/table repair (28). See owning topic links in the register.
+- Approved directions: progressive discovery (02), financial ledger (13), outbox/Hangfire reliability (22), measurable operational baselines/reporting (26). Engineering contracts/evidence remain, not repeat owner-selection questions.
+- Planned: existing delivery/two-month arrangements (03); preserve milestones, responsibilities and target. Do not recreate a missing-plan question from historical audits.
+- During Development: compensation period/correction treatment (14), with owner/finance approval of unresolved policy.
+- No Change: future-only patient-task edits (18); No Additional Action: broad UI/parity audit concern (24).
+- Notes only: Wati/Saudi SMS concern (04), future practitioner suggestions within the salaried group (27); neither authorizes replacement or ranking changes.
+- Deferred and unresolved: AUD-07/10/11/17/20/25, as listed below. This response does not reopen previously deferred multi-assignee/task, package-edge or transfer details.
+
 ## Deferred by the user
 
+- **AUD-07:** mobile purchasing/product classification; retain MyFatoorah, no new store payment route.
+- **AUD-10:** further identity/family/guardian/beneficiary/consent lifecycle, including evidence, minor/self-exit and cross-member details. Preserve all confirmed rules.
+- **AUD-17:** assessment API/SSO/result/payment contract when development reaches the integration; [prepared questions](18-assessment-platform-integration-questions.md) retained for that stage.
+- **AUD-20:** detailed SignalR event taxonomy, ordering, delivery semantics and scaling; selection remains proposed.
+- **AUD-25:** Emdaad migration details; full replacement/data-and-file migration remains a release dependency, with no invented cutover date.
+
+
+- Detailed booking questions about room-capacity guarantee, cash booking before attendance and payment after an expired hold are deferred for discussion. Booking/payment implementation still needs those answers; the seven-minute hold and existing payment rules remain confirmed.
 - Future treatment pathways involving multiple practitioners/services; current repeated-session practitioner packages are resolved.
 - Internal multi-assignee task completion: all assignees finish versus one person finishing for everyone (Q2).
 - Emdaad export formats/options and availability discussion (Q10); the full migration-at-launch requirement remains in force.
@@ -74,10 +96,39 @@ Engineering follow-ups: workflow contracts and examples (R02), clinical form inv
 - Bank execution/verification/reconciliation details remain open; request within wallet and system administrator/accountant approval are resolved.
 - Additional deductions, optional service-specific rates, edit permissions and refund/period-close corrections remain open.
 - Extra credential evidence, verification procedure, upload constraints and recruitment scope expansion remain open; current website baseline is recorded.
-- Which imported Arabic formats are translated and how translations are presented; the user said to note this for later.
+- Exact imported file/content formats remain open/noted for later; general selected-language display is confirmed (AUD-16).
 - Remaining cross-member family access, relationship consent/proof, minor/self-exit and administrator-controlled adulthood interaction retain unresolved/deferred details.
 
 ## Resolved notes
+
+### Engineering tools and Swagger/OpenAPI — 8 October 2026
+
+- **Confirmed:** Swagger UI with OpenAPI contracts. The user approved the other recommendations: modular monolith, ASP.NET Core policy/resource authorization, FluentValidation, typed HttpClient with .NET HTTP resilience, OpenTelemetry/Application Insights, HybridCache with Redis, SQL Server integration tests using Testcontainers, Playwright and Flutter integration tests. Protected audit/edit history, incoming-webhook deduplication and database concurrency protection are approved as technical foundations.
+- [Detailed notes](24-approved-engineering-tools-and-realtime.md) record responsibilities, safe retries, audit/caching behavior and client/testing consequences. Exact contracts/versions/configuration remain open; approving the approach does not finalize an API specification or authorize implementation.
+- **Still under discussion:** The user asked whether SignalR is suitable across platforms. SignalR plus eligible FCM/APNs delivery and SQL-backed message recovery is the recommendation; SignalR, the Flutter client and the push/hosting choices are not confirmed by approval of the remaining tools. The existing P08 provider/account batch remains unanswered.
+
+### Reliable background workflows — 8 October 2026
+
+- **Confirmed:** Use the transactional outbox pattern with Hangfire for reliable external effects and appropriate lengthy/scheduled work. Save business state and required outbox records in the same Azure SQL transaction, then dispatch durable jobs with idempotent processing and recovery. Applies to accounting synchronization, required notifications and suitable imports, exports, reports, reminders and scheduled checks; critical booking/finance invariants retain database concurrency protection.
+- [Detailed notes](23-outbox-and-background-jobs.md) record the recommended transaction/dispatch flow, duplicate and unknown-outcome handling, workflow checkpoints, security, hosting, client progress and future acceptance checks. The tool/pattern choice is confirmed; exact engineering contracts, limits and topology remain to specify. This records planning approval, not application implementation or resource provisioning.
+
+### Backend readiness answers — 7 October 2026
+
+- **Confirmed development role testing and permission granularity:** Create one confirmed/active nonproduction account per staff role with that role's full baseline permissions. Adding a service's permissions to a role automatically updates that role's default test account's effective access. Every protected backend endpoint has a specific action permission; create, read/get, update and delete are separate, and other operations need their own permissions. The role selects the staff dashboard; effective permissions determine the components and actions shown in it. Existing per-person customization remains supported. Production accounts and patient access are outside these development fixtures; server resource scope and separate sensitive grants still apply.
+- **Confirmed database:** Azure SQL Database (SQL Server). Hosting region, tier, cost and provisioning still need validation.
+- **Confirmed staff access model:** Each staff role provides permissions; authorized management can customize permissions for an individual staff member, so people with the same role can differ. The frontend uses the individual's effective permissions to show controls, while every backend action independently checks permission and branch/patient/resource scope. Patients are outside this configurable staff-role model, but their own and family access remains server-enforced. Separate clinical-record and recording grants still require administrators explicitly authorized by the owner. Effective permission precedence and management delegation details remain open.
+- **Confirmed provider readiness report:** The owner says the MyFatoorah account and Tabby/Tamara integrations are ready. Technical access, exact BNPL route, enabled method evidence and test results remain to document.
+- **Deferred discussion:** The owner requested that the booking-rule questions from the readiness list be left for later. This does not waive the booking workflow gate.
+
+### Online payment provider — 7 October 2026
+
+- **Confirmed:** Use [MyFatoorah](https://www.myfatoorah.com/) for online payments. The owner says Tabby (“tabbi”) and Tamara integrations are ready for integration. Tap is no longer the preferred provider; PayTabs and Moyasar remain historical research/comparison only.
+- The app and patient website still need mada, Apple Pay, credit/debit cards, Tabby and Tamara. “Ready for integration” is the owner's status report, not evidence that Motmaan's MyFatoorah account has every method enabled or that a production transaction has passed. The MyFatoorah versus direct Tabby/Tamara connection path and operational ownership remain in P05.
+
+### Azure caching and deployment discussion — 6 October 2026
+
+- **Confirmed on 6 October:** Include **Azure Managed Redis** as the fifth service in the discussed Azure plan. Azure SQL Database was conditional at that time and was selected on 7 October. Application Insights/OpenTelemetry and HybridCache were approved on 8 October; App Service, private Blob Storage and Key Vault remain proposals. Regions, tiers, cost and final topology remain open.
+- The user asked how deployment would start if they choose to proceed. [Azure deployment preparation](22-azure-hosting-and-deployment.md) records the recommended setup order and client/backend boundaries. This is guidance, not authorization to implement, create resources, purchase services or activate production.
 
 ### Authentication and provider batch — 4 October 2026
 
@@ -97,14 +148,14 @@ Engineering follow-ups: workflow contracts and examples (R02), clinical form inv
 - **A09 core behavior confirmed:** Deactivation immediately blocks new doctor work. A doctor with an already-active consultation can finish and save only that consultation; access exception ends on its closure. Abandonment expiry, exact permitted actions and future-booking handover remain open; no new login or unrelated chart access is granted.
 - **A01 confirmed:** Staff and doctors may use username, verified email or phone number with their password. Patient login remains phone OTP.
 - **A02 confirmed:** Staff/doctor SMS additional verification is enabled by default. Each person can manage their own setting; an administrator with the appropriate permission can control it for all accounts. This does not let patients disable the OTP needed for patient login. Sensitive setting-change/recovery safeguards are recommendations pending review.
-- **P01 confirmed:** No external-provider accounts are currently available. The project owner will be responsible for all accounts. Recommendation: center-owned business accounts and billing with limited delegated developer access; the owner has not thereby selected every provider candidate or approved a purchase. The existing assessment platform remains reported to exist; its integration access is unavailable.
+- **P01 confirmed, 4 October:** No external-provider accounts were available then. The project owner will be responsible for all accounts. On 7 October the owner reported the MyFatoorah account and Tabby/Tamara integrations ready; current credential access and method configuration have not been documented here. Recommendation: center-owned business accounts and billing with limited delegated developer access. The existing assessment platform remains reported to exist; its integration access is unavailable.
 - The user has returned to authentication/authorization details, including previously deferred staff permissions and deactivation. The remaining matrix and related access questions are open, not answered by the login choices. Unrelated deferrals remain in place.
 
 
 ### Product, delivery, and roles
 
 - Motmaan only; one branch initially with more possible later. Patients, doctors, schedules, and reporting are restricted by branch; cross-branch exceptions remain open.
-- Latest delivery direction: all project requirements/features, including source-labeled later/separately approved items, belong in the first stage. Preserve explicit exceptions (doctor-only Join us jobs initially) and workflows the user has deferred. Production starts after two months of development at production-level quality; required checks include security, user acceptance, payment/accounting reconciliation, backup restore, performance, and monitoring. Exact thresholds/sign-off owners remain open.
+- Latest delivery direction: all project requirements/features, including source-labeled later/separately approved items, belong in the first stage. Preserve explicit exceptions (doctor-only Join us jobs initially) and workflows the user has deferred. Production starts after two months of development at production-level quality; required checks include security, user acceptance, payment/accounting reconciliation, backup restore, performance, and monitoring. Initial operational baselines are approved under AUD-26; validation and named sign-off evidence remain open.
 - Replace Emdaad at production launch and migrate all its data: patient profiles, family links, appointments, clinical history, finance, packages, and referenced files. Export coverage, mapping, reconciliation, and cutover validation remain open.
 - Use Saudi Arabia time (`Asia/Riyadh`) project-wide. Store event instants in UTC and convert/calculate schedules, recurrences, display times, and calendar boundaries in the named zone.
 - Initial role groups: manager, reception, administrator, and doctor, with accountant participation now required for internal staff tasks. The permissions matrix is open.
@@ -117,7 +168,7 @@ Engineering follow-ups: workflow contracts and examples (R02), clinical form inv
 
 ### Booking and money
 
-- Booking and payment are supported in the patient app and responsive website. Required online methods: mada, Apple Pay, credit/debit, Tabby, and Tamara. Tap is the preferred provider to evaluate; PayTabs is a comparison, not an approved contract.
+- Booking and payment are supported in the patient app and responsive website. Required online methods: mada, Apple Pay, credit/debit, Tabby, and Tamara. MyFatoorah is the confirmed online payment provider; see the 7 October note above for the reported BNPL readiness and remaining connection details.
 - Online booking confirmation requires trusted provider confirmation to the backend.
 - Cash is accepted only at in-person sessions when the patient attends. Booking by bank transfer is not allowed.
 - Checkout holds the selected appointment for seven minutes, shows a countdown, then releases unpaid capacity and displays «انتهى وقت الدفع، يرجى المحاولة مرة أخرى». API/server expiry is authoritative.
@@ -127,7 +178,7 @@ Engineering follow-ups: workflow contracts and examples (R02), clinical form inv
 - Administrators have full control over package offers and settings. Exact fields and safeguards remain to define.
 - For in-person and online no-shows, retain payment or consume one package session; no doctor incentive. Mark after scheduled start plus dynamic admin-defined grace period, unless attendance or active online session is recorded.
 - The patient app shows an appointment countdown and advance notice; admin sets reminder lead time.
-- Reception marks in-person patients Arrived; the treating doctor marks the session Finished. Patient self-recording of in-person arrival is superseded; online attendance evidence remains separate.
+- Reception marks in-person patients Arrived; the treating doctor normally marks Finished; reception may perform authorized operational closure if the doctor forgets (AUD-19), without clinical signing. Patient self-recording of in-person arrival is superseded; online attendance evidence remains separate.
 - Patients book scheduled free doctor slots and see the next available date/time, even if it is a week away. Waiting-room queue/estimated-wait display was not selected. Doctors and management control daily session count and session time/duration; five sessions per day and X minutes are examples only. See [booking and finance](02-booking-and-finance.md) and [customer appointments](10-customer-mobile-appointments.md).
 - Session duration is configurable. Session count/duration setting changes affect only unbooked slots; existing bookings retain their booked date/time and duration. Exact configuration scope (such as per service) remains open; no numeric defaults were selected.
 - Schedules support different working hours per weekday, breaks between sessions, and days off. Exact break settings and handling days off conflicting with existing bookings remain open; no automatic cancellation/rescheduling is approved.
@@ -135,7 +186,7 @@ Engineering follow-ups: workflow contracts and examples (R02), clinical form inv
 - The doctor presses Ready for patient to notify both reception and the patient. Trigger and recipients are confirmed; channels remain open. Advance reminders stay separate.
 - The doctor explicitly confirms the end-session process; after confirmation marks the session Finished, email a request to rate the session/doctor. If unanswered, show a rating popup on the patient's next app opening within eligibility. Reviews remain optional, out of 10, with existing visibility/editing rules. The 48-hour window starts at actual consultation end even if confirmation is delayed; reception records the actual in-person end if the doctor forgets. Recording/correction permissions, confirmation validation, popup repetition, and missing-email handling remain open. See [patient feedback](14-patient-session-feedback.md).
 - Actual in-person consultation end means the patient leaves. The doctor writes notes afterward and may write a prescription before departure. Do not require notes before clinical end/patient departure or invent a mandatory note-save gate. Later Finished confirmation and actual consultation end are distinct.
-- Measure allocated session duration from actual consultation start. At expiry, show the doctor a red warning if unfinished; notify reception after a system-configured delay if it remains unfinished. No delay value/default or setting owner was selected. The doctor may extend the active session by a period configurable by doctor or management. Allow extension into a later booking with a warning to the doctor that another patient is waiting; do not shift bookings automatically. A 1.5-hour session is illustrative, not a default. Actual-start capture, extension values/limits and exact waiting/conflict detection remain open; no automatic completion, no-show, or charges are selected. Scheduled-start no-show grace is unchanged. See [customer appointments](10-customer-mobile-appointments.md).
+- Measure allocated session duration from actual consultation start. At expiry, show the doctor a red warning if unfinished; notify reception after a system-configured delay if it remains unfinished. No delay value/default or setting owner was selected. The doctor may extend the active session by a period configurable by doctor or management. AUD-12 supersedes the earlier permission: block extension if the doctor or room has a later booking; no automatic shifts/delays, and actual overruns are recorded separately. A 1.5-hour session is illustrative, not a default. Actual-start capture, extension values/limits and exact waiting/conflict detection remain open; no automatic completion, no-show, or charges are selected. Scheduled-start no-show grace is unchanged. See [customer appointments](10-customer-mobile-appointments.md).
 
 ### Doctors, recruitment, expertise, and patient tasks
 
@@ -159,9 +210,9 @@ Engineering follow-ups: workflow contracts and examples (R02), clinical form inv
 
 - Patients only submit support tickets; administrators resolve them. Statuses: Open, In progress, Waiting for patient, Resolved, Closed. Push updates and an in-ticket new-message indicator are required. When Closed, email a satisfaction survey rated out of 10 with optional comments and one submission per ticket; link it to the resolving admin. Management sees all results; the patient sees their own response.
 - Patients may optionally review a session and its doctor within exactly 48 hours from session end, with a rating out of 10 and written comments (recommended as optional). Management sees all reviews; the submitting patient sees their own and the session doctor sees that review. No other users see it. Mobile review editing is allowed within the original 48-hour window; edits do not extend it. Web editing/retraction remains unspecified. Ticket satisfaction remains once only. See [patient feedback](14-patient-session-feedback.md).
-- Support translation of imported Arabic user data into English using a suitable API. Google Cloud Translation is an evaluation candidate, not a final vendor. Keep the Arabic source, label machine translation, and approve privacy/residency before processing health data externally. Translation of specific formats and presentation is noted for later; human clinical review is the recommended approach, not yet selected by the user.
+- **Confirmed AUD-16:** suitable dynamic display data follows the selected Arabic/English interface language, beyond imported/clinical text; transliterate names and preserve originals. Evaluate a suitable API/derived representation approach. Google Cloud Translation is an evaluation candidate, not a final vendor. Keep the Arabic source, label machine translation, and approve privacy/residency before processing health data externally. Specific file formats remain open; general display-language behavior is resolved; human clinical review is the recommended approach, not yet selected by the user.
 - Agora is the source-named provisional online session provider. Proposed recording delivery goes directly into a supported private center bucket; one-year retention is a source requirement. Playback is limited by management permission. Provider/storage fit remains to validate.
-- Center-controlled private Saudi-region storage is proposed; Google Cloud Storage in Dammam is a candidate, with OCI Saudi as an alternative.
+- Center-controlled private storage remains required/proposed according to data class; Azure Qatar Central is the interim hosting preference subject to production health-data/cross-border review (AUD-05). Private Blob fit remains unverified; GCS Dammam/OCI Saudi are retained alternatives, not selected.
 - Qoyod is the named accounting/e-invoicing system. Wati is source-named for WhatsApp; on 4 October the user also identified it for WhatsApp/SMS evaluation. Its role and research dependencies are in the [expanded Wati notes](17-provider-documentation-development-notes.md#whatsapp-and-sms-handling-wati). Final SMS route, existing account/access, and assessment API/SSO remain to confirm; identifying the platform does not approve activation or change OTP channels.
 - The user requested a dedicated external-provider Markdown guide showing each provider's role and configuration clearly. See [external provider guide](16-external-provider-guide.md); keep it current when provider decisions change.
 - Family addition is by father or mother. Each member sees own reports/sessions/diagnoses and invoices if they paid; self-exit notifies family head and enables independent booking and ordinary patient powers. Previous parent visibility direction is not explicitly withdrawn; exact cross-member scope and self-exit/minor/guardian interaction remain open. A parent need not have a patient record; no automatic adulthood change is selected.
@@ -171,7 +222,7 @@ Engineering follow-ups: workflow contracts and examples (R02), clinical form inv
 
 #### Wider priority batch — latest owner answers
 
-- Staff/doctors use username, verified email or phone number plus password. SMS additional verification is enabled by default; each person manages their own setting and an administrator with the relevant permission may manage it for all accounts. These newer answers supersede the earlier unresolved credential/default/control details. The detailed permission matrix is now under active clarification; patient OTP now uses SMS with confirmed defaults; the final SMS vendor remains open.
+- Staff/doctors use username, verified email or phone number plus password. SMS additional verification is enabled by default; ordinary staff manage their own SMS setting subject to AUD-08 mandatory privileged verification and an administrator with the relevant permission may manage it for all accounts. These newer answers supersede the earlier unresolved credential/default/control details. The detailed permission matrix is now under active clarification; patient OTP now uses SMS with confirmed defaults; the final SMS vendor remains open.
 - Rooms are assigned per appointment by reception. Show suggestions of available rooms for the appointment; do not automatically allocate a room for a practitioner's entire shift. Selection timing, ranking and room/service constraints remain open.
 - Every online session must be recorded for safety and performance review. An unrecorded online-session option is not selected. Preserve consent and restricted playback; exact consent/refusal and recorder-failure handling remain open.
 - Connection-failure clarification: management may review an interrupted/incomplete online session and grant a free replacement session; the patient may open a support ticket for review. Neither interruption nor ticket creation automatically grants a session. Detailed review/grant conditions and partial-session accounting remain open.
@@ -187,8 +238,8 @@ Engineering follow-ups: workflow contracts and examples (R02), clinical form inv
 #### Latest three-question batch
 
 - Support reopening: patients may reopen their resolved/closed tickets without a time limit. Resulting status mapping remains open; one satisfaction response per ticket remains in force.
-- Review deadline: exactly 48 hours from actual consultation end, including delayed doctor confirmation. Reception records actual in-person session end if the doctor forgets. Detailed recording/correction permissions remain open; this does not replace the existing doctor-confirmed Finished/invitation step.
-- Extension conflict: allow extension with a warning to the doctor that another patient is waiting when it overlaps the later appointment. Existing bookings do not move automatically. Exact waiting/conflict detection, extension limits and financial effects remain open.
+- Review deadline: exactly 48 hours from actual consultation end, including delayed doctor confirmation. Reception records actual in-person session end if the doctor forgets. Detailed recording/correction permissions remain open; AUD-19 additionally permits authorized reception operational closure when the doctor forgets, without clinical signing; actual end and closure time remain separate.
+- **Superseded 4 October extension answer:** AUD-12 now blocks extension whenever the affected doctor or room has a later booking. Preserve scheduled times, no automatic moves and other rules when no later booking exists; operational overrun recording is distinct.
 
 ## Latest owner answers — resolved notes, 4 October 2026
 

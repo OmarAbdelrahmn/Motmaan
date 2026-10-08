@@ -1,6 +1,6 @@
 # Identity roles permissions and dashboard access
 
-Updated: 4 October 2026. Status: user-requested access direction with a proposed detailed model.
+Updated: 8 October 2026. Status: user-requested access direction with a proposed detailed model.
 
 The user wants management, doctor or specialist, and patient experiences. Management and specialist dashboards must show details based on permissions, and entry must be restricted to authorized staff. The recommendation is one coherent identity and authorization model serving these experiences, with stronger staff authentication and a separate patient OTP flow.
 
@@ -8,13 +8,13 @@ The user wants management, doctor or specialist, and patient experiences. Manage
 
 **Current confirmed access answers:** Patient login uses SMS with a six-digit code, five-minute validity, resend after 60 seconds and five failed attempts per challenge. Imported-record links are preverified during migration where adequate evidence exists, with reception handling unverified/ambiguous cases before access; this approach was selected by the assistant under explicit user delegation. Clinical-record and recording access require separate grants. The owner explicitly authorizes access-management administrators who may assign those grants within branch/patient scope. If a patient loses both phone and verified email, reception verifies identity and an authorized account administrator approves recovery. A deactivated doctor may finish/save only an already-active consultation; new work is blocked immediately and the remaining access ends when that consultation is closed. Proof checklists, detailed role defaults and technical session mechanisms remain to specify.
 
-The user has returned to authentication, authorization and external providers for detailed planning. The earlier discussion deferral for staff permissions/deactivation is superseded for this selected workflow; no permission matrix is approved yet. Related family/assignment access questions can be clarified here, while unrelated financial rules, Emdaad export formats, multi-assignee task completion and translation-format deferrals remain unchanged. See [the detailed workflow](21-authentication-and-authorization-workflows.md).
+The user has returned to authentication, authorization and external providers for detailed planning. The earlier discussion deferral for staff permissions/deactivation is superseded for this selected workflow. Role baselines plus individual staff permission customization are confirmed; the exact permission matrix and multi-role conflict rules remain open; within-role individual additions/removals are confirmed by AUD-09. Further identity/family lifecycle is deferred (AUD-10); previously parked assignment details retain their status, while unrelated financial rules, Emdaad export formats, multi-assignee task completion and translation-format deferrals remain unchanged. See [the detailed workflow](21-authentication-and-authorization-workflows.md).
 
 Confirmed role baseline: reception handles scoped branch bookings/contact details, accountants handle scoped finance, doctors handle assigned patients, and managers receive only owner-assigned operational/reporting permissions. Separate clinical/recording grants remain required; the full granular action matrix is not approved by this baseline. Confirmed self-service safeguard: turning staff SMS verification off or changing its phone requires password confirmation and an SMS code to the existing verified phone. A lost phone uses the approved administrator recovery process. Detailed audit, conflict handling and administrator-change safeguards remain proposals.
 
 Staff lost-phone recovery is approved through an authorized account administrator after identity verification; recovery of the last available administrator requires owner verification. An adult family member must explicitly consent before a parent or another authorized family member can view their clinical records. Family membership, package sharing and payment rights do not establish clinical consent; detailed consent/proof/revocation and minor rules remain open.
 
-**New confirmed answers:** Staff/doctors sign in with username, verified email or phone number plus password. SMS additional verification is enabled by default; each user manages their own setting, and an administrator with the appropriate permission can manage it for all accounts. This concerns staff/doctor additional verification, not optional bypass of patient login OTP. No external-provider accounts are currently available; the project owner will be responsible for all of them. Existing provider preferences are not final selections.
+**Earlier confirmed answers:** Staff/doctors sign in with username, verified email or phone number plus password. Ordinary staff SMS is enabled by default and self/authorized-administrator managed, subject to mandatory privileged verification/step-up (AUD-08). This concerns staff/doctor additional verification, not optional bypass of patient login OTP. The project owner is responsible for external-provider accounts. The 4 October inventory found none available then; the later MyFatoorah selection and Tabby/Tamara readiness report need account-specific access details.
 
 
 ## Three experiences
@@ -27,7 +27,7 @@ Staff lost-phone recovery is approved through an authorized account administrato
 
 The specialist dashboard is a focused workspace over the same backend. It does not require a second identity database or duplicate business logic. Management does not mean every staff user receives all information.
 
-One staff login can route staff into their allowed workspace. Distinct management and specialist entry pages are also possible but should call the same staff authentication system. A user with both authorized staff contexts can choose or switch workspaces. Final UI routing is still open.
+Staff roles determine which dashboard/workspace is available: for example, a doctor role opens the specialist dashboard. Permissions determine which components, data and actions appear within that dashboard. One staff login can route staff into an allowed workspace; a user with multiple authorized roles may choose or switch among their dashboards. Exact navigation presentation remains open, but an individual permission change alone does not assign a new dashboard role.
 
 Patient OTP login remains separate in assurance and session context. A staff member who is also a patient must not obtain staff powers by logging in through the patient OTP path.
 
@@ -54,13 +54,13 @@ An illustrative authorization rule is: active account plus appropriate authentic
 
 ## Roles and permissions
 
-Roles are configurable bundles of permissions. Initial staff roles from the requirements are General Manager, Executive Manager, System Administrator, Accountant, Reception or Customer Service, Marketing, and Specialist. Different practitioner types may need separate role templates.
+Roles are configurable bundles of permissions. Initial staff roles from the requirements are General Manager, Executive Manager, System Administrator, Accountant, Reception or Customer Service, Marketing, and Specialist. Different practitioner types may need separate role templates. **Confirmed 7 October:** a staff member's effective permissions may differ from the role baseline through management-controlled individual customization. Patients do not use this configurable staff-role scheme; their own-account, family-consent and beneficiary rules still require server checks.
 
 **User's current-stage direction:** Start with manager, reception, administrator, and doctor, with accountant participation now required for internal staff tasks. The exact permission matrix is now under active clarification, including whether administrator means system or operational administrator. Do not grant broad access solely from a role label. Management verifies doctor degrees and applicant data before activation; the verification procedure remains open.
 
-The user expects the interface to show or hide actions according to each staff member's granted permissions. This is a usability rule only: every API operation still enforces the permission and resource scope on the server. Management controls each doctor's active status, and only active doctors may enter the doctor dashboard. Deactivation's effect on existing sessions, tokens, and in-progress work remains open.
+The interface shows or hides actions according to each staff member's **effective** permissions after role and individual settings are combined. This is a usability rule only: every API operation still enforces current permission and resource scope on the server. A stale frontend permission snapshot cannot authorize an action after a grant is removed. Management controls each doctor's active status, and only active doctors may enter the doctor dashboard; the already-active consultation exception remains as confirmed.
 
-Admins can create roles and select permissions from a developer-maintained catalog of supported actions. Creating a permission name in a dashboard does not create a new API capability. Avoid hardcoding clinical and financial access exclusively to a role name.
+Admins with the relevant grant can create roles and select permissions from a developer-maintained catalog of supported endpoint actions. **Confirmed:** every protected backend endpoint maps to a specific permission. Create, read/get, update and delete are distinct permissions where those operations exist; non-CRUD operations such as approval, export, refund, recording playback or configuration changes need their own explicit permissions. A generic view/edit flag or one permission for every method of a service does not meet this granularity. This rule does not require adding a delete endpoint to a resource that cannot be deleted. Creating a permission name in a dashboard does not create a new API capability. An endpoint permission is necessary but does not replace branch, assigned-patient, beneficiary, field or business-state checks.
 
 | Illustrative permission | Scope or extra restriction |
 |---|---|
@@ -94,7 +94,25 @@ Admins can create roles and select permissions from a developer-maintained catal
 
 Permission names are examples, not implemented contracts. Refine the catalog by use case before coding. Keep sensitive permissions explicit rather than automatically granting a wildcard to system administrators.
 
-Proposed initial rule: roles grant permissions and multiple roles combine allowed grants. Resource scope and business constraints still apply. Avoid mixing grant and deny semantics or many individual-user overrides until a concrete requirement justifies their conflict rules.
+Confirmed model: staff roles provide baseline permissions, and authorized management can customize permissions per staff member, including people sharing a role. Resource scope and business constraints still apply. **Confirmed AUD-09:** individual customizations may add authorized permissions or remove permissions within the assigned role; store overrides explicitly without changing role defaults or other users. Multi-role conflict precedence and delegation ceilings remain open; audit and safe revocation are required, while mechanisms remain engineering work. A manager must not gain clinical-record or recording access merely by editing a general role or their own account; those separate grants retain the owner-authorized access-administrator rule.
+
+**Confirmed development testing requirement:** In each development/test environment, provide one confirmed/active test account for each staff role. It has all permissions in that role's baseline so the team can test the role's dashboard and endpoint behavior. When a new service's action permissions are assigned to a role, the corresponding default test account receives the new effective permissions automatically through its role membership; do not rely on manually editing the account after every service addition. Use synthetic data and environment-only credentials. These test identities never become production staff accounts and do not bypass login, separate sensitive grants or resource scope. Seed/reset mechanics, safe credential delivery and automated checks are implementation details.
+
+## Individual permission customization — AUD-09
+
+**Confirmed — Important Clarification:** role defaults are inherited, and an authorized administrator can customize the individual user's allowed/removed permissions during creation and later editing. Inherit, explicitly allow where authorized, and explicitly remove/deny within the role assignment are conceptual override modes. `RolePermission`, `UserRole` and `UserPermissionOverride` are possible representations, not mandated table names or an approved schema.
+
+**Example:** a role has **90 permissions**; remove **5** from user A and that user has **85 effective permissions** from the role. User B with the same role retains **90**. Restoring an override restores the affected permission without editing the role. Show default, added, removed and effective permissions in management, and evaluate the actual effective permissions at protected API operations, with resource scope and separate sensitive grants still enforced.
+
+Persist overrides explicitly, audit who changed what, and revoke access safely so stale tokens/caches cannot continue granting removed permissions. Multiple authorized roles already allow corresponding dashboards; **global precedence between different role assignments is unresolved**. Do not infer a global deny-wins or union policy from the within-role example. Exact catalog/defaults and delegation authority limits remain open.
+
+Future acceptance: two same-role users; five removals affect only one; restore a permission; grant a new authorized individual permission; edit after creation; protected endpoints reject revocation even with stale state; audit identifies the changer. These are required future checks, not executed tests.
+
+## Privileged authentication — AUD-08
+
+**Confirmed:** stronger verification/MFA and appropriate sensitive-action step-up are required for highly privileged administrators, role/permission administration, sensitive clinical/recording access, refunds and other high-risk finance. The ordinary staff self-managed default-on SMS policy and patient SMS OTP behavior remain, subject to this mandatory privileged requirement; neither a self toggle nor administrator control can bypass it.
+
+[Workflow 21](21-authentication-and-authorization-workflows.md#privileged-verification-lifecycle--aud-08) owns enrollment, verification, recovery, lost-device checks, action assurance and audit requirements. Passkeys/authenticators may be evaluated; mechanism selection is technical design, not a new confirmed provider choice.
 
 ## Starting role matrix
 
@@ -148,8 +166,8 @@ The acceptance workflow can assign only the approved doctor role template, not a
 
 ## Login and access changes
 
-- Patient authentication uses phone OTP as confirmed. Optional username/email setup and recovery require account ownership checks; email recovery uses a previously verified address. Exact challenge limits and recovery assurance remain open.
-- **Confirmed on 4 October 2026:** Additional verification for staff/doctor sign-in is a configurable option that can be enabled or disabled. When enabled, deliver the verification code by SMS. Mandatory additional verification for every staff account is not selected. The latest answers select username/verified email/phone plus password, SMS enabled by default, self-service control of the user's own setting and control of all accounts by an administrator with the relevant permission. Self-service disable/phone changes require password plus existing-phone SMS proof; lost-factor recovery uses an authorized account administrator after identity verification, or owner verification for the last administrator. Detailed evidence/audit mechanics and granular permissions remain open in document 21. Staff onboarding is managed by administration in the initial requirements.
+- Patient authentication uses phone OTP as confirmed. Optional username/email setup and recovery require account ownership checks; email recovery uses a previously verified address. Patient challenge defaults are confirmed in document 07; additional delivery/abuse limits and detailed recovery evidence remain open.
+- **Confirmed on 4 October 2026:** Additional verification for staff/doctor sign-in is a configurable option that can be enabled or disabled. When enabled, deliver the verification code by SMS. Mandatory verification for every ordinary staff account is not selected. **AUD-08 supersedes unrestricted opt-out for privileged accounts and sensitive access:** stronger verification/MFA and step-up are mandatory for role/permission administration, highly privileged accounts, sensitive clinical/recording access and refunds/high-risk finance. The latest answers select username/verified email/phone plus password, SMS enabled by default, self-service control of the user's own setting and control of all accounts by an administrator with the relevant permission. Self-service disable/phone changes require password plus existing-phone SMS proof; lost-factor recovery uses an authorized account administrator after identity verification, or owner verification for the last administrator. Detailed evidence/audit mechanics and granular permissions remain open in document 21. Staff onboarding is managed by administration in the initial requirements.
 - After staff authentication, derive allowed workspaces and effective permissions from trusted server-side assignments.
 - A requested workspace or role from the browser is not proof of authorization.
 - Staff authentication must not be satisfied solely by a lower-assurance patient session.
@@ -167,13 +185,21 @@ Audit role changes, sensitive grants, refunds, wallet spending, policy overrides
 
 Use authorization in application workflows as well as HTTP entry points so background or internal callers cannot bypass the rules. Patient ownership and practitioner scope must come from trusted context, not unchecked request identifiers.
 
+## Clinical document version history — AUD-15
+
+**Confirmed:** every meaningful clinical-report/relevant medical-document modification must preserve an accessible historical version. Retain original and updated content, modification timestamps and modifying practitioner identity. Do not permanently overwrite prior report content. Preserve version-specific exported files, including the content version represented by each PDF, and trace each signature to the exact version signed.
+
+History access and exports require current authorization, assigned-patient/branch scope and appropriate audit. Direct editing of a finalized report remains the approved user experience; preserve history underneath it rather than requiring a separate revised-report issuance workflow. Professional eligibility/issuing rights remain enforced; reception operational closure grants no clinical signature authority. Exact version storage, presentation, retention and relevant document categories remain design/clinical details, not an excuse to omit history. Prescription/accounting correction business policy remains unresolved.
+
+Future acceptance: original survives edits; author/time are traceable; exports and signatures remain bound to the correct version; authorized users can access history and unauthorized users cannot; concurrent edits cannot silently destroy versions.
+
 ## ASP.NET Core direction
 
 Use role membership for grouping, policy-based authorization for supported actions, and resource-based authorization for record scope. ASP.NET Core Identity is a candidate for account and role management; its adoption is proposed, not confirmed. Our dynamic permission catalog and policy-version invalidation need a deliberate design.
 
 ## Questions to settle
 
-The operational role baseline and sensitive-grant authority are confirmed in document 21. Agree the staff landing experience, remaining granular action defaults, clinical visibility in the patient portal, the adult-child access transition and exact family data/actions, practitioner prescribing eligibility, and permission-revocation behavior. Establish a controlled first-admin/bootstrap process without implicitly granting every person medical and financial access.
+The operational role baseline, role-selected dashboard and sensitive-grant authority are confirmed in document 21. Agree the exact route/permission catalog, remaining granular action defaults, clinical visibility in the patient portal, the adult-child access transition and exact family data/actions, practitioner prescribing eligibility, and permission-revocation behavior. Establish a controlled first-admin/bootstrap process without implicitly granting every person medical and financial access.
 
 ## References
 

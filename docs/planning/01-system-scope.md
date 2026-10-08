@@ -1,6 +1,6 @@
 # System scope and backend direction
 
-Updated: 4 October 2026. Status: planning.
+Updated: 8 October 2026. Status: planning.
 
 The API will support the center's operational, clinical, and financial workflows across staff dashboards, the patient website, and mobile apps. Our first focus is defining booking and payment behavior, alongside patient identity and authorization, before choosing tables and endpoints.
 
@@ -13,7 +13,7 @@ The API will support the center's operational, clinical, and financial workflows
 
 - **Latest confirmed direction:** Include all currently enumerated project modules/features in the first stage. This supersedes the earlier direction to split features between stages. The user also expects production to start after two months from development start.
 - **Open:** Reconcile exact source-document subfeatures and explicit exceptions before final scope lock. More job types remain later because Join us starts with doctors only. Current insurance is excluded with future NPHIES/Waseel readiness; bank-transfer bookings are prohibited, checkout holds are seven minutes and patient changes within 24 hours are blocked. Remaining family/access, assignment and financial edge cases stay open/deferred.
-- **Confirmed timing/quality direction:** Replace Emdaad when Motmaan enters production, after two months of development, at production-level quality. Security, user acceptance, payment/accounting reconciliation, backup restore, performance, and monitoring checks are all required. Exact thresholds, sign-off owners, and schedule remain open.
+- **Confirmed timing/quality direction:** Replace Emdaad when Motmaan enters production, after two months of development, at production-level quality. Security, user acceptance, payment/accounting reconciliation, backup restore, performance, and monitoring checks are all required. Initial operational baselines are defined under AUD-26 in document 09; named sign-off/evidence still require preparation. AUD-03 is Planned: preserve the existing delivery plan and target.
 
 ## Organization and practitioner model
 
@@ -45,6 +45,24 @@ The center currently has about 10 specialists, growing to 25, about 30 appointme
 | Operations | Notifications, internal staff tasks (reception/accountant assignment, priority, details), audit history, settings, reports, initial setup progress |
 | Public website | Center identity and content, practitioner/service presentation, and Join us entry; branding interpretation is recorded below |
 
+## Progressive feature discovery — AUD-02
+
+**Approved Direction:** the module inventory above and [source-section coverage inventory](25-full-project-audit.md#source-requirements-coverage-and-reconciliation-checklist) are extensible planning records. Preserve all agreed scope, including source-only detail; refine a feature/workflow when preparing its implementation and record new owner clarifications in its owning topic/register/tracker. No currently unspecified detail removes a feature or blocks unrelated work.
+
+Use these discovery states per feature: confirmed rules; source requirements/planned coverage; unresolved detail; explicit deferral; contract-ready for development (then implementation authorization still required). Add source/decision references, owning topic, Web/Flutter/staff surfaces, acceptance examples and dependencies progressively using the [shared checklist](../handoff/shared-contract-checklist.md). None of these narrative inventories certifies a workflow implemented or tested.
+
+| Scope area requiring further detail | Current discovery status | Next preparation / dependency |
+|---|---|---|
+| Clinical worksheets, stamped report requests, forms and catalogs | In scope; forms unresolved; report version history confirmed | Prepare clinical field/template and acceptance contracts per workflow |
+| Catalog/pricing, waitlists, free follow-ups, Ramadan/overnight scheduling | In scope; detailed contracts unresolved | Prepare applicable operations rules; preserve deferred booking edges |
+| POS/cashboxes, discounts, loyalty and business reporting/analytics | In scope; ledger direction approved, detailed finance/metric rules unresolved | Finance/business examples; loyalty disabled by default does not remove scope |
+| Setup/tutorials, training courses and external-doctor marketplace | Source requirements retained; progressive discovery needed | Reconcile detailed flows with Motmaan-only boundary; mobile purchase policy deferred |
+| Nafath/Wasfaty and other source integrations | In scope; actual use cases/access unresolved | Obtain actual onboarding/contracts; do not replace approved patient login |
+| Identity/family, booking transitions, assessment contracts, SignalR events, migration details | Explicitly deferred where recorded | Prepare dependent workflow only after applicable answers; unrelated work continues |
+| Existing public/patient/staff Web and Flutter functionality/Figma | Preserve approved requirements; no new AUD-24 redesign | Update only explicit owner changes; no invented platform parity |
+
+Delivery planning remains **Planned** (AUD-03): this refinement creates no new staffing, dates or scope change.
+
 ## User additions after the source document
 
 - **Confirmed:** Future implementation must use the api-pattern skill. Performance and security are explicit priorities.
@@ -53,16 +71,16 @@ The center currently has about 10 specialists, growing to 25, about 30 appointme
 - **Confirmed:** Every website must work well on mobile and desktop, including public pages and both staff dashboards.
 - **Confirmed:** Patient treatment tasks have two types: repeatable self-care actions and Motmaan program recommendations. Doctors control tasks and their reminder schedule; patients report completion or a missed reason. The backend sends push notifications according to the doctor-defined schedule and recurrence. Doctor controls include reminder time, weekdays, start/end dates, and reminders per day; Changes to recurring patient tasks apply only to future occurrences and preserve earlier completion history. Weekly summaries go to both patient and assigned doctor; numeric task limits and summary content, timing and channels remain open.
 - **Confirmed:** Patients can book and pay through both the mobile app and the responsive patient website, including from a recommended Motmaan program.
-- **Confirmed payment options:** mada, Apple Pay, credit/debit cards, Tabby, and Tamara are required together. Tap Payments is preferred for evaluation and PayTabs is a comparison; merchant approval and final provider selection remain open.
+- **Confirmed payment provider and options:** MyFatoorah is selected for online payments. Mada, Apple Pay, credit/debit cards, Tabby and Tamara are required on the app and patient website. The owner reports Tabby/Tamara integrations ready; account-enabled methods and whether BNPL connects through MyFatoorah or directly still need verification.
 - **Confirmed booking/payment rule:** An online booking becomes confirmed only after the provider confirms successful payment. The API must rely on trusted provider confirmation rather than a client-only checkout return.
 - **Confirmed cancellation consequence for Motmaan/doctor cancellations:** Credit the patient in the Motmaan internal wallet. The patient requests bank payout inside the wallet for service-refund-origin funds only; a system administrator or accountant approves. Coupon credit is not withdrawable; execution/verification details remain open.
 - **Confirmed package direction:** Administrators create package offers and control their availability, end/expiry, and package settings. Exact fields and limits remain to be specified.
 - **Confirmed patient case visibility:** Patients can view all information about their own case in the patient experience. Exact presentation and any internal-only administrative metadata remain open.
 - **Confirmed treatment-task interaction:** Patients can mark self-care tasks complete or missed and provide a reason; support recurrence-based push notifications and weekly progress summaries. Exact send time and summary behavior remain open.
 - **Confirmed:** Patients submit support tickets; administrators resolve them using Open, In progress, Waiting for patient, Resolved, and Closed statuses. Send push updates and show a new-message indicator. On Closed, email a survey rated out of 10 with optional comments and one submission per ticket, linked to the resolver. Management sees all results; patients see their own response.
-- **Confirmed:** Initial staff role groups are manager, reception, administrator, and doctor; accountant participation is now required for internal staff tasks. The detailed permission matrix remains deferred.
+- **Confirmed:** Initial staff role groups are manager, reception, administrator, and doctor; accountant participation is now required for internal staff tasks. The exact granular matrix remains open in the selected workflow; role defaults plus within-role individual allowed/removed overrides are confirmed (AUD-09).
 - **Confirmed:** Access is role- and permission-based. The frontend should show or hide actions according to granted permissions, while the backend must enforce them regardless of interface state.
-- **Confirmed:** Management controls whether a doctor is active. Only active doctors can log in to the doctor dashboard; deactivation effects on existing sessions and reactivation flow remain open.
+- **Confirmed:** Management controls whether a doctor is active. Only active doctors can log in to the doctor dashboard; deactivation blocks new work immediately and permits only finishing/saving the already-active consultation; restricted continuation details/reactivation remain open.
 - **Confirmed doctor clinical scope:** Doctors are expected to handle all listed clinical work (diagnoses, treatment plans, prescriptions, reports, session records, and tasks), within their permissions, assigned-patient scope, and applicable qualification rules.
 - **Confirmed doctor search filters:** Expertise/concern, specialty, language, appointment mode, and availability.
 - **Confirmed recruitment information:** Applications capture usual personal information, expertise, and degrees. Management verifies degrees and applicant data before activation. Baseline fields/documents follow the reviewed existing website, plus therapeutic expertise multi-select; see [recruitment reference](19-recruitment-current-website-reference.md). Verification, upload constraints and additional evidence remain open.
@@ -78,11 +96,11 @@ The center currently has about 10 specialists, growing to 25, about 30 appointme
 - **Confirmed mobile direction:** Show a countdown to an in-person appointment and deliver advance reminders using an administration-configured lead time. The countdown interpretation and related mobile behavior are documented in [customer mobile appointments](10-customer-mobile-appointments.md).
 - **Interpretation:** The user's reference to clinic identity means the center's name, logo, and branding on public pages; detailed brand assets are not yet supplied.
 
-Public employment applications are a current user addition. They are distinct from the later external-practitioner marketplace in the source document; do not defer recruitment simply because that marketplace is later work.
+Public employment applications are a current user addition. They are distinct from the marketplace, which the source originally phased later; the owner's broad first-stage scope supersedes that historical phasing without merging it into Join us.
 
 ## Cross-scope clarifications — 4 October 2026
 
-- **Confirmed clinical reports:** When a finalized clinical report needs correction, the authorized doctor edits that report directly; a separate revised-report issuance workflow is not required. Keep granted permissions, assigned-patient/branch scope, and qualifications in force. This answer concerns clinical reports, not accounting invoices, prescriptions, or unrestricted deletion. Proposed: preserve protected edit history/audit without making the doctor create another report; exact audit and patient-update presentation remain open.
+- **Confirmed clinical reports:** When a finalized clinical report needs correction, the authorized doctor edits that report directly; a separate revised-report issuance workflow is not required. Keep granted permissions, assigned-patient/branch scope, and qualifications in force. This answer concerns clinical reports, not accounting invoices, prescriptions, or unrestricted deletion. AUD-15 mandates preserved versions, author/time, version-specific exports and signature lineage underneath direct editing; [document 05](05-identity-and-access.md#clinical-document-version-history--aud-15) owns detail. Exact presentation/storage remains design work.
 - **Confirmed management dashboard:** Include all four figures offered in the question: revenue, bookings, unpaid amounts, and patient satisfaction. Definitions, period filters, layout/order, and drill-downs remain open; "all" does not select every unspecified metric. Enforce authorized branch/reporting scope.
 - **Confirmed weekly treatment summaries:** Both the patient and their assigned doctor receive the weekly progress summary; content, timing, and channels remain open.
 - **Latest clarification:** Current packages repeat sessions for a chosen practitioner, with family usage and practitioner-change/difference payment; future treatment pathways are deferred. The existing assessment platform will be integrated, with [programmer questions](18-assessment-platform-integration-questions.md) pending. Multi-assignee staff-task completion and Emdaad export discussion remain deferred; full migration at launch remains in scope.
@@ -98,11 +116,11 @@ The user's latest direction is to include all currently enumerated project requi
 - **Open:** Loyalty is described as a configurable unit disabled by default, while later prioritization places it last. Disabled functionality is not automatically excluded scope.
 - **Confirmed addition:** Internal administrative tasks include reception/accountant assignments to several staff, Low/Normal/High/Urgent priority, details, optional due dates/overdue indicators, comments, and files. Status derives from actions; event notifications appear live in the website. Management sees full branch-authorized details; staff see full created/assigned details. Exact mappings and multi-assignee completion remain open. Separate from patient tasks; see [internal staff tasks](15-internal-staff-tasks.md).
 
-The source document specifies a two-to-three-month overall delivery target and prioritizes mobile apps, Qoyod, assessment integration, then analytics and loyalty when time is constrained. The user separately directed that production starts after two months from development start. Neither statement is a validated delivery estimate; detailed milestones and acceptance gates remain to be planned.
+The source document specifies a two-to-three-month overall delivery target and prioritizes mobile apps, Qoyod, assessment integration, then analytics and loyalty when time is constrained. The user separately directed that production starts after two months from development start. Neither statement is a validated delivery estimate; AUD-03 confirms delivery planning is already addressed; preserve established milestones/responsibilities/schedule and document only genuine missing linked evidence. Do not invent a start or cutover date.
 
-## Proposed architecture
+## Backend architecture
 
-Use a modular monolith: one backend with clear feature ownership and one initial relational database. The database engine, .NET version, deployment topology, and job platform are still open.
+**Confirmed on 8 October:** Use a modular monolith, with one backend, clear feature ownership and the selected Azure SQL Database (SQL Server). Transactional outbox with Hangfire is confirmed for reliable external effects and appropriate lengthy/scheduled work; see [detailed background workflow notes](23-outbox-and-background-jobs.md). [Approved tools](24-approved-engineering-tools-and-realtime.md) records Swagger/OpenAPI, authorization, validation, resilience, telemetry, caching, audit and testing choices. The .NET/package versions, contracts, worker configuration and deployment topology remain open; the controls below guide their design.
 
 Future implementation follows the api-pattern skill at `C:/Users/omarf/.codex/skills/api-pattern/SKILL.md`. See [performance security and responsive websites](09-performance-security-and-responsive-websites.md) for the user's quality priorities.
 
@@ -111,7 +129,7 @@ Future implementation follows the api-pattern skill at `C:/Users/omarf/.codex/sk
 - Use EF Core as the default unit of work. The owning workflow controls the commit.
 - Define module contracts for cross-module writes and avoid circular service dependencies.
 - Use transactions and concurrency protection for slot reservation, money, and entitlements.
-- Use durable jobs and an outbox where reliable delivery to external providers matters.
+- Use the confirmed Hangfire and transactional outbox direction where durable execution and reliable delivery to external providers matter, with idempotent processing and recovery.
 - Propagate cancellation, bound collection queries, and provide predictable errors.
 - Use `Asia/Riyadh` as the single project time zone for user-facing times, working schedules, policy boundaries, reports, and recurring jobs. Persist event instants in UTC; perform local calendar/recurrence logic in `Asia/Riyadh` and convert at boundaries.
 - Keep integrations behind explicit adapters so provider changes are localized. Adapters reduce backend coupling; replacing a video SDK may still require client changes.
@@ -119,11 +137,11 @@ Future implementation follows the api-pattern skill at `C:/Users/omarf/.codex/sk
 
 ## Operational capabilities
 
-Plan private object storage, strong staff authentication, protected audit logs, versioned policy acceptance, backups with tested restoration, and monitoring of API and job failures. Define measurable availability, response-time, recovery-time, and recovery-point targets rather than leaving them as "fast" or "high availability".
+Plan private object storage, strong staff authentication, protected audit logs, versioned policy acceptance, backups with tested restoration, and monitoring of API and job failures. Use the initial measurable [AUD-26 operational baselines](09-performance-security-and-responsive-websites.md#initial-operational-targets-and-reporting--aud-26) and validate them with actual hosting/workload evidence.
 
 **Confirmed:** Replace Emdaad at production launch and migrate all its data and referenced files. Proposed migration checks include export samples, mapping, duplicate review, financial reconciliation, trial import, and cutover validation. Actual export coverage and file retrieval remain to validate.
 
-**Confirmed latest owner clarification:** Seed/import existing data before the system starts operating. This is a launch prerequisite; exact seeded account-to-patient links and first-access identity matching remain open. Reception assigns rooms per appointment with suggestions of available rooms. Online recording is mandatory for safety and performance review. Additional staff/doctor verification can be enabled or disabled and uses SMS when enabled. See the relevant booking, recording and identity notes for remaining details; implementation is not authorized.
+**Confirmed latest owner clarification:** Seed/import existing data before the system starts operating. This is a launch prerequisite; verified prelinking with reception reviewing exceptions is adopted by delegation; evidence details remain open and further identity/family lifecycle is deferred (AUD-10). Reception assigns rooms per appointment with suggestions of available rooms. Online recording is mandatory for safety and performance review. Ordinary staff SMS is configurable; mandatory stronger privileged verification/step-up under AUD-08 overrides unrestricted opt-out. See the relevant booking, recording and identity notes for remaining details; implementation is not authorized.
 
 ## Before implementation
 

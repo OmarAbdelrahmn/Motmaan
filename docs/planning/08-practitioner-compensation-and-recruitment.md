@@ -1,6 +1,6 @@
 # Practitioner compensation and public recruitment
 
-Updated: 4 October 2026. Status: confirmed user capabilities with proposed detailed workflows.
+Updated: 8 October 2026. Status: confirmed user capabilities with proposed detailed workflows.
 
 The user confirmed a percentage compensation arrangement and a salary arrangement with an incentive on monthly revenue above a target. In the first stage, candidates apply for doctor roles through the public Join us route; administrators control openings and applications. Authorized acceptance automatically creates or safely resolves the doctor account, assigns the doctor role, and schedules an SMS invitation. Other job types may be added later. No application code or actual external communications are part of this planning update.
 
@@ -56,6 +56,10 @@ Use the same eligible base for monthly target progress and above-target incentiv
 
 Only authorized management/finance users can manage terms. A specialist may view their own approved arrangement and statements if granted; access to other practitioners' compensation is not implied. Audit edits, approvals, reversals, and payments. Define how the relevant records map to Qoyod without duplicating internal accrual and accounting entries.
 
+## Compensation details during development — AUD-14
+
+**During Development:** retain confirmed salary, practitioner-specific percentage and above-target incentive formulas and completed/fully-paid eligibility. Resolve and document period attribution, refund corrections, mid-period term changes, closed statements and earned-versus-paid amounts during the affected implementation. Developers must obtain owner/finance decisions where treatment changes salary/commission policy; this status does not permit invented finance rules. Do not block unrelated development or turn statements into a payroll engine by assumption. Further deductions, service rates, rounding and the source fixed-amount alternative remain open business details.
+
 ## Public Join us flow
 
 The initial Join us scope is doctor recruitment only. Administrators control whether openings are available and manage submitted applications. Support for other job types is a possible later expansion, not first-stage scope. Exact vacancy-versus-general-application behavior remains open.
@@ -104,7 +108,7 @@ Assign the approved doctor-role template, never a role supplied by the public fo
 
 ### Proposed SMS invitation and first access
 
-The SMS acknowledges acceptance and provides a short-lived first-access link or code to the staff portal. Its exact template and login mechanism are open. Do not send a reusable password in SMS. Verify control of the invitation destination and establish the approved staff authentication method, including MFA if that proposal is adopted.
+The SMS acknowledges acceptance and provides a short-lived first-access link or code to the staff portal. Its exact template and login mechanism are open. Do not send a reusable password in SMS. Verify control of the invitation destination and establish the approved staff authentication method, including mandatory privileged verification where AUD-08 applies; exact mechanisms remain technical design.
 
 Store invitation state, expiry, and use securely. Staff activation through this flow must not make ordinary patient OTP sufficient for staff access. Scheduling, service assignments, and compensation settings are separate configuration; absent schedules must not create public bookable availability automatically.
 

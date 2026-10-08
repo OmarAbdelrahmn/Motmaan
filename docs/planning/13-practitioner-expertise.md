@@ -1,6 +1,6 @@
 # Practitioner expertise catalog and patient filters
 
-Updated: 4 October 2026. Status: expertise requirement and management approval of post-hiring public biography/expertise updates confirmed; detailed workflow remains open. No implementation has started.
+Updated: 8 October 2026. Status: expertise requirement and management approval of post-hiring public biography/expertise updates confirmed; detailed workflow remains open. No implementation has started.
 
 ## Goal
 
@@ -45,6 +45,10 @@ The user clarified preferences as **salary-paid and available** practitioners ta
 - Availability calculation/display and treatment of mixed results when employed doctors have slots on some selected dates. Single-day and date-range selection are confirmed; apply branch and selected search filters consistently. No arbitrary date-range limit is approved yet.
 - Whether additional patient filters are needed beyond expertise/concern, specialty, language, appointment mode, and availability.
 - Evidence/credential verification, who may edit the catalog, translations, archive behavior, and review/audit permissions.
+
+## Future recommendation consideration — AUD-27
+
+**Note only:** consider a future suggestion/recommendation system **within the salaried practitioner group**. Availability, relevant specialization, workload distribution, patient preference or other approved criteria are possible discovery topics, not approved factors/weights or ranking precedence. Current salary-paid availability priority, branch/date/filter rules and external fallback remain unchanged. No recommendation engine is authorized.
 
 ## Relevant surfaces
 

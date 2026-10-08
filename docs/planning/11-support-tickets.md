@@ -1,6 +1,6 @@
 # Support ticket system
 
-Updated: 4 October 2026. Status: patient support-ticket flow, basic statuses, and patient reopening without a time limit confirmed; other details remain open. No implementation has started.
+Updated: 8 October 2026. Status: patient support-ticket flow, basic statuses, and patient reopening without a time limit confirmed; other details remain open. No implementation has started.
 
 ## Goal
 
@@ -31,7 +31,7 @@ Give patients a trackable way to ask Motmaan for help and give authorized staff 
 - A patient can access only their own tickets, unless a separately approved family authorization permits acting for another patient.
 - Support staff need explicit permissions for the support queue. A ticket role does not grant access to the patient's clinical record.
 - If a ticket is linked to an appointment or case, show only the minimum authorized context; opening a ticket must not bypass doctor assignment or clinical-record rules.
-- Validate, limit, and scan attachments. Do not expose public storage URLs or file credentials.
+- Validate, limit, and scan attachments under the [shared secure/resumable file lifecycle](03-integrations-and-storage.md#secure-file-lifecycle--aud-23) (AUD-23). Do not expose public storage URLs or file credentials.
 - Keep audit history, rate-limit public ticket creation, and avoid putting unnecessary medical details into email, SMS, or push notifications.
 - A closed-ticket satisfaction response links to the resolved ticket and its resolving administrator. Management sees all responses; the patient sees their own. See [patient session feedback](14-patient-session-feedback.md).
 

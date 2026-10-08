@@ -1,6 +1,6 @@
 # Booking and financial workflows
 
-Updated: 4 October 2026. Status: confirmed directions and proposed rules with unresolved business decisions.
+Updated: 8 October 2026. Status: confirmed directions and proposed rules with unresolved business decisions.
 
 Booking and payment form the first workflow to define and eventually implement. A correct appointment depends on patient access, service pricing, specialist availability, room capacity, consent, and payment verification.
 
@@ -42,9 +42,9 @@ flowchart LR
 | Confirmation | For online payment, provider-confirmed successful payment is required before the appointment becomes confirmed; retain separate fulfillment rules for paid package entitlements and eligible free follow-ups |
 | Online payment | Confirmed seven-minute checkout hold with visible countdown; release unpaid capacity at expiry |
 | Bank transfer | Not allowed for bookings; no transfer-proof booking flow |
-| Late payment | Record the payment, recheck capacity, and resolve or refund if the slot is unavailable |
+| Late payment | **Deferred AUD-11:** preserve/reconcile trusted outcomes; no booking/refund/reallocation policy is selected for success after expiry |
 | Attendance | Separate evidence from appointment completion and financial settlement |
-| Completion | Authorized treating specialist records completion |
+| Completion | Treating specialist completes normally; reception may perform authorized operational closure when the doctor forgets (AUD-19), without clinical signing |
 
 **Confirmed on 4 October 2026:** Allocate rooms per appointment. Reception selects the room; show reception suggestions of rooms available for that appointment rather than automatically assigning a room or reserving it for a practitioner's entire shift. Room allocation at confirmation is a source requirement; how reception's selection fits self-service booking and confirmation timing remains open. The proposed hold should reserve room capacity too, so payment does not succeed for an impossible in-person booking. Suggestions must respect branch scope and current reservations/holds, with availability rechecked when the selection is saved; ranking and service-specific room constraints remain open.
 
@@ -58,15 +58,15 @@ flowchart LR
 
 ## State design
 
-The 4 October clinical clarification distinguishes patient departure/actual consultation end from later session-note writing and doctor-confirmed Finished status. Prescriptions may be written before departure. Do not require notes before the patient can leave. Exact completion validation remains open. Rating delivery is email after confirmation plus a next-app-opening popup if unanswered, within existing eligibility. The 48-hour review window starts at actual consultation end even if confirmation is delayed; reception records actual in-person end if the doctor forgets. Detailed recording/correction permissions remain open; actual-end recording is distinct from the existing doctor-confirmed Finished/invitation step.
+The 4 October clinical clarification distinguishes patient departure/actual consultation end from later session-note writing and doctor-confirmed Finished status. Prescriptions may be written before departure. Do not require notes before the patient can leave. Exact completion validation remains open. Rating delivery is email after confirmation plus a next-app-opening popup if unanswered, within existing eligibility. The 48-hour review window starts at actual consultation end even if confirmation is delayed; reception records actual in-person end if the doctor forgets. Detailed recording/correction permissions remain open; actual end remains distinct from administrative closure. **AUD-19:** reception may perform authorized operational closure if the doctor forgets, with actor audit and separate actual-end/closure timestamps. This does not authorize reception to sign clinical reports or change feedback eligibility.
 
-**Confirmed overrun behavior:** Measure allocated duration from actual consultation start. At expiry, show the doctor a red warning if unfinished; notify reception if it remains unfinished after a system-configured delay from expiry. Delay value/default and configuration owner remain open. The doctor can extend the active session using a period configurable by doctor or management; no numeric defaults/limits were approved. This explicit active-session extension is distinct from changing general scheduling defaults. Expiry does not complete the session or trigger no-show/rating. Preserve attended/ongoing consultation protection. No-show timing still uses scheduled start plus the separate attendance grace period. Allow extension into a later booked appointment with a warning to the doctor that another patient is waiting. Actual-start capture, extension recalculation, exact waiting/conflict detection and financial consequences remain unresolved; no automatic booking shifts or extra charges are approved. See [customer appointments](10-customer-mobile-appointments.md).
+**Confirmed overrun behavior:** Measure allocated duration from actual consultation start. At expiry, show the doctor a red warning if unfinished; notify reception if it remains unfinished after a system-configured delay from expiry. Delay value/default and configuration owner remain open. The doctor can extend the active session using a period configurable by doctor or management; no numeric defaults/limits were approved. This explicit active-session extension is distinct from changing general scheduling defaults. Expiry does not complete the session or trigger no-show/rating. Preserve attended/ongoing consultation protection. No-show timing still uses scheduled start plus the separate attendance grace period. **Confirmed AUD-12:** block extension when a later booking exists for the affected doctor or room; check both resources before offering extension and protect the mutation against concurrent bookings. Never extend into another confirmed booking, move/delay the next patient or automatically reschedule. Actual-start capture, extension recalculation, exact waiting/conflict detection and financial consequences remain unresolved; no automatic booking shifts or extra charges are approved. See [customer appointments](10-customer-mobile-appointments.md).
 
 Keep booking state, payment state, attendance, recording state, and accounting synchronization separate. Preserve the required appointment labels through mappings to stable business meanings. Administrator-created labels must not redefine billing or authorization rules implicitly.
 
 The source lists confirmed, pending, completed, cancelled, no-show, cancelled for nonpayment, and postponed. It also mentions processing in the patient interface. Agree the canonical transitions and presentation mappings.
 
-The automatic no-show rule must account for recorded attendance and remote sessions continuing beyond the scheduled end. The one-time late-change exception needs a defined owner and scope, such as patient lifetime or another center-approved boundary.
+The automatic no-show rule must account for recorded attendance and remote sessions continuing beyond the scheduled end. **Superseded source wording:** a one-time late-change exception cannot re-enable patient changes inside the confirmed 24-hour cutoff. Authorized staff exceptions require separate decisions.
 
 **Confirmed user refinement:** Automatic no-show assignment uses the scheduled appointment start plus an administration-configured grace period. This replaces the source's scheduled-end timing for the current design. Recorded attendance or an active consultation prevents automatic no-show even when completion has not yet been entered. A mobile countdown alone never determines attendance or a financial charge.
 
@@ -145,13 +145,23 @@ Cash payment is accepted only at an in-person session when the patient attends. 
 
 Tax classification must be validated with finance by service and beneficiary. Do not encode the document's nationality shorthand as a universal exemption rule. Reference: [ZATCA clarification on healthcare supplied to citizens](https://x.com/Zatca_care/status/1994204337090806266).
 
+## Approved financial ledger direction — AUD-13
+
+**Approved Direction, not implemented:** use immutable financial entries and corrective entries, explicit payer/beneficiary/owner references, and separate total, spendable, withdrawable, promotional and refundable credit categories. Reserve payout funds under concurrency protection. Preserve current refund-origin withdrawal and package/no-show rules; architecture approval does not decide unresolved money policy.
+
+Give each logical payment/refund a durable identity and provider reference. Enforce idempotency and duplicate-callback handling, and reconcile unknown provider outcomes before retrying a potentially completed operation. Document refund/payout failures, chargebacks/disputes and package corrections with visible failure/reconciliation states and traceable corrective entries. Do not overwrite balances silently or duplicate gateway/direct BNPL captures/refunds.
+
+Motmaan owns operational wallet/entitlement/transaction state; payment providers collect/refund under verified contracts; BNPL follows the actual gateway/direct connection; Qoyod owns official accounting issuance and accounting reconciliation. Retain references and synchronize through [outbox/Hangfire](23-outbox-and-background-jobs.md).
+
+Tax rates/classification, rounding, mixed-credit spending priorities, refund ownership/destination and unresolved correction policies still require owner/finance approval. [Compensation](08-practitioner-compensation-and-recruitment.md) preserves formulas and addresses period/correction details during development (AUD-14), without blocking unrelated work.
+
 ## Future verification scenarios
 
 When coding begins, verify simultaneous booking of the same capacity, duplicate payment callbacks, payment after expiry, repeated wallet spending, repeated entitlement consumption, recorded attendance before a no-show job, active online sessions past scheduled end, exactly-once no-show consumption, and correction of an incorrectly recorded no-show. These are planned acceptance scenarios; no implementation or tests have been created.
 
 ## Readiness follow-ups — R05 and R06
 
-Reviewer findings, 4 October 2026; no business policy selected:
+Reviewer findings, 4 October 2026; no business policy selected. On 7 October the owner deferred discussion of the three detailed R05 booking questions below. This does not defer the booking feature or change existing confirmed rules; settle them before implementing the affected booking/payment transitions:
 
 - Define the lifecycle preceding an attended cash payment: staff-created reservation, walk-in, capacity ownership, unpaid state and authority to collect/record money. Cash-at-attendance does not itself define advance booking eligibility.
 - Separate guaranteed room capacity from reception's later named-room selection. Decide how self-service confirmation works when reception has not chosen a room, including simultaneous reservations and all rooms occupied. The diagram above is a proposed workflow, not evidence that this policy is settled.
@@ -165,5 +175,5 @@ See the [readiness review](20-development-readiness-review.md) and [shared contr
 
 - Percentage rates vary by practitioner and are calculated on net revenue after tax and discounts. The user's “and so on” does not identify further deductions; gateway fees or other costs require clarification. Rate-edit ownership, possible service-specific overrides, allocation, rounding, and closed-period reversals remain open.
 - Above-target commissions remain separately confirmed: apply the agreed incentive rate to additional eligible revenue above the practitioner's target. Existing completed/fully-paid eligibility and no-show exclusion remain in force.
-- Proposed wallet controls: preserve credit origin, show total/spendable/withdrawable balances separately, reserve requested withdrawable funds to prevent concurrent spending or duplicate payouts, and distinguish approval from successful bank execution. Request fields, payout executor/provider, approval policy for mixed credit origins, and bank reconciliation are open.
+- Approved ledger direction (AUD-13): preserve credit origin, show total/spendable/withdrawable balances separately, reserve requested withdrawable funds to prevent concurrent spending or duplicate payouts, and distinguish approval from successful bank execution. Request fields, payout executor/provider, approval policy for mixed credit origins, and bank reconciliation are open.
 - Planned acceptance checks now include the exact 24-hour boundary, simultaneous checkout and seven-minute expiry, payment arriving after expiry, cross-family package consumption, a SAR 400 refund for the confirmed example, practitioner transfer/difference payment, coupon withdrawal rejection, concurrent wallet spend/payout, and repeated payout approval. These are future checks, not implemented tests.
